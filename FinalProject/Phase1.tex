@@ -26,7 +26,8 @@ Tucker Trainor\qquad\texttt{tmt33@pitt.edu}
 \subsection{System Assumptions \& Threat Models}
 % A paragraph informally describing the trust assumptions that you are making regarding the players in the system. This could, for example, be a description of the system model in which you envision your application being deployed.
 % Threat model 1
-
+\textbf{Threat Model 1}\\
+\\
 Preventing malicious users from accessing the system or authorized users from defacing existing data.
 \begin{itemize}
 \item \textbf{Property 1: User verification.} User verification indicates that users accessing the the system need to be verified as the correct user they are logging in as. Through the use of simple techniques such as password based access. Additionally, IP-based identification of a user and SSH-key verification should be employed to further assist in verifying user access and identity. This is done in order to prevent unauthorized access to accounts and prevent multiple connections to the same account.
@@ -38,6 +39,8 @@ Preventing malicious users from accessing the system or authorized users from de
 \item \textbf{Property 7: Physical system protections.} The physical system protections speaks to ensuring that the physical location of the server should be secure. Additionally, the machine itself should have a RAID-5 setup in order to mitigate the potential for data loss. Any offsite backups of the server should also be maintained in a secure environment.
 \end{itemize}
 % Threat model 2
+\textbf{Threat Model 2}\\
+\\
 Privacy and isolation of files must be ensured if users are to trust the file sharing system.
 \begin{itemize}
 \item \textbf{Property 1: Correctness.} Correctness implies that if file \emph{f} is shared with members of group \emph{g}, only members of group {g} should be able to access \emph{f}. The notion of ``access” entails the creation, modification, and deletion of \emph{f}, as well as the ability to see that \emph{f} even exists. Without this requirement, any user could access any file, which is contrary to the notion of group-based file sharing.
