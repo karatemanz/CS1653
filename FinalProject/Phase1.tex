@@ -28,7 +28,7 @@ Tucker Trainor\qquad\texttt{tmt33@pitt.edu}
 % Threat model 1
 \textbf{Threat Model 1}\\
 \\
-Preventing malicious users from accessing the system or authorized users from defacing existing data.
+Preventing malicious users from accessing the system or authorized users from defacing existing data. Threats to data may come from outside the system or within. Unauthorized users should not be granted access to the systems, and methods involving login control and network security must be in place to prevent outside attacks to the system. Authorized users, whether intentional or not, should not be allowed to improperly access data to which they do not have rights to. Additionally, authorized users should not be able to unintentionally alter data via accidental overwrites or other common misfortunes.
 \begin{itemize}
 \item \textbf{Property 1: User verification.} User verification indicates that users accessing the the system need to be verified as the correct user they are logging in as. Through the use of simple techniques such as password based access. Additionally, IP-based identification of a user and SSH-key verification should be employed to further assist in verifying user access and identity. This is done in order to prevent unauthorized access to accounts and prevent multiple connections to the same account.
 \item \textbf{Property 2: User/group uniqueness.} User and group account names must be unique in order to ensure no collisions occur with respect to file permissions. In the case of a group or user name being created or modified in such a way that it is the same as another the system must respond in such a way that this does not happen.
