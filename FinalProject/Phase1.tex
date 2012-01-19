@@ -28,7 +28,7 @@ Tucker Trainor\qquad\texttt{tmt33@pitt.edu}
 % Threat model 1
 
 Preventing malicious users from accessing the system or authorized users from defacing existing data.
-\begin{enumerate}
+\begin{itemize}
 \item \textbf{Property 1: User verification.} User verification indicates that users accessing the the system need to be verified as the correct user they are logging in as. Through the use of simple techniques such as password based access. Additionally, IP-based identification of a user and SSH-key verification should be employed to further assist in verifying user access and identity. This is done in order to prevent unauthorized access to accounts and prevent multiple connections to the same account.
 \item \textbf{Property 2: User/group uniqueness.} User and group account names must be unique in order to ensure no collisions occur with respect to file permissions. In the case of a group or user name being created or modified in such a way that it is the same as another the system must respond in such a way that this does not happen.
 \item \textbf{Property 3: Strong login protocols.} Strong login protocols specifies that when logging into the system certain precautions must be taken to prevent brute forcing account access. This should be implemented by restricting failed authentication by a number of tries (eg: three) and timing out for a period of time before allowing more tries to take place.
@@ -36,10 +36,10 @@ Preventing malicious users from accessing the system or authorized users from de
 \item \textbf{Property 5: Password integrity (and authentication).} Password integrity indicates that passwords shall be kept secure via never being exchanged or stored in clear text. Additionally, a strong password policy will be implemented such as requiring a minimal length, minimum character set, and expiration of passwords on a regular schedule.
 \item \textbf{Property 6: Filename uniqueness.} Filename uniqueness similar to group and user name uniqueness speaks to ensuring no issues arise from permissions and filename collisions. Users should be alerted if they are possibly overwriting their own owned file, however, if a user is potentially overwriting a file they do not own the action should be disallowed.
 \item \textbf{Property 7: Physical system protections.} The physical system protections speaks to ensuring that the physical location of the server should be secure. Additionally, the machine itself should have a RAID-5 setup in order to mitigate the potential for data loss. Any offsite backups of the server should also be maintained in a secure environment.
-\end{enumerate}
+\end{itemize}
 % Threat model 2
 Privacy and isolation of files must be ensured if users are to trust the file sharing system.
-\begin{enumerate}
+\begin{itemize}
 \item \textbf{Property 1: Correctness.} Correctness implies that if file \emph{f} is shared with members of group \emph{g}, only members of group {g} should be able to access \emph{f}. The notion of ``access” entails the creation, modification, and deletion of \emph{f}, as well as the ability to see that \emph{f} even exists. Without this requirement, any user could access any file, which is contrary to the notion of group-based file sharing.
 \item \textbf{Property 2: Permission levels.} Permission levels that each user or group has for a file or folder determines what a particular user is able to perform on a file, such as read, write, delete, or create within the file structure. Without proper handling of permissions, unauthorized access or modification to files can occur.
 \item \textbf{Property 3: File integrity.} File integrity refers to keeping a checksum or CRC to ensure modifications or corruptions in a file can be tracked or detected. Users may refer to these checksums to maintain integrity of the file and assurance of correctness, enhancing trust in the system.
@@ -47,5 +47,5 @@ Privacy and isolation of files must be ensured if users are to trust the file sh
 \item \textbf{Property 5: User roles.} User roles refers to the powers granted to users on the system. By enforcing a hierarchy of ownership and ability to grant permissions (e.g. administrator, group owner, etc.), unintended or malicious modification or deletion of files is diminished.
 \item \textbf{Property 6: Download integrity.} Download integrity refers to the prevention of malicious files even existing on the file sharing system. By implementing a proven virus and malware detection solution, the server maintains protection against corruption from within. Malicious content shall be quarantined and removed from the system, and system administrators shall be made aware of such activity.
 \item \textbf{Property 7: Open verified software.} Open verified software implies that the software installed on the system will be open source and heavily validated and supported by the community in order to ensure both correctness and security. Open verified software provides transparency in source code and by extension software, allowing enhanced security over black box software.
-\end{enumerate}
+\end{itemize}
 \end{document}
