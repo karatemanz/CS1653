@@ -29,13 +29,13 @@ Tucker Trainor\qquad\texttt{tmt33@pitt.edu}
 
 Preventing malicious users from accessing the system or authorized users from defacing existing data.
 \begin{enumerate}
-\item \textbf{Property 1: User verification.}
-\item \textbf{Property 2: User/group uniqueness.}
-\item \textbf{Property 3: Strong login protocols.}
-\item \textbf{Property 4: Connection restrictions.}
-\item \textbf{Property 5: Password integrity (and authentication).}
-\item \textbf{Property 6: Filename uniqueness.}
-\item \textbf{Property 7: Physical system protections.}
+\item \textbf{Property 1: User verification.} User verification indicates that users accessing the the system need to be verified as the correct user they are logging in as. Through the use of simple techniques such as password based access. Additionally, IP-based indentification of a user and SSH-key verification should be employed to further assist in verifying user access and indentity. This is done in order to prevent unauthorized access to accounts and prevent multiple connections to the same account.
+\item \textbf{Property 2: User/group uniqueness.} User and group account names must be unique in order to ensure no collisions occur with respect to file permissions. In the case of a group or user name being created or modified in such a way that it is the same as another the system must respond in such a way that this does not happen.
+\item \textbf{Property 3: Strong login protocols.} Strong login protocols specifies that when logging into the system certain precautions must be taken to prevent brute forcing account access. This should be implemented by restricting failed authentication by a number of tries (eg: three) and timing out for a period of time before allowing more tries to take place.
+\item \textbf{Property 4: Connection restrictions.} Connection restrictions speaks to disallowing incoming connections from more than just what the users require in order to connect. Limiting port access prevents casual snooping or hacking and may mitigate Denial-of-Service attacks. The network should allow just as much connectivity as is necessary.  
+\item \textbf{Property 5: Password integrity (and authentication).} Password integrity indicates that passwords shall be kept secure via never being exchanged or stored in clear text. Additionally, a strong password policy will be implemented such as requiring a minimal length, minimum character set, and expiration of passwords on a regular schedule.
+\item \textbf{Property 6: Filename uniqueness.} Filename uniqueness similar to group and user name uniqueness speaks to ensuring no issues arrise from permissions and filename collisions. Users should be alerted if they are possibly overwriting their own owned file, however, if a user is potientially overwriting a file they do not own the action should be disallowed.
+\item \textbf{Property 7: Physical system protections.} The physical system protections speaks to ensuring that the physical location of the server should be secure. Additionally, the machine itself should have a RAID-5 setup in order to mitigate the potiential for data loss. Any offsite backups of the server should also be maintained in a secure environment.
 \end{enumerate}
 % Threat model 2
 Privacy and isolation of files must be ensured if users are to trust the file sharing system.
