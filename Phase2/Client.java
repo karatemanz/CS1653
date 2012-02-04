@@ -1,5 +1,6 @@
 import java.net.ServerSocket;  // The server uses this to bind to a port	
 import java.net.Socket;        // Incoming connections are represented as socketsimport java.io.ObjectInputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public abstract class Client {
@@ -20,7 +21,7 @@ public abstract class Client {
 			final ServerSocket serverSock = new ServerSocket(server);
 			
 			// A simple infinite loop to accept connections
-			Socket sock = null;
+			sock = null;
 			EchoThread thread = null;
 			while(true){
 				sock = serverSock.accept();     // Accept an incoming connection
