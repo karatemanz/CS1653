@@ -18,8 +18,8 @@ public abstract class Client {
 		/* TODO: Write this method */
 		try{
 			// Connect to the specified server
-			final Socket sock = new Socket(args[0], EchoServer.SERVER_PORT);
-			System.out.println("Connected to " + args[0] + " on port " + EchoServer.SERVER_PORT);
+			sock = new Socket(server, port);
+			System.out.println("Connected to " + server + " on port " + port);
 		}
 		catch(Exception e){
 			System.err.println("Error: " + e.getMessage());
