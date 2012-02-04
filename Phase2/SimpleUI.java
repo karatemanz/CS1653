@@ -7,7 +7,11 @@ public class SimpleUI
     public static void main(String[] args)
     {
 		Scanner console = new Scanner(System.in); // Scanner object for input
+		String inputString;
+		String userName;
+		UserToken userToken;
 		boolean exitKey = false;
+		boolean hasToken = false;
 		FileClient fc = new FileClient();
 		GroupClient gc = new GroupClient();
 		
@@ -25,13 +29,36 @@ public class SimpleUI
 		 * Server UI without being overly complex? Or just do it from here
 		 * before presenting any other options? */
 		
+		// (1) get token by connecting to group server via group client
+		// (2) upon valid token retrieval, allow formal connection to group server
+		System.out.print("Enter your username to login...\n> ");
+		userName = console.nextLine();		
+		
+		// connect to group server and get token
+		gc.connect("localhost", 8765);
+		if (gc.isConnected()) // check that server is running)
+		{
+			userToken = gc.getToken(userName);
+			if (userToken == null) // no login for that name
+			{
+				System.out.println("Username not recognized. Contact Admin.");
+				exitKey = true;
+			}
+		}
+		else
+		{
+			System.out.println("Error - Group Server not running. Contact Admin.");
+			exitKey = true;
+		}
+		
+		// get connection to either File Server or Group Server
 		while (!exitKey)
 		{
 			System.out.print("Main menu:\n" +
 							 "Enter 1 to connect to the File Server,\n" +
 							 "enter 2 to connect to the Group Server,\n" +
 							 "enter 3 to exit...\n> ");
-			String inputString = console.nextLine();
+			inputString = console.nextLine();
 			
 			switch (Integer.parseInt(inputString))
 			{
