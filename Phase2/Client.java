@@ -22,10 +22,10 @@ public abstract class Client {
 			
 			// A simple infinite loop to accept connections
 			sock = null;
-			EchoThread thread = null;
+			GroupThread thread = null;
 			while(true){
 				sock = serverSock.accept();     // Accept an incoming connection
-				thread = new EchoThread(sock);  // Create a thread to handle this connection
+				thread = new GroupThread(sock);  // Create a thread to handle this connection
 				thread.start();                 // Fork the thread
 			}                                   // Loop to work on new connections while this
 			// the accept()ed connection is handled
