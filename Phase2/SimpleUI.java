@@ -31,7 +31,8 @@ public class SimpleUI
 				case 1:
 					System.out.println("1");
 					//fc.connect("localhost", 4321);
-					FileClientUI fcu = new FileClientUI(testToken);
+					FileClientUI fcu = new FileClientUI();
+					fcu.launchUI(testToken);
 					break;
 				case 2:
 					System.out.println("2");
