@@ -58,7 +58,7 @@ public class Token implements UserToken
      */
     public List<String> getGroups()
     {
-    	String[] words = {"ace", "boom", "crew", "dog", "eon"};  
+    	String[] words = {"this", "is", "the", "getGroups", "stub"};
    
 		List<String> wordList = Arrays.asList(words);
 
