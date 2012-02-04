@@ -1,5 +1,6 @@
 import java.util.Scanner; // Scanner class required for user input
 import java.util.List; // to create test UserToken
+import java.util.Arrays; // to create test UserToken
 
 public class SimpleUI
 {
