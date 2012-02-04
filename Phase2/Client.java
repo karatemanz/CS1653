@@ -1,5 +1,5 @@
 import java.net.ServerSocket;  // The server uses this to bind to a port	
-import java.net.Socket;        // Incoming connections are represented as socketsimport java.io.ObjectInputStream;
+import java.net.Socket;        // Incoming connections are represented as sockets
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
