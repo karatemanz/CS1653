@@ -17,7 +17,7 @@ public abstract class Client {
 		/* TODO: Write this method */
 		try{
 			// This is basically just listens for new client connections
-			final ServerSocket serverSock = new ServerSocket(SERVER_PORT);
+			final ServerSocket serverSock = new ServerSocket(server);
 			
 			// A simple infinite loop to accept connections
 			Socket sock = null;
