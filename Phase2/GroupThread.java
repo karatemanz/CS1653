@@ -227,7 +227,9 @@ public class GroupThread extends Thread
 					//If user is the owner, removeMember will automatically delete group!
 					for(int index = 0; index < deleteFromGroups.size(); index++)
 					{
-						my_gs.groupList.removeMember(username, deleteFromGroups.get(index));
+						//my_gs.groupList.removeMember(username, deleteFromGroups.get(index));
+						/* TO DO: create groupList object and removeMember
+						 * method or make this work some other way */
 					}
 					
 					//If groups are owned, they must be deleted
