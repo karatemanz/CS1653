@@ -26,8 +26,8 @@ public class Token implements UserToken, java.io.Serializable
      */
     public String getIssuer()
     {
-		return "getIssuer stub";
-    	//return issuer;
+		//return "getIssuer stub";
+    	return issuer;
     }
 
 
@@ -42,8 +42,8 @@ public class Token implements UserToken, java.io.Serializable
      */
     public String getSubject()
     {
-    	return "getSubject stub";
-    	//return subject;
+    	//return "getSubject stub";
+    	return subject;
     }
 
 
@@ -58,12 +58,10 @@ public class Token implements UserToken, java.io.Serializable
      */
     public List<String> getGroups()
     {
-    	String[] words = {"this", "is", "the", "getGroups", "stub"};
-   
-		List<String> wordList = Arrays.asList(words);
-
-		return wordList;
-		//return groups;
+    	//String[] words = {"this", "is", "the", "getGroups", "stub"};
+		//List<String> wordList = Arrays.asList(words);
+		//return wordList;
+		return groups;
     }
 
 }
