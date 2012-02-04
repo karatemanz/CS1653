@@ -24,7 +24,7 @@ public class FileClientUI
 				System.out.println("Enter 1 to list files,\n" +
 								   "enter 2 to upload a file to the File Server,\n" +
 								   "enter 3 to download a file to the File Server,\n" +
-								   "enter 4 to delete a file to the File Server," +
+								   "enter 4 to delete a file to the File Server,\n" +
 								   "enter 5 to disconnect and exit:");
 				String inputString = console.nextLine();
 				
