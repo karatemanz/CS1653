@@ -20,10 +20,12 @@ public abstract class Client {
 			// Connect to the specified server
 			sock = new Socket(server, port);
 			System.out.println("Connected to " + server + " on port " + port);
+			return true;
 		}
 		catch(Exception e){
 			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace(System.err);
+			return false;
 		}
 	}
 
