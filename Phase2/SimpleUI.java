@@ -19,11 +19,11 @@ public class SimpleUI
 		
 		while (!exitKey)
 		{
-			System.out.println("Enter 1 to connect to the File Server,\n" +
-							   "enter 2 to disconnect from the File Server,\n" +
-							   "enter 3 to connect to the Group Server,\n" +
-							   "enter 4 to disconnect from the Group Server,\n" +
-							   "enter 5 to exit:");
+			System.out.print("Enter 1 to connect to the File Server,\n" +
+							 "enter 2 to disconnect from the File Server,\n" +
+							 "enter 3 to connect to the Group Server,\n" +
+							 "enter 4 to disconnect from the Group Server,\n" +
+							 "enter 5 to exit:\n>");
 			String inputString = console.nextLine();
 			
 			switch (Integer.parseInt(inputString))

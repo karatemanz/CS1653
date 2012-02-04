@@ -21,11 +21,11 @@ public class FileClientUI
 				 * public List<String> listFiles(UserToken token)
 				 * public boolean upload(String sourceFile, String destFile, String group, UserToken token)
 				 */
-				System.out.println("Enter 1 to list files,\n" +
-								   "enter 2 to upload a file to the File Server,\n" +
-								   "enter 3 to download a file to the File Server,\n" +
-								   "enter 4 to delete a file to the File Server,\n" +
-								   "enter 5 to disconnect and exit:");
+				System.out.print("Enter 1 to list files,\n" +
+								 "enter 2 to upload a file to the File Server,\n" +
+								 "enter 3 to download a file to the File Server,\n" +
+								 "enter 4 to delete a file to the File Server,\n" +
+								 "enter 5 to disconnect and exit:\n>");
 				String inputString = console.nextLine();
 				
 				switch (Integer.parseInt(inputString))
@@ -52,7 +52,7 @@ public class FileClientUI
 						break;
 					case 5:
 						System.out.println("Disconnecting and exiting...");
-						fc.disconnect(); // catch boolean, return its value
+						fc.disconnect();
 						exitKey = true;
 						break;
 					default:
