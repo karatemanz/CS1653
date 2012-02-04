@@ -15,6 +15,7 @@ public abstract class Client {
 		System.out.println("attempting to connect");
 
 		/* TODO: Write this method */
+		return true; // stub for compilation
 
 	}
 
