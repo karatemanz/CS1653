@@ -155,7 +155,7 @@ class AutoSave extends Thread
 					System.err.println("Error: " + e.getMessage());
 					e.printStackTrace(System.err);
 				}
-
+			}
 			catch(Exception e)
 			{
 				System.out.println("Autosave Interrupted");
