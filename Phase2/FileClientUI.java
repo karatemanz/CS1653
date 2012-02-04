@@ -1,4 +1,5 @@
 import java.util.Scanner; // Scanner class required for user input
+import java.util.List;
 
 public class FileClientUI
 {
