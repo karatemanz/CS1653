@@ -44,6 +44,11 @@ public class SimpleUI
 				System.out.println("Username not recognized. Contact Admin.");
 				exitKey = true;
 			}
+			else
+			{
+				System.out.println(userToken.getSubject());
+				System.out.println(userToken.getIssuer());
+			}
 		}
 		else
 		{
