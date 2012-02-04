@@ -17,13 +17,20 @@ public class SimpleUI
 		
 		UserToken testToken = new Token("TestServer", "TestUser", testList);
 		
+		/* From phase 2 description: Once a user obtains a token from the group
+		 * server, they can log into one or more file servers to upload,
+		 * download or delete files.
+		 * So, we should force user to go to Group Server and get their token
+		 * before accessing the File Server. Can this be done from the File
+		 * Server UI without being overly complex? Or just do it from here
+		 * before presenting any other options? */
+		
 		while (!exitKey)
 		{
-			System.out.print("Enter 1 to connect to the File Server,\n" +
-							 "enter 2 to disconnect from the File Server,\n" +
-							 "enter 3 to connect to the Group Server,\n" +
-							 "enter 4 to disconnect from the Group Server,\n" +
-							 "enter 5 to exit:\n>");
+			System.out.print("Main menu:\n" +
+							 "Enter 1 to connect to the File Server,\n" +
+							 "enter 2 to connect to the Group Server,\n" +
+							 "enter 3 to exit...\n>");
 			String inputString = console.nextLine();
 			
 			switch (Integer.parseInt(inputString))
