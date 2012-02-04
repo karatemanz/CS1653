@@ -46,4 +46,22 @@ public class SimpleUI
 			}
 		}
 	}
+	
+	/* FileClient methods:
+	 * public boolean delete(String filename, UserToken token)
+	 * public boolean download(String sourceFile, String destFile, UserToken token)
+	 * public List<String> listFiles(UserToken token)
+	 * public boolean upload(String sourceFile, String destFile, String group, UserToken token)
+	 */
+	
+	/* GroupClient methods:
+	 * public UserToken getToken(String username)
+	 * public boolean createUser(String username, UserToken token)
+	 * public boolean deleteUser(String username, UserToken token)
+	 * public boolean createGroup(String groupname, UserToken token)
+	 * public boolean deleteGroup(String groupname, UserToken token)
+	 * public List<String> listMembers(String group, UserToken token)
+	 * public boolean addUserToGroup(String username, String groupname, UserToken token)
+	 * public boolean deleteUserFromGroup(String username, String groupname, UserToken token)
+	 */
 }
