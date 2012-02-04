@@ -30,7 +30,7 @@ public class SimpleUI
 			System.out.print("Main menu:\n" +
 							 "Enter 1 to connect to the File Server,\n" +
 							 "enter 2 to connect to the Group Server,\n" +
-							 "enter 3 to exit...\n>");
+							 "enter 3 to exit...\n> ");
 			String inputString = console.nextLine();
 			
 			switch (Integer.parseInt(inputString))
@@ -43,7 +43,8 @@ public class SimpleUI
 					break;
 				case 2:
 					System.out.println("2");
-					fc.disconnect();
+					//fc.disconnect();
+					System.out.println(gc.isConnected());
 					break;
 				case 3:
 					System.out.println("3");
