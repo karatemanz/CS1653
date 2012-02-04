@@ -1,4 +1,5 @@
 import java.util.Scanner; // Scanner class required for user input
+import java.util.List; // to create test UserToken
 
 public class SimpleUI
 {
@@ -8,6 +9,12 @@ public class SimpleUI
 		boolean exitKey = false;
 		FileClient fc = new FileClient();
 		GroupClient gc = new GroupClient();
+		
+		// make a test Token to send to FileClientUI
+		String[] testGroups = {"this", "is", "the", "test", "group", "list"};  
+		List<String> testList = Arrays.asList(testGroups);
+		
+		UserToken testToken = new Token("TestServer", "TestUser", testList);
 		
 		while (!exitKey)
 		{
@@ -22,7 +29,8 @@ public class SimpleUI
 			{
 				case 1:
 					System.out.println("1");
-					fc.connect("localhost", 4321);
+					//fc.connect("localhost", 4321);
+					FileClientUI fcu = new FileClientUI(testToken);
 					break;
 				case 2:
 					System.out.println("2");
