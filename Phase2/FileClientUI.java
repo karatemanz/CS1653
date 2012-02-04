@@ -11,7 +11,7 @@ public class FileClientUI
 		{
 			Scanner console = new Scanner(System.in); // Scanner object for input
 			boolean exitKey = false;
-			List<String> aList = new List<String>;
+			List<String> aList;
 			
 			while (!exitKey)
 			{
