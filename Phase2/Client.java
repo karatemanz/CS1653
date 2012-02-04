@@ -17,18 +17,9 @@ public abstract class Client {
 
 		/* TODO: Write this method */
 		try{
-			// This is basically just listens for new client connections
-			final ServerSocket serverSock = new ServerSocket(port);
-			
-			// A simple infinite loop to accept connections
-			sock = null;
-			GroupThread thread = null;
-			while(true){
-				sock = serverSock.accept();     // Accept an incoming connection
-				thread = new GroupThread(sock);  // Create a thread to handle this connection
-				thread.start();                 // Fork the thread
-			}                                   // Loop to work on new connections while this
-			// the accept()ed connection is handled
+			// Connect to the specified server
+			final Socket sock = new Socket(args[0], EchoServer.SERVER_PORT);
+			System.out.println("Connected to " + args[0] + " on port " + EchoServer.SERVER_PORT);
 		}
 		catch(Exception e){
 			System.err.println("Error: " + e.getMessage());
