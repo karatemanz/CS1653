@@ -44,11 +44,29 @@ public class GroupClientUI
 				{
 					case 1:
 						System.out.println("1");
-						System.out.println("createUser() stub");
+						aList = token.getGroups();
+						if (aList.contains("ADMIN"))
+						{
+							System.out.println("ADMIN");
+							System.out.println("createUser() stub");
+						}
+						else
+						{
+							System.out.println("Forbidden operation. You must be an ADMIN to create a user");
+						}
 						break;
 					case 2:
 						System.out.println("2");
-						System.out.println("deleteUser() stub");
+						aList = token.getGroups();
+						if (aList.contains("ADMIN"))
+						{
+							System.out.println("ADMIN");
+							System.out.println("deleteUser() stub");
+						}
+						else
+						{
+							System.out.println("Forbidden operation. You must be an ADMIN to delete a user");
+						}
 						break;
 					case 3:
 						System.out.println("3");
