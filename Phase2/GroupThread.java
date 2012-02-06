@@ -272,4 +272,27 @@ public class GroupThread extends Thread
 		}
 	}
 	
+	private List<String> listMembers(String group, UserToken yourToken)
+	{
+		String requester = yourToken.getSubject();
+		
+		//Does requester exist?
+		if(my_gs.userList.checkUser(requester))
+		{
+			ArrayList<String> temp = my_gs.userList.getUserGroups(requester);
+			//requester needs to be in same group as requested
+			if(temp.contains(group))
+			{
+				// do the work - iterate through UserList somehow?
+			}
+			else
+			{
+				return false; //requester is not in same group
+			}
+		}
+		else
+		{
+			return false; //requester does not exist
+		}
+	}
 }
