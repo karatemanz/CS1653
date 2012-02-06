@@ -26,13 +26,13 @@ public class SimpleUI
 		{
 			System.out.print("Enter 1 to login,\nenter 2 to exit...\n> ");
 			inputString = console.nextLine();
-
-			System.out.print("Enter your username to login...\n> ");
-			userName = console.nextLine();
-			menuChoice = Integer.parseInt(inputString);
 			
 			if (menuChoice == 1)
 			{
+				System.out.print("Enter your username to login...\n> ");
+				userName = console.nextLine();
+				menuChoice = Integer.parseInt(inputString);
+
 				// connect to group server and get token
 				gc.connect("localhost", 8765);
 				if (gc.isConnected()) // check that server is running
