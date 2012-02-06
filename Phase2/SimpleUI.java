@@ -4,12 +4,9 @@ import java.util.Arrays; // to create test UserToken
 
 public class SimpleUI
 {
-	FileClient fc = new FileClient();
-	GroupClient gc = new GroupClient();
-	Scanner console = new Scanner(System.in); // Scanner object for input
-
     public static void main(String[] args)
     {
+		loginMenu();
 //		Scanner console = new Scanner(System.in); // Scanner object for input
 //		String inputString;
 //		String userName;
@@ -45,8 +42,12 @@ public class SimpleUI
 		// get connection to either File Server or Group Server
 	}
 	
-	public void loginMenu()
+	public static void loginMenu()
 	{
+		FileClient fc = new FileClient();
+		GroupClient gc = new GroupClient();
+		Scanner console = new Scanner(System.in); // Scanner object for input
+
 		String loginString;
 		int loginNumber;
 		boolean doExit = false;
@@ -66,7 +67,7 @@ public class SimpleUI
 			{
 				// connect to group server and get token
 				gc.connect("localhost", 8765);
-				if (gc.isConnected()) // check that server is running)
+				if (gc.isConnected()) // check that server is running
 				{
 					userToken = gc.getToken(userName);
 					if (userToken == null) // no login for that name
@@ -85,6 +86,10 @@ public class SimpleUI
 			else if (loginNumber == 2)
 			{
 				System.out.println("Exiting...");
+				if (gc.isConnected())
+				{
+					gc.disconnect();
+				}
 				doExit = true;
 			}
 			else
@@ -94,7 +99,7 @@ public class SimpleUI
 		}
 	}
 	
-	public void serverMenu(UserToken theToken)
+	public static void serverMenu(UserToken theToken)
 	{
 		boolean exitKey = false;
 		String inputString;
