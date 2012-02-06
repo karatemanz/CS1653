@@ -305,11 +305,12 @@ public class GroupThread extends Thread
 				// get a list of usernames, loop through each
 				for (Enumeration<String> usernameList = my_gs.userList.getUsernames(); usernameList.hasMoreElements();)
 				{
-					aUser = usernameList.nextElement();
-					if (aUser.getUserGroups.contains(group));
+					aUser = (usernameList.nextElement());
+					
+					if (my_gs.userList.getUserGroups(aUser).contains(group));
 					{
 						System.out.println(aUser);
-						aList.add(aUser);
+						System.out.println(aList.add(aUser));
 					}
 				}
 				// ArrayList<String> aGroupList = my_gs.userList.getUserGroups(username)
