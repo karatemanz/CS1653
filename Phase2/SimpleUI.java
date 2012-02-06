@@ -71,30 +71,21 @@ public class SimpleUI
 			switch (Integer.parseInt(inputString))
 			{
 				case 1:
-					System.out.println("1");
-					//fc.connect("localhost", 4321);
+					System.out.println("Connecting to File Server");
 					FileClientUI fcu = new FileClientUI();
-					fcu.launchUI(testToken);
+					fcu.launchUI(userToken);
 					break;
 				case 2:
-					System.out.println("2");
-					//fc.disconnect();
-					System.out.println(gc.isConnected());
+					System.out.println("Connecting to Group Server...");
+					GroupClientUI gcu = new GroupClientUI();
+					gcu.launchUI(userToken);
 					break;
 				case 3:
-					System.out.println("3");
-					gc.connect("localhost", 8765);
-					break;
-				case 4:
-					System.out.println("4");
-					gc.disconnect();
-					break;
-				case 5:
-					System.out.println("Exiting");
+					System.out.println("Exiting...");
 					exitKey = true;
 					break;
 				default:
-					exitKey = true;
+					System.out.println("Unknown command. Please try again.");
 					break;
 			}
 		}
