@@ -27,7 +27,7 @@ public class GroupClientUI
 				 */
 				
 				// need to determine whether user has ADMIN rights or not, then
-				// send to appropriate menu
+				// send to appropriate menu - only ADMIN can create/delete user
 				System.out.print("Enter 1 to create a user,\n" +
 								 "enter 2 to delete a user,\n" +
 								 "enter 3 to create a group,\n" +
