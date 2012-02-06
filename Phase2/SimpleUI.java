@@ -18,6 +18,7 @@ public class SimpleUI
 		String inputString;
 		int menuChoice;
 		boolean exitKey = false;
+		boolean hasToken = false;
 		String userName;
 		UserToken userToken;
 		
@@ -43,6 +44,10 @@ public class SimpleUI
 						gc.disconnect();
 						exitKey = true;
 					}
+					else // has a valid token
+					{
+						hasToken = true;
+					}
 				}
 				else
 				{
@@ -63,41 +68,37 @@ public class SimpleUI
 			{
 				System.out.println("Unknown command. Please try again.");
 			}
-		}
-	}
-	
-	public static void serverMenu(UserToken theToken)
-	{
-		boolean exitKey = false;
-		String inputString;
-		while (!exitKey)
-		{
-			System.out.print("Main menu:\n" +
-							 "Enter 1 to connect to the File Server,\n" +
-							 "enter 2 to connect to the Group Server,\n" +
-							 "enter 3 to logout...\n> ");
-			inputString = console.nextLine();
 			
-			switch (Integer.parseInt(inputString))
+			while (hasToken)
 			{
-				case 1:
-					System.out.println("Connecting to File Server");
-					FileClientUI fcu = new FileClientUI();
-					fcu.launchUI(theToken);
-					break;
-				case 2:
-					System.out.println("Connecting to Group Server...");
-					GroupClientUI gcu = new GroupClientUI();
-					gcu.launchUI(theToken);
-					break;
-				case 3:
-					System.out.println("Logging out...");
-					exitKey = true;
-					break;
-				default:
-					System.out.println("Unknown command. Please try again.");
-					break;
+				System.out.print("Main menu:\n" +
+								 "Enter 1 to connect to the File Server,\n" +
+								 "enter 2 to connect to the Group Server,\n" +
+								 "enter 3 to logout...\n> ");
+				inputString = console.nextLine();
+				
+				switch (Integer.parseInt(inputString))
+				{
+					case 1:
+						System.out.println("Connecting to File Server");
+						FileClientUI fcu = new FileClientUI();
+						fcu.launchUI(theToken);
+						break;
+					case 2:
+						System.out.println("Connecting to Group Server...");
+						GroupClientUI gcu = new GroupClientUI();
+						gcu.launchUI(theToken);
+						break;
+					case 3:
+						System.out.println("Logging out...");
+						hasToken = false;
+						userToken = null;
+						break;
+					default:
+						System.out.println("Unknown command. Please try again.");
+						break;
+				}
 			}
-		}		
+		}
 	}
 }
