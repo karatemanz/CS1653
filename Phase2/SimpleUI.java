@@ -44,9 +44,10 @@ public class SimpleUI
 						gc.disconnect();
 						exitKey = true;
 					}
-					else // has a valid token
+					else // has a valid token, can disconnect from gc
 					{
 						hasToken = true;
+						gc.disconnect();
 					}
 				}
 				else
