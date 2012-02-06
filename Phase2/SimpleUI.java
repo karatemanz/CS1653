@@ -7,39 +7,6 @@ public class SimpleUI
     public static void main(String[] args)
     {
 		loginMenu();
-//		Scanner console = new Scanner(System.in); // Scanner object for input
-//		String inputString;
-//		String userName;
-//		UserToken userToken;
-//		boolean exitKey = false;
-//		boolean hasToken = false;
-		
-		// make a test Token to send to FileClientUI
-//		String[] testGroups = {"this", "is", "the", "test", "group", "list"};  
-//		List<String> testList = Arrays.asList(testGroups);
-//		
-//		UserToken testToken = new Token("TestServer", "TestUser", testList);
-		
-		/* From phase 2 description: Once a user obtains a token from the group
-		 * server, they can log into one or more file servers to upload,
-		 * download or delete files.
-		 * So, we should force user to go to Group Server and get their token
-		 * before accessing the File Server. Can this be done from the File
-		 * Server UI without being overly complex? Or just do it from here
-		 * before presenting any other options? */
-		
-		// (1) get token by connecting to group server via group client
-		// (2) upon valid token retrieval, allow formal connection to group server
-//			else // test UserToken methods
-//			{
-//				System.out.println(userToken.getSubject());
-//				System.out.println(userToken.getIssuer());
-//				testList = userToken.getGroups();
-//				for (String huh : testList)
-//				{ System.out.println(huh); }
-//			}
-		
-		// get connection to either File Server or Group Server
 	}
 	
 	public static void loginMenu()
