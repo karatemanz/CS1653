@@ -35,7 +35,7 @@ public class GroupClientUI
 								 "enter 5 to list the members of a group,\n" +
 								 "enter 6 to add a user to a group,\n" +
 								 "enter 7 to delete a user from a group,\n" +
-								 "enter 8 to disconnect and exit:\n> ");
+								 "enter 8 to disconnect from Group Server:\n> ");
 				String inputString = console.nextLine();
 				
 				switch (Integer.parseInt(inputString))
@@ -69,7 +69,7 @@ public class GroupClientUI
 						System.out.println("deleteUserFromGroup() stub");
 						break;
 					case 8:
-						System.out.println("Disconnecting and exiting...");
+						System.out.println("Disconnecting from Group Server...");
 						gc.disconnect();
 						exitKey = true;
 						break;
