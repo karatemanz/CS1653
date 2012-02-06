@@ -15,22 +15,22 @@ public class SimpleUI
 		GroupClient gc = new GroupClient();
 		Scanner console = new Scanner(System.in); // Scanner object for input
 
-		String loginString;
-		int loginNumber;
-		boolean doExit = false;
+		String inputString;
+		int menuChoice;
+		boolean exitKey = false;
 		String userName;
 		UserToken userToken;
 		
-		while (!doExit)
+		while (!exitKey)
 		{
 			System.out.println("Enter 1 to login,\nenter 2 to exit...\n> ");
 			loginString = console.nextLine();
 
 			System.out.print("Enter your username to login...\n> ");
 			userName = console.nextLine();
-			loginNumber = Integer.parseInt(loginString);
+			menuChoice = Integer.parseInt(loginString);
 			
-			if (loginNumber == 1)
+			if (menuChoice == 1)
 			{
 				// connect to group server and get token
 				gc.connect("localhost", 8765);
@@ -41,23 +41,23 @@ public class SimpleUI
 					{
 						System.out.println("Username not recognized. Contact Admin.");
 						gc.disconnect();
-						doExit = true;
+						exitKey = true;
 					}
 				}
 				else
 				{
 					System.out.println("Error - Group Server not running. Contact Admin.");
-					doExit = true;
+					exitKey = true;
 				}
 			}
-			else if (loginNumber == 2)
+			else if (menuChoice == 2)
 			{
 				System.out.println("Exiting...");
 				if (gc.isConnected())
 				{
 					gc.disconnect();
 				}
-				doExit = true;
+				exitKey = true;
 			}
 			else
 			{
