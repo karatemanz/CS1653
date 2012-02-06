@@ -117,7 +117,23 @@ public class GroupThread extends Thread
 				}
 				else if(message.getMessage().equals("LMEMBERS")) //Client wants a list of members in a group
 				{
-				    /* TODO:  Write this handler */
+					String groupName = (String)message.getObjContents().get(0); //Get the groupName
+					UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
+					
+					if(groupName == null)
+					{
+						response = new Envelope("FAIL");
+						response.addObject(null);
+						output.writeObject(response);
+					}
+					else
+					{
+						ListString memberList = listMembers(groupName, yourToken); //Create a token
+						//Respond to the client. On error, the client will receive a null List
+						response = new Envelope("OK");
+						response.addObject(memberList);
+						output.writeObject(response);
+					}
 				}
 				else if(message.getMessage().equals("AUSERTOGROUP")) //Client wants to add user to a group
 				{
