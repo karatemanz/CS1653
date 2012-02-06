@@ -111,12 +111,12 @@ public class SimpleUI
 				case 1:
 					System.out.println("Connecting to File Server");
 					FileClientUI fcu = new FileClientUI();
-					fcu.launchUI(userToken);
+					fcu.launchUI(theToken);
 					break;
 				case 2:
 					System.out.println("Connecting to Group Server...");
 					GroupClientUI gcu = new GroupClientUI();
-					gcu.launchUI(userToken);
+					gcu.launchUI(theToken);
 					break;
 				case 3:
 					System.out.println("Logging out...");
