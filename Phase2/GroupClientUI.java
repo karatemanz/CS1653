@@ -11,6 +11,7 @@ public class GroupClientUI
 		{
 			Scanner console = new Scanner(System.in); // Scanner object for input
 			String userName = token.getSubject();
+			String aUserName, aGroupName;
 			boolean exitKey = false;
 			List<String> aList;
 			
@@ -70,7 +71,9 @@ public class GroupClientUI
 					case 5:
 						System.out.println("5");
 						// public List<String> listMembers(String group, UserToken token)
-						System.out.println("listMembers() stub");
+						aGroupName = getNonEmptyString("Enter the group name: ", 64);
+						gc.listMembers(aGroupName, token);
+//						System.out.println("listMembers() stub");
 						break;
 					case 6:
 						System.out.println("6");
