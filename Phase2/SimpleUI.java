@@ -20,7 +20,7 @@ public class SimpleUI
 		boolean exitKey = false;
 		boolean hasToken = false;
 		String userName;
-		UserToken userToken;
+		UserToken userToken = null;
 		
 		while (!exitKey)
 		{
