@@ -34,6 +34,7 @@ public class SimpleUI
 				userName = console.nextLine();
 
 				// connect to group server and get token
+				// may want to prompt user here for server name, port?
 				gc.connect("localhost", 8765);
 				if (gc.isConnected()) // check that server is running
 				{
@@ -84,7 +85,8 @@ public class SimpleUI
 					case 2:
 						System.out.println("Connecting to Group Server...");
 						GroupClientUI gcu = new GroupClientUI();
-						gcu.launchUI(userToken);
+						// may want to prompt user here for server name, port
+						gcu.launchUI(userToken, "localhost", 8765);
 						break;
 					case 3:
 						System.out.println("Logging out...");
