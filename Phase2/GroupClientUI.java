@@ -101,4 +101,31 @@ public class GroupClientUI
 			return false;
 		}
 	}
+	
+	public static String getNonEmptyString(String prompt, int maxLength)
+	{
+		String str = "";
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print(prompt);        
+		
+		while (str.length() == 0)
+		{
+			str = scan.nextLine();
+			
+			if (str.length() == 0)
+			{
+				System.out.print(prompt);
+			}
+			else if (str.length() > maxLength)
+			{
+				System.out.println("Maximum length allowed is " + maxLength + " characters. Please re-enter.");
+				System.out.print(prompt);
+				str = "";
+			}
+		}
+		
+		return str;
+	}
+
 }
