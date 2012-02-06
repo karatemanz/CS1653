@@ -16,19 +16,6 @@ public class GroupClientUI
 			
 			while (!exitKey)
 			{
-				/* GroupClient methods:
-				 * public UserToken getToken(String username)
-				 * public boolean createUser(String username, UserToken token)
-				 * public boolean deleteUser(String username, UserToken token)
-				 * public boolean createGroup(String groupname, UserToken token)
-				 * public boolean deleteGroup(String groupname, UserToken token)
-				 * public List<String> listMembers(String group, UserToken token)
-				 * public boolean addUserToGroup(String username, String groupname, UserToken token)
-				 * public boolean deleteUserFromGroup(String username, String groupname, UserToken token)
-				 */
-				
-				// need to determine whether user has ADMIN rights or not, then
-				// send to appropriate menu - only ADMIN can create/delete user
 				System.out.print("Enter 1 to create a user,\n" +
 								 "enter 2 to delete a user,\n" +
 								 "enter 3 to create a group,\n" +
@@ -48,6 +35,7 @@ public class GroupClientUI
 						if (aList.contains("ADMIN"))
 						{
 							System.out.println("ADMIN");
+							// public boolean createUser(String username, UserToken token)
 							System.out.println("createUser() stub");
 						}
 						else
@@ -61,6 +49,7 @@ public class GroupClientUI
 						if (aList.contains("ADMIN"))
 						{
 							System.out.println("ADMIN");
+							// public boolean deleteUser(String username, UserToken token)
 							System.out.println("deleteUser() stub");
 						}
 						else
@@ -69,23 +58,28 @@ public class GroupClientUI
 						}
 						break;
 					case 3:
-						System.out.println("3");
+						System.out.println("3"); // don't allow duplicate name (also covers ADMIN)
+						// public boolean createGroup(String groupname, UserToken token)
 						System.out.println("createGroup() stub");
 						break;
 					case 4:
 						System.out.println("4");
+						// public boolean deleteGroup(String groupname, UserToken token)
 						System.out.println("deleteGroup() stub");
 						break;
 					case 5:
 						System.out.println("5");
+						// public List<String> listMembers(String group, UserToken token)
 						System.out.println("listMembers() stub");
 						break;
 					case 6:
 						System.out.println("6");
+						// public boolean addUserToGroup(String username, String groupname, UserToken token)
 						System.out.println("addUserToGroup() stub");
 						break;
 					case 7:
 						System.out.println("7");
+						// public boolean deleteUserFromGroup(String username, String groupname, UserToken token)
 						System.out.println("deleteUserFromGroup() stub");
 						break;
 					case 8:
