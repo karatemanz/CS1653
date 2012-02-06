@@ -16,10 +16,10 @@ public class SimpleUI
 		GroupClient gc = new GroupClient();
 		
 		// make a test Token to send to FileClientUI
-		String[] testGroups = {"this", "is", "the", "test", "group", "list"};  
-		List<String> testList = Arrays.asList(testGroups);
-		
-		UserToken testToken = new Token("TestServer", "TestUser", testList);
+//		String[] testGroups = {"this", "is", "the", "test", "group", "list"};  
+//		List<String> testList = Arrays.asList(testGroups);
+//		
+//		UserToken testToken = new Token("TestServer", "TestUser", testList);
 		
 		/* From phase 2 description: Once a user obtains a token from the group
 		 * server, they can log into one or more file servers to upload,
@@ -44,14 +44,14 @@ public class SimpleUI
 				System.out.println("Username not recognized. Contact Admin.");
 				exitKey = true;
 			}
-			else
-			{
-				System.out.println(userToken.getSubject());
-				System.out.println(userToken.getIssuer());
-				testList = userToken.getGroups();
-				for (String huh : testList)
-				{ System.out.println(huh); }
-			}
+//			else // test UserToken methods
+//			{
+//				System.out.println(userToken.getSubject());
+//				System.out.println(userToken.getIssuer());
+//				testList = userToken.getGroups();
+//				for (String huh : testList)
+//				{ System.out.println(huh); }
+//			}
 		}
 		else
 		{
