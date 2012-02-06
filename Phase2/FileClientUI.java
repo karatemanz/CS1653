@@ -5,9 +5,9 @@ public class FileClientUI
 {
 	FileClient fc = new FileClient();
 	
-	public boolean launchUI(UserToken token)
+	public boolean launchUI(UserToken token, String serverName, int portNumber)
 	{
-		if (fc.connect("localhost", 4321))
+		if (fc.connect(serverName, portNumber))
 		{
 			Scanner console = new Scanner(System.in); // Scanner object for input
 			boolean exitKey = false;
