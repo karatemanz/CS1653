@@ -4,6 +4,9 @@ import java.util.Arrays; // to create test UserToken
 
 public class SimpleUI
 {
+	FileClient fc = new FileClient();
+	GroupClient gc = new GroupClient();
+
     public static void main(String[] args)
     {
 		Scanner console = new Scanner(System.in); // Scanner object for input
@@ -12,8 +15,6 @@ public class SimpleUI
 		UserToken userToken;
 		boolean exitKey = false;
 		boolean hasToken = false;
-		FileClient fc = new FileClient();
-		GroupClient gc = new GroupClient();
 		
 		// make a test Token to send to FileClientUI
 //		String[] testGroups = {"this", "is", "the", "test", "group", "list"};  
@@ -89,5 +90,13 @@ public class SimpleUI
 					break;
 			}
 		}
+	}
+	
+	public void loginSequence()
+	{
+		String loginString;
+		String userName;
+		
+		System.out.println("Enter 1 to login,\nenter 2 to exit...\n> ");
 	}
 }
