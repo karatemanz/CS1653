@@ -275,6 +275,7 @@ public class GroupThread extends Thread
 	private List<String> listMembers(String group, UserToken yourToken)
 	{
 		String requester = yourToken.getSubject();
+		List<String> aList = null;
 		
 		//Does requester exist?
 		if(my_gs.userList.checkUser(requester))
@@ -284,15 +285,16 @@ public class GroupThread extends Thread
 			if(temp.contains(group))
 			{
 				// do the work - iterate through UserList somehow?
+				return aList;
 			}
 			else
 			{
-				return false; //requester is not in same group
+				return null; //requester is not in same group
 			}
 		}
 		else
 		{
-			return false; //requester does not exist
+			return null; //requester does not exist
 		}
 	}
 }
