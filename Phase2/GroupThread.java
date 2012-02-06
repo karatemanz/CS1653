@@ -291,6 +291,7 @@ public class GroupThread extends Thread
 	private List<String> listMembers(String group, UserToken yourToken)
 	{
 		String requester = yourToken.getSubject();
+		String aUser = new String();
 		List<String> aList = null;
 		
 		//Does requester exist?
@@ -301,10 +302,18 @@ public class GroupThread extends Thread
 			if(temp.contains(group))
 			{
 				// do the work - iterate through UserList somehow?
-				// get a list of usernames
-				// loop for each username in list
+				// get a list of usernames, loop through each
+				for (Enumeration<String> usernameList = my_gs.userList.getUsernames(); usernameList.hasMoreElements();)
+				{
+					aUser = usernameList.nextElement();
+					if (aUser.getUserGroups.contains(group));
+					{
+						System.out.println(aUser);
+						aList.add(aUser);
+					}
+				}
 				// ArrayList<String> aGroupList = my_gs.userList.getUserGroups(username)
-				// if (aGroupList.contains(group) { aList.add(username); }
+				// 
 				return aList;
 			}
 			else
