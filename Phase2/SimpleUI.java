@@ -48,6 +48,9 @@ public class SimpleUI
 			{
 				System.out.println(userToken.getSubject());
 				System.out.println(userToken.getIssuer());
+				testList = userToken.getGroups();
+				for (String huh : testList)
+				{ System.out.println(huh); }
 			}
 		}
 		else
