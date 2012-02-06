@@ -56,7 +56,7 @@ public class FileClientUI
 						exitKey = true;
 						break;
 					default:
-						exitKey = true;
+						System.out.println("Unknown command. Please try again.");
 						break;
 				}
 			}
