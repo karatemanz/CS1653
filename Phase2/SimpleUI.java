@@ -19,7 +19,7 @@ public class SimpleUI
 		int menuChoice;
 		boolean exitKey = false;
 		boolean hasToken = false;
-		String userName;
+		String userName = new String();
 		UserToken userToken = null;
 		
 		while (!exitKey)
@@ -69,7 +69,8 @@ public class SimpleUI
 				System.out.print("Main menu:\n" +
 								 "Enter 1 to connect to the File Server,\n" +
 								 "enter 2 to connect to the Group Server,\n" +
-								 "enter 3 to logout...\n> ");
+								 "enter 3 to logout...\n" +
+								 userName + "> ");
 				inputString = console.nextLine();
 				
 				switch (Integer.parseInt(inputString))

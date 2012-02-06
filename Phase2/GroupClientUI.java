@@ -10,6 +10,7 @@ public class GroupClientUI
 		if (gc.connect("localhost", 8765))
 		{
 			Scanner console = new Scanner(System.in); // Scanner object for input
+			String userName = token.getSubject();
 			boolean exitKey = false;
 			List<String> aList;
 			
@@ -35,7 +36,8 @@ public class GroupClientUI
 								 "enter 5 to list the members of a group,\n" +
 								 "enter 6 to add a user to a group,\n" +
 								 "enter 7 to delete a user from a group,\n" +
-								 "enter 8 to disconnect from Group Server:\n> ");
+								 "enter 8 to disconnect from Group Server:\n" +
+								 userName + "> ");
 				String inputString = console.nextLine();
 				
 				switch (Integer.parseInt(inputString))

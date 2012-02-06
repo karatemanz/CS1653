@@ -10,6 +10,7 @@ public class FileClientUI
 		if (fc.connect(serverName, portNumber))
 		{
 			Scanner console = new Scanner(System.in); // Scanner object for input
+			String userName = token.getSubject();
 			boolean exitKey = false;
 			List<String> aList;
 			
@@ -25,7 +26,8 @@ public class FileClientUI
 								 "enter 2 to upload a file to the File Server,\n" +
 								 "enter 3 to download a file to the File Server,\n" +
 								 "enter 4 to delete a file to the File Server,\n" +
-								 "enter 5 to disconnect from File Server:\n> ");
+								 "enter 5 to disconnect from File Server:\n" +
+								 userName + "> ");
 				String inputString = console.nextLine();
 				
 				switch (Integer.parseInt(inputString))
