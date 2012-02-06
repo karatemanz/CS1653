@@ -24,7 +24,7 @@ public class SimpleUI
 		
 		while (!exitKey)
 		{
-			System.out.println("Enter 1 to login,\nenter 2 to exit...\n> ");
+			System.out.print("Enter 1 to login,\nenter 2 to exit...\n> ");
 			inputString = console.nextLine();
 
 			System.out.print("Enter your username to login...\n> ");
