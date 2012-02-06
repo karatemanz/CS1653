@@ -77,7 +77,8 @@ public class SimpleUI
 					case 1:
 						System.out.println("Connecting to File Server");
 						FileClientUI fcu = new FileClientUI();
-						fcu.launchUI(userToken);
+						// may want to prompt user here for server name, port
+						fcu.launchUI(userToken, "localhost", 4321);
 						break;
 					case 2:
 						System.out.println("Connecting to Group Server...");
