@@ -25,11 +25,11 @@ public class SimpleUI
 		while (!exitKey)
 		{
 			System.out.println("Enter 1 to login,\nenter 2 to exit...\n> ");
-			loginString = console.nextLine();
+			inputString = console.nextLine();
 
 			System.out.print("Enter your username to login...\n> ");
 			userName = console.nextLine();
-			menuChoice = Integer.parseInt(loginString);
+			menuChoice = Integer.parseInt(inputString);
 			
 			if (menuChoice == 1)
 			{
@@ -82,12 +82,12 @@ public class SimpleUI
 					case 1:
 						System.out.println("Connecting to File Server");
 						FileClientUI fcu = new FileClientUI();
-						fcu.launchUI(theToken);
+						fcu.launchUI(userToken);
 						break;
 					case 2:
 						System.out.println("Connecting to Group Server...");
 						GroupClientUI gcu = new GroupClientUI();
-						gcu.launchUI(theToken);
+						gcu.launchUI(userToken);
 						break;
 					case 3:
 						System.out.println("Logging out...");
