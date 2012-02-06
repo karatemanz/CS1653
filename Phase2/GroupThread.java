@@ -285,6 +285,10 @@ public class GroupThread extends Thread
 			if(temp.contains(group))
 			{
 				// do the work - iterate through UserList somehow?
+				// get a list of usernames
+				// loop for each username in list
+				// ArrayList<String> aGroupList = my_gs.userList.getUserGroups(username)
+				// if (aGroupList.contains(group) { aList.add(username); }
 				return aList;
 			}
 			else
