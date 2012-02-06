@@ -128,7 +128,7 @@ public class GroupThread extends Thread
 					}
 					else
 					{
-						ListString memberList = listMembers(groupName, yourToken); //Create a token
+						List<String> memberList = listMembers(groupName, yourToken); //Create a token
 						//Respond to the client. On error, the client will receive a null List
 						response = new Envelope("OK");
 						response.addObject(memberList);
