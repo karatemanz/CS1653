@@ -42,7 +42,6 @@ public class SimpleUI
 					{
 						System.out.println("Username not recognized. Contact Admin.");
 						gc.disconnect();
-						exitKey = true;
 					}
 					else // has a valid token, can disconnect from gc
 					{
@@ -53,16 +52,11 @@ public class SimpleUI
 				else
 				{
 					System.out.println("Error - Group Server not running. Contact Admin.");
-					exitKey = true;
 				}
 			}
 			else if (menuChoice == 2)
 			{
 				System.out.println("Exiting...");
-				if (gc.isConnected())
-				{
-					gc.disconnect();
-				}
 				exitKey = true;
 			}
 			else
