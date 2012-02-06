@@ -51,7 +51,7 @@ public class FileClientUI
 						System.out.println("delete stub");
 						break;
 					case 5:
-						System.out.println("Disconnecting and exiting...");
+						System.out.println("Disconnecting from File Server...");
 						fc.disconnect();
 						exitKey = true;
 						break;
