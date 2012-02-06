@@ -5,9 +5,9 @@ public class GroupClientUI
 {
 	GroupClient gc = new GroupClient();
 	
-	public boolean launchUI(UserToken token)
+	public boolean launchUI(UserToken token, String serverName, int portNumber)
 	{
-		if (gc.connect("localhost", 8765))
+		if (gc.connect(serverName, portNumber))
 		{
 			Scanner console = new Scanner(System.in); // Scanner object for input
 			String userName = token.getSubject();
