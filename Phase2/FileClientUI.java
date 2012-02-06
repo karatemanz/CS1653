@@ -25,7 +25,7 @@ public class FileClientUI
 								 "enter 2 to upload a file to the File Server,\n" +
 								 "enter 3 to download a file to the File Server,\n" +
 								 "enter 4 to delete a file to the File Server,\n" +
-								 "enter 5 to disconnect and exit:\n>");
+								 "enter 5 to disconnect and exit:\n> ");
 				String inputString = console.nextLine();
 				
 				switch (Integer.parseInt(inputString))
