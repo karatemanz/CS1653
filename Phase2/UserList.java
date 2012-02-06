@@ -33,6 +33,11 @@ import java.util.*;
 			}
 		}
 		
+		public synchronized Enumeration<String> getUsernames()
+		{
+			return list.keys();
+		}
+		
 		public synchronized ArrayList<String> getUserGroups(String username)
 		{
 			return list.get(username).getGroups();
