@@ -229,6 +229,8 @@ public class GroupThread extends Thread
 				//Does user exist?
 				if(my_gs.userList.checkUser(username))
 				{
+					/* The following is not necessary - there is no implementation
+					 * of a GroupList in this project...
 					//User needs deleted from the groups they belong
 					ArrayList<String> deleteFromGroups = new ArrayList<String>();
 					
@@ -243,9 +245,9 @@ public class GroupThread extends Thread
 					for(int index = 0; index < deleteFromGroups.size(); index++)
 					{
 						//my_gs.groupList.removeMember(username, deleteFromGroups.get(index));
-						/* TO DO: create groupList object and removeMember
-						 * method or make this work some other way */
 					}
+					 *
+					 * end of unnecessary code */
 					
 					//If groups are owned, they must be deleted
 					ArrayList<String> deleteOwnedGroup = new ArrayList<String>();
@@ -261,9 +263,14 @@ public class GroupThread extends Thread
 					{
 						//Use the delete group method. Token must be created for this action
 						//deleteGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
+						
+						// removeGroup(String user, String groupname)
+						deleteUserFromGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
 						/* TO DO: deleteGroup is a method from GroupClient -
 						 * match up with a GC object or make it work some other
 						 * way */
+						
+						// Use remove group on all members of group
 					}
 					
 					//Delete the user from the user list
