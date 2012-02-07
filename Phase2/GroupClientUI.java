@@ -33,33 +33,37 @@ public class GroupClientUI
 					case 1:
 						if (token.getGroups().contains("ADMIN"))
 						{
-							aUserName = getNonEmptyString("Enter the new user's name: ", 32);
+							aUserName = getNonEmptyString("Enter the username to be added: ", 32);
 							if (gc.createUser(aUserName, token))
 							{
 								System.out.println("Added " + aUserName + " to the User List.");
 							}
 							else
 							{
-								System.out.println("Error adding user - name already exists");
+								System.out.println("Error adding user - name already exists.");
 							}
 						}
 						else
 						{
-							System.out.println("Forbidden operation. You must be an ADMIN to create a user");
+							System.out.println("Forbidden operation. You must be an ADMIN to create a user.");
 						}
 						break;
 					case 2:
-						System.out.println("2");
-						aList = token.getGroups();
-						if (aList.contains("ADMIN"))
+						if (token.getGroups().contains("ADMIN"))
 						{
-							System.out.println("ADMIN");
-							// public boolean deleteUser(String username, UserToken token)
-							System.out.println("deleteUser() stub");
+							aUserName = getNonEmptyString("Enter the username to be deleted: ", 32);
+							if (gc.deleteUser(aUserName, token))
+							{
+								System.out.println("Deleted " + aUserName + " from the User List.");
+							}
+							else
+							{
+								System.out.println("Error deleting user - unknown username.");
+							}
 						}
 						else
 						{
-							System.out.println("Forbidden operation. You must be an ADMIN to delete a user");
+							System.out.println("Forbidden operation. You must be an ADMIN to delete a user.");
 						}
 						break;
 					case 3:
