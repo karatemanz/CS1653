@@ -72,7 +72,7 @@ public class GroupClientUI
 						System.out.println("5");
 						// public List<String> listMembers(String group, UserToken token)
 						aGroupName = getNonEmptyString("Enter the group name: ", 64);
-						gc.listMembers(aGroupName, token);
+						aList = gc.listMembers(aGroupName, token);
 //						System.out.println("listMembers() stub");
 						break;
 					case 6:
