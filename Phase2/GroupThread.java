@@ -112,7 +112,31 @@ public class GroupThread extends Thread
 				}
 				else if(message.getMessage().equals("DGROUP")) //Client wants to delete a group
 				{
-				    /* TODO:  Write this handler */
+					if(message.getObjContents().size() < 2)
+					{
+						response = new Envelope("FAIL");
+					}
+					else
+					{
+						response = new Envelope("FAIL");
+						
+						if(message.getObjContents().get(0) != null)
+						{
+							if(message.getObjContents().get(1) != null)
+							{
+								String groupname = (String)message.getObjContents().get(0); //Extract the group name
+								UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
+								
+								if(deleteGroup(groupname, yourToken))
+								{
+									response = new Envelope("OK"); //Success
+								}
+							}
+						}
+					}
+					
+					output.writeObject(response);
+
 				}
 				else if(message.getMessage().equals("LMEMBERS")) //Client wants a list of members in a group
 				{
