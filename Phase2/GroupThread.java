@@ -81,7 +81,6 @@ public class GroupThread extends Thread
 				}
 				else if(message.getMessage().equals("DUSER")) //Client wants to delete a user
 				{
-					
 					if(message.getObjContents().size() < 2)
 					{
 						response = new Envelope("FAIL");
@@ -266,6 +265,11 @@ public class GroupThread extends Thread
 		{
 			return false; //requester does not exist
 		}
+	}
+	
+	private boolean createGroup(final String groupname, final UserToken token)
+	{
+		
 	}
 	
 	private boolean deleteGroup(String groupname, UserToken yourToken)
