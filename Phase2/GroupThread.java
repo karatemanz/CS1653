@@ -255,7 +255,6 @@ public class GroupThread extends Thread
 				else
 				{
 					return false; //User does not exist
-					
 				}
 			}
 			else
