@@ -280,20 +280,12 @@ public class GroupThread extends Thread
 						}
 					}
 					
-					
 					//Delete owned groups
+					// Is this even necessary if we are deleting the user after?
 					for(int index = 0; index < deleteOwnedGroup.size(); index++)
 					{
 						//Use the delete group method. Token must be created for this action
 						//deleteGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
-						
-						// removeGroup(String user, String groupname)
-//						deleteUserFromGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
-						/* TO DO: deleteGroup is a method from GroupClient -
-						 * match up with a GC object or make it work some other
-						 * way */
-						
-						// Use remove group on all members of group
 					}
 					
 					//Delete the user from the user list
