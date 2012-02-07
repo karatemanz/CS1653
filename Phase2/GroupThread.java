@@ -231,26 +231,6 @@ public class GroupThread extends Thread
 				//Does user exist?
 				if(my_gs.userList.checkUser(username))
 				{
-					/* The following is not necessary - there is no implementation
-					 * of a GroupList in this project...
-					//User needs deleted from the groups they belong
-					ArrayList<String> deleteFromGroups = new ArrayList<String>();
-					
-					//This will produce a hard copy of the list of groups this user belongs
-					for(int index = 0; index < my_gs.userList.getUserGroups(username).size(); index++)
-					{
-						deleteFromGroups.add(my_gs.userList.getUserGroups(username).get(index));
-					}
-					
-					//Delete the user from the groups
-					//If user is the owner, removeMember will automatically delete group!
-					for(int index = 0; index < deleteFromGroups.size(); index++)
-					{
-						//my_gs.groupList.removeMember(username, deleteFromGroups.get(index));
-					}
-					 *
-					 * end of unnecessary code */
-					
 					//If groups are owned, they must be deleted
 					ArrayList<String> deleteOwnedGroup = new ArrayList<String>();
 					
@@ -259,33 +239,12 @@ public class GroupThread extends Thread
 					{
 						deleteOwnedGroup.add(my_gs.userList.getUserOwnership(username).get(index));
 					}
-					
-					// now we need to go through each user - if the user has a
-					// group on the above list, delete that group from the
-					// user's group list
-					
-					// get list of usernames
-					for (Enumeration<String> usernameList = my_gs.userList.getUsernames(); usernameList.hasMoreElements();)
-					{
-						aUser = (usernameList.nextElement());
-						groupList = my_gs.userList.getUserGroups(aUser);
-						
-						for (int index = 0; index < deleteOwnedGroup.size(); index++)
-						{
-							if (my_gs.userList.getUserGroups(aUser).contains(deleteOwnedGroup.get(index)));
-							{
-								// delete this group from the user's group list
-								my_gs.userList.removeGroup(aUser, deleteOwnedGroup.get(index));
-							}
-						}
-					}
-					
+										
 					//Delete owned groups
-					// Is this even necessary if we are deleting the user after?
 					for(int index = 0; index < deleteOwnedGroup.size(); index++)
 					{
 						//Use the delete group method. Token must be created for this action
-						//deleteGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
+						deleteGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
 					}
 					
 					//Delete the user from the user list
