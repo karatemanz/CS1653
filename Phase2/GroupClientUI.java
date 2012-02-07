@@ -73,6 +73,10 @@ public class GroupClientUI
 						// public List<String> listMembers(String group, UserToken token)
 						aGroupName = getNonEmptyString("Enter the group name: ", 64);
 						aList = gc.listMembers(aGroupName, token);
+						for (String s: aList)
+						{
+							System.out.println(s);
+						}
 //						System.out.println("listMembers() stub");
 						break;
 					case 6:
