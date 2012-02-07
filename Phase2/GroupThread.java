@@ -291,9 +291,38 @@ public class GroupThread extends Thread
 		}
 	}
 	
-	private boolean createGroup(final String groupname, final UserToken token)
+	private boolean createGroup(final String groupname, final UserToken yourToken)
 	{
+		String requester = yourToken.getSubject();
+		String otherUser;
 		
+		//Check if requester exists
+		if(my_gs.userList.checkUser(requester))
+		{
+			// loop through users - if group name already owned, cannot create
+			for (Enumeration<String> usernameList = my_gs.userList.getUsernames(); usernameList.hasMoreElements();)
+			{
+				otherUser = (usernameList.nextElement());
+				
+				if (my_gs.userList.getUserOwnership(otherUser).contains(groupname))
+				{
+					return false; // group name is taken
+				}
+			}
+			
+			// add group to ownership
+			my_gs.userList.addOwnership(requester, groupname);
+			
+			// add group to groups
+			my_gs.userList.addGroup(requester, groupname);
+			
+			return true;
+		}
+		else
+		{
+			return false; //requester does not exist
+		}
+
 	}
 	
 	private boolean deleteGroup(String groupname, UserToken yourToken)
