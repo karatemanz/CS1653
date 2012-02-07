@@ -218,6 +218,8 @@ public class GroupThread extends Thread
 	private boolean deleteUser(String username, UserToken yourToken)
 	{
 		String requester = yourToken.getSubject();
+		String aUser;
+		ArrayList<String> groupList = new ArrayList<String>();
 		
 		//Does requester exist?
 		if(my_gs.userList.checkUser(requester))
@@ -258,6 +260,27 @@ public class GroupThread extends Thread
 						deleteOwnedGroup.add(my_gs.userList.getUserOwnership(username).get(index));
 					}
 					
+					// now we need to go through each user - if the user has a
+					// group on the above list, delete that group from the
+					// user's group list
+					
+					// get list of usernames
+					for (Enumeration<String> usernameList = my_gs.userList.getUsernames(); usernameList.hasMoreElements();)
+					{
+						aUser = (usernameList.nextElement());
+						groupList = my_gs.userList.getUserGroups(aUser);
+						
+						for (int index = 0; index < deleteOwnedGroup.size(); index++)
+						{
+							if (my_gs.userList.getUserGroups(aUser).contains(deleteOwnedGroup.get(index)));
+							{
+								// delete this group from the user's group list
+								my_gs.userList.removeGroup(aUser, deleteOwnedGroup.get(index));
+							}
+						}
+					}
+					
+					
 					//Delete owned groups
 					for(int index = 0; index < deleteOwnedGroup.size(); index++)
 					{
@@ -265,7 +288,7 @@ public class GroupThread extends Thread
 						//deleteGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
 						
 						// removeGroup(String user, String groupname)
-						deleteUserFromGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
+//						deleteUserFromGroup(deleteOwnedGroup.get(index), new Token(my_gs.name, username, deleteOwnedGroup));
 						/* TO DO: deleteGroup is a method from GroupClient -
 						 * match up with a GC object or make it work some other
 						 * way */
