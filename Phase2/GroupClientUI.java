@@ -72,9 +72,15 @@ public class GroupClientUI
 						System.out.println("createGroup() stub");
 						break;
 					case 4:
-						System.out.println("4");
-						// public boolean deleteGroup(String groupname, UserToken token)
-						System.out.println("deleteGroup() stub");
+						aGroupName = getNonEmptyString("Enter the group name to be deleted: ", 64);
+						if (gc.deleteGroup(aGroupName, token))
+						{
+							System.out.println("Deleted the group " + aGroupName + " from your Group List.");
+						}
+						else
+						{
+							System.out.println("Forbidden operation. You must be the owner of a group to delete it.");
+						}
 						break;
 					case 5:
 						aGroupName = getNonEmptyString("Enter the group name: ", 64);
