@@ -69,15 +69,20 @@ public class GroupClientUI
 						System.out.println("deleteGroup() stub");
 						break;
 					case 5:
-						System.out.println("5");
-						// public List<String> listMembers(String group, UserToken token)
 						aGroupName = getNonEmptyString("Enter the group name: ", 64);
 						aList = gc.listMembers(aGroupName, token);
-						for (String s: aList)
+						if (aList != null)
 						{
-							System.out.println(s);
+							for (String s: aList)
+							{
+								System.out.println(s);
+							}
 						}
-//						System.out.println("listMembers() stub");
+						else
+						{
+							System.out.println("Error. You are not a member of group " +
+											   aGroupName + ".");
+						}
 						break;
 					case 6:
 						System.out.println("6");
