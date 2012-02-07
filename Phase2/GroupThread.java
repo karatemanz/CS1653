@@ -292,7 +292,7 @@ public class GroupThread extends Thread
 	{
 		String requester = yourToken.getSubject();
 		String aUser = new String();
-		List<String> aList = null;
+		List<String> aList = new ArrayList<String>();
 		
 		//Does requester exist?
 		if(my_gs.userList.checkUser(requester))
