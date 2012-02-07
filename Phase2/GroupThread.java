@@ -308,8 +308,7 @@ public class GroupThread extends Thread
 					
 					if (my_gs.userList.getUserGroups(aUser).contains(group));
 					{
-						System.out.println(aUser);
-						System.out.println(aList.add(aUser));
+						aList.add(aUser);
 					}
 				}
 				return aList;
