@@ -301,7 +301,6 @@ public class GroupThread extends Thread
 			//requester needs to be in same group as requested
 			if(temp.contains(group))
 			{
-				// do the work - iterate through UserList somehow?
 				// get a list of usernames, loop through each
 				for (Enumeration<String> usernameList = my_gs.userList.getUsernames(); usernameList.hasMoreElements();)
 				{
@@ -313,8 +312,6 @@ public class GroupThread extends Thread
 						System.out.println(aList.add(aUser));
 					}
 				}
-				// ArrayList<String> aGroupList = my_gs.userList.getUserGroups(username)
-				// 
 				return aList;
 			}
 			else
