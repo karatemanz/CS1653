@@ -31,13 +31,17 @@ public class GroupClientUI
 				switch (Integer.parseInt(inputString))
 				{
 					case 1:
-						System.out.println("1");
-						aList = token.getGroups();
-						if (aList.contains("ADMIN"))
+						if (token.getGroups().contains("ADMIN"))
 						{
-							System.out.println("ADMIN");
-							// public boolean createUser(String username, UserToken token)
-							System.out.println("createUser() stub");
+							aUserName = getNonEmptyString("Enter the new user's name: ", 32);
+							if (gc.createUser(aUserName, token))
+							{
+								System.out.println("Added " + aUserName + " to the User List.");
+							}
+							else
+							{
+								System.out.println("Error adding user - name already exists");
+							}
 						}
 						else
 						{
