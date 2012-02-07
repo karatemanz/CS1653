@@ -310,6 +310,55 @@ public class GroupThread extends Thread
 		}
 	}
 	
+	private boolean deleteGroup(String groupname, UserToken yourToken)
+	{
+		String requester = yourToken.getSubject();
+		String otherUser;
+		
+		//Check if requester exists
+		if(my_gs.userList.checkUser(requester))
+		{
+			// Check if requester owns group
+			ArrayList<String> deleteOwnedGroup = new ArrayList<String>();
+			
+			for(int index = 0; index < my_gs.userList.getUserOwnership(requester).size(); index++)
+			{
+				deleteOwnedGroup.add(my_gs.userList.getUserOwnership(requester).get(index));
+			}
+
+			if (deleteOwnedGroup.contains(groupname))
+			{
+				// go through other users, remove this group from their list
+				for (Enumeration<String> usernameList = my_gs.userList.getUsernames(); usernameList.hasMoreElements();)
+				{
+					otherUser = (usernameList.nextElement());
+					
+					for (int index = 0; index < deleteOwnedGroup.size(); index++)
+					{
+						if (my_gs.userList.getUserGroups(otherUser).contains(deleteOwnedGroup.get(index)));
+						{
+							// delete this group from the user's group list
+							my_gs.userList.removeGroup(otherUser, deleteOwnedGroup.get(index));
+						}
+					}
+				}
+				
+				// remove this group from owner's list
+				my_gs.userList.removeGroup(requester, groupname);
+				
+				return true;
+			}
+			else
+			{
+				return false; // requester does not own this group
+			}
+		}		
+		else
+		{
+			return false; //requester does not exist
+		}
+	}
+	
 	private List<String> listMembers(String group, UserToken yourToken)
 	{
 		String requester = yourToken.getSubject();
