@@ -105,9 +105,16 @@ public class GroupClientUI
 						}
 						break;
 					case 6:
-						System.out.println("6");
-						// public boolean addUserToGroup(String username, String groupname, UserToken token)
-						System.out.println("addUserToGroup() stub");
+						aUserName = getNonEmptyString("Enter the username: ", 32);
+						aGroupName = getNonEmptyString("Enter the group name: ", 64);
+						if (gc.addUserToGroup(aUserName, aGroupName, token))
+						{
+							System.out.println("Added " + aUserName + " to group " + aGroupName + ".");
+						}
+						else
+						{
+							System.out.println("Error adding user to group - check username and group name.");
+						}
 						break;
 					case 7:
 						System.out.println("7");
