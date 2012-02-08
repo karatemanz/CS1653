@@ -431,4 +431,29 @@ public class GroupThread extends Thread
 			return null; //requester does not exist
 		}
 	}
+	
+	private boolean addUserToGroup(String username, String groupname, UserToken yourToken)
+	{
+		String requester = yourToken.getSubject();
+		
+		// Do requester and user exist?
+		if(my_gs.userList.checkUser(requester) && my_gs.userList.checkUser(username))
+		{
+			// Does requester have ownsership of group?
+			if (my_gs.userList.getUserOwnership(requester).contains(groupname))
+			{
+				my_gs.userList.addGroup(username, groupname);
+				
+				return true;
+			}
+			else
+			{
+				return false; //requester does not have ownership
+			}
+		}
+		else
+		{
+			return false; //requester does not exist
+		}
+	}
 }
