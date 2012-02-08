@@ -117,9 +117,16 @@ public class GroupClientUI
 						}
 						break;
 					case 7:
-						System.out.println("7");
-						// public boolean deleteUserFromGroup(String username, String groupname, UserToken token)
-						System.out.println("deleteUserFromGroup() stub");
+						aUserName = getNonEmptyString("Enter the username: ", 32);
+						aGroupName = getNonEmptyString("Enter the group name: ", 64);
+						if (gc.deleteUserFromGroup(aUserName, aGroupName, token))
+						{
+							System.out.println("Added " + aUserName + " to group " + aGroupName + ".");
+						}
+						else
+						{
+							System.out.println("Error deleting user from group - check that the user is member of that group.");
+						}
 						break;
 					case 8:
 						System.out.println("Disconnecting from Group Server...");
