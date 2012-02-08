@@ -67,9 +67,15 @@ public class GroupClientUI
 						}
 						break;
 					case 3:
-						System.out.println("3"); // don't allow duplicate name (also covers ADMIN)
-						// public boolean createGroup(String groupname, UserToken token)
-						System.out.println("createGroup() stub");
+						aGroupName = getNonEmptyString("Enter the group name to be created: ", 64);
+						if (gc.createGroup(aGroupName, token))
+						{
+							System.out.println("Added the group " + aGroupName + " to your Group List.");
+						}
+						else
+						{
+							System.out.println("Error creating group - group name already exists.");
+						}
 						break;
 					case 4:
 						aGroupName = getNonEmptyString("Enter the group name to be deleted: ", 64);
