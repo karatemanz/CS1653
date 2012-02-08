@@ -121,7 +121,7 @@ public class GroupClientUI
 						aGroupName = getNonEmptyString("Enter the group name: ", 64);
 						if (gc.deleteUserFromGroup(aUserName, aGroupName, token))
 						{
-							System.out.println("Added " + aUserName + " to group " + aGroupName + ".");
+							System.out.println("Removed " + aUserName + " from group " + aGroupName + ".");
 						}
 						else
 						{
