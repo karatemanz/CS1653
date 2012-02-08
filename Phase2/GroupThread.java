@@ -466,12 +466,45 @@ public class GroupThread extends Thread
 		// Do requester and user exist?
 		if(my_gs.userList.checkUser(requester) && my_gs.userList.checkUser(username))
 		{
-			// Does requester have ownsership of group?
+			// Does requester have ownership of group?
 			if (my_gs.userList.getUserOwnership(requester).contains(groupname))
 			{
 				my_gs.userList.addGroup(username, groupname);
 				
 				return true;
+			}
+			else
+			{
+				return false; //requester does not have ownership
+			}
+		}
+		else
+		{
+			return false; //requester does not exist
+		}
+	}
+	
+	private boolean deleteUserFromGroup(String username, String groupname, UserToken token)
+	{
+		String requester = yourToken.getSubject();
+		
+		// Does the requester exist?
+		if(my_gs.userList.checkUser(requester))
+		{
+			// Does the requester have ownsership of group?
+			if (my_gs.userList.getUserOwnership(requester).contains(groupname))
+			{
+				// Is the user a member of the group?
+				if (my_gs.userList.getUserGroups(username).contains(groupname))
+				{
+					my_gs.userList.removeGroup(username, groupname);
+
+					return true;
+				}
+				else
+				{
+					return false; // username is not in group
+				}
 			}
 			else
 			{
