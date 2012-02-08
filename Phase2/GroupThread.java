@@ -511,7 +511,7 @@ public class GroupThread extends Thread
 		}
 	}
 	
-	private boolean deleteUserFromGroup(String username, String groupname, UserToken token)
+	private boolean deleteUserFromGroup(String username, String groupname, UserToken yourToken)
 	{
 		String requester = yourToken.getSubject();
 		
