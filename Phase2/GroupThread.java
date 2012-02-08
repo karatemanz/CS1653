@@ -524,7 +524,9 @@ public class GroupThread extends Thread
 				// Is the user a member of the group?
 				if (my_gs.userList.getUserGroups(username).contains(groupname))
 				{
+					System.out.println(my_gs.userList.getUserGroups(username).contains(groupname));
 					my_gs.userList.removeGroup(username, groupname);
+					System.out.println(my_gs.userList.getUserGroups(username).contains(groupname));
 
 					return true;
 				}
