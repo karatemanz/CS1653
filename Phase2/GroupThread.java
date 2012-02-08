@@ -213,7 +213,34 @@ public class GroupThread extends Thread
 				}
 				else if(message.getMessage().equals("RUSERFROMGROUP")) //Client wants to remove user from a group
 				{
-				    /* TODO:  Write this handler */
+					if(message.getObjContents().size() < 3)
+					{
+						response = new Envelope("FAIL");
+					}
+					else
+					{
+						response = new Envelope("FAIL");
+						
+						if(message.getObjContents().get(0) != null)
+						{
+							if(message.getObjContents().get(1) != null)
+							{
+								if(message.getObjContents().get(1) != null)
+								{
+									String username = (String)message.getObjContents().get(0); //Extract the username
+									String groupname = (String)message.getObjContents().get(1); //Extract the group name
+									UserToken yourToken = (UserToken)message.getObjContents().get(2); //Extract the token
+									
+									if(deleteUserFromGroup(username, groupname, yourToken))
+									{
+										response = new Envelope("OK"); //Success
+									}
+								}
+							}
+						}
+					}
+					
+					output.writeObject(response);
 				}
 				else if(message.getMessage().equals("DISCONNECT")) //Client wants to disconnect
 				{
