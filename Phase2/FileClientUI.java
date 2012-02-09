@@ -115,7 +115,6 @@ public class FileClientUI
 						}
 						break;
 					case 5:
-						//fc.download(sourceFile, destFile, token); // returns a boolean
 						if (currentGroup.length() > 0)
 						{
 							sourceFileName = getNonEmptyString("Enter source file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
