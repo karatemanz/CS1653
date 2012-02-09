@@ -67,7 +67,8 @@ public class FileClientUI
 		}
 		else // error connecting
 		{
-			System.out.println("Error connecting to File Server");
+			System.out.println("Error connecting to File Server at " +
+							   serverAddress + " port " + portNumber + ".");
 			return false;
 		}
 	}
