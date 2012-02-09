@@ -24,7 +24,7 @@ public class GroupClientUI
 								 "enter 5 to list the members of a group,\n" +
 								 "enter 6 to add a user to a group,\n" +
 								 "enter 7 to delete a user from a group,\n" +
-								 "enter 8 to disconnect from Group Server:\n" +
+								 "enter 0 to disconnect from Group Server:\n" +
 								 userName + "> ");
 				String inputString = console.nextLine();
 				
@@ -128,7 +128,7 @@ public class GroupClientUI
 							System.out.println("Error deleting user from group - check that the user is member of that group.");
 						}
 						break;
-					case 8:
+					case 0:
 						System.out.println("Disconnecting from Group Server...");
 						gc.disconnect();
 						exitKey = true;
