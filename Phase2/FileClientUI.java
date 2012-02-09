@@ -12,12 +12,15 @@ public class FileClientUI
 			Scanner console = new Scanner(System.in); // Scanner object for input
 			String userName = token.getSubject();
 			boolean exitKey = false;
+			final int MAXUSERLENGTH = 32;
+			final int MAXGROUPLENGTH = 32;
 			List<String> aList;
 			String groupName;
 			String currentGroup = new String();
 			String userPrompt;
 			String sourceFileName;
 			String destFileName;
+
 			
 			while (!exitKey)
 			{
@@ -62,7 +65,7 @@ public class FileClientUI
 						}
 						break;
 					case 2:
-						groupName = getNonEmptyString("Enter the group name to change to...\n" + userPrompt + "> ", 64);
+						groupName = getNonEmptyString("Enter the group name to change to...\n" + userPrompt + "> ", MAXGROUPLENGTH);
 						aList = fc.changeGroup(groupName, token);
 						if (aList != null)
 						{

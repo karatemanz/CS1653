@@ -14,6 +14,8 @@ public class GroupClientUI
 			String aUserName, aGroupName;
 			boolean exitKey = false;
 			List<String> aList;
+			final int MAXUSERLENGTH = 32;
+			final int MAXGROUPLENGTH = 32;
 			
 			while (!exitKey)
 			{
@@ -33,7 +35,7 @@ public class GroupClientUI
 					case 1:
 						if (token.getGroups().contains("ADMIN"))
 						{
-							aUserName = getNonEmptyString("Enter the username to be added: ", 32);
+							aUserName = getNonEmptyString("Enter the username to be added: ", MAXUSERLENGTH);
 							if (gc.createUser(aUserName, token))
 							{
 								System.out.println("Added " + aUserName + " to the User List.");
@@ -51,7 +53,7 @@ public class GroupClientUI
 					case 2:
 						if (token.getGroups().contains("ADMIN"))
 						{
-							aUserName = getNonEmptyString("Enter the username to be deleted: ", 32);
+							aUserName = getNonEmptyString("Enter the username to be deleted: ", MAXUSERLENGTH);
 							if (gc.deleteUser(aUserName, token))
 							{
 								System.out.println("Deleted " + aUserName + " from the User List.");
@@ -67,7 +69,7 @@ public class GroupClientUI
 						}
 						break;
 					case 3:
-						aGroupName = getNonEmptyString("Enter the group name to be created: ", 64);
+						aGroupName = getNonEmptyString("Enter the group name to be created: ", MAXGROUPLENGTH);
 						if (gc.createGroup(aGroupName, token))
 						{
 							System.out.println("Added the group " + aGroupName + " to your Group List.");
@@ -78,7 +80,7 @@ public class GroupClientUI
 						}
 						break;
 					case 4:
-						aGroupName = getNonEmptyString("Enter the group name to be deleted: ", 64);
+						aGroupName = getNonEmptyString("Enter the group name to be deleted: ", MAXGROUPLENGTH);
 						if (gc.deleteGroup(aGroupName, token))
 						{
 							System.out.println("Deleted the group " + aGroupName + " from your Group List.");
@@ -89,7 +91,7 @@ public class GroupClientUI
 						}
 						break;
 					case 5:
-						aGroupName = getNonEmptyString("Enter the group name: ", 64);
+						aGroupName = getNonEmptyString("Enter the group name: ", MAXGROUPLENGTH);
 						aList = gc.listMembers(aGroupName, token);
 						if (aList != null)
 						{
@@ -105,8 +107,8 @@ public class GroupClientUI
 						}
 						break;
 					case 6:
-						aUserName = getNonEmptyString("Enter the username: ", 32);
-						aGroupName = getNonEmptyString("Enter the group name: ", 64);
+						aUserName = getNonEmptyString("Enter the username: ", MAXUSERLENGTH);
+						aGroupName = getNonEmptyString("Enter the group name: ", MAXGROUPLENGTH);
 						if (gc.addUserToGroup(aUserName, aGroupName, token))
 						{
 							System.out.println("Added " + aUserName + " to group " + aGroupName + ".");
@@ -117,8 +119,8 @@ public class GroupClientUI
 						}
 						break;
 					case 7:
-						aUserName = getNonEmptyString("Enter the username: ", 32);
-						aGroupName = getNonEmptyString("Enter the group name: ", 64);
+						aUserName = getNonEmptyString("Enter the username: ", MAXUSERLENGTH);
+						aGroupName = getNonEmptyString("Enter the group name: ", MAXGROUPLENGTH);
 						if (gc.deleteUserFromGroup(aUserName, aGroupName, token))
 						{
 							System.out.println("Removed " + aUserName + " from group " + aGroupName + ".");
