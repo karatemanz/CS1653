@@ -143,7 +143,7 @@ public class FileClientUI
 							}
 							else
 							{
-								System.out.println("Error deleting " + destFileName + " from File Server. Check file's group and name");
+								System.out.println("Error deleting " + sourceFileName + " from File Server. Check file's group and name");
 							}
 						}
 						else
