@@ -97,6 +97,7 @@ public class SimpleUI
 						GroupClientUI gcu = new GroupClientUI();
 						// may want to prompt user here for server name, port
 						gcu.launchUI(userToken, "localhost", 8765);
+						hasToken = false;
 						break;
 					case 3:
 						System.out.println("Logging out...");
