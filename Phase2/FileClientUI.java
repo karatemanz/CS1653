@@ -15,6 +15,7 @@ public class FileClientUI
 			List<String> aList;
 			String groupName;
 			String currentGroup = new String();
+			String userPrompt;
 			String sourceFileName;
 			String destFileName;
 			
@@ -26,13 +27,21 @@ public class FileClientUI
 				 * public List<String> listFiles(UserToken token)
 				 * public boolean upload(String sourceFile, String destFile, String group, UserToken token)
 				 */
+				if (currentGroup.length() > 0)
+				{
+					userPrompt = userName + "/" + currentGroup;
+				}
+				else
+				{
+					userPrompt = userName;
+				}
 				System.out.print("Enter 1 to list files,\n" +
 								 "enter 2 to list the groups you belong to,\n" +
 								 "enter 3 to upload a file to the File Server,\n" +
 								 "enter 4 to download a file to the File Server,\n" +
 								 "enter 5 to delete a file to the File Server,\n" +
 								 "enter 6 to disconnect from File Server...\n" +
-								 userName + "> ");
+								 userPrompt + "> ");
 				String inputString = console.nextLine();
 				
 				switch (Integer.parseInt(inputString))
@@ -50,7 +59,7 @@ public class FileClientUI
 						}
 						break;
 					case 2:
-						aList = fc.listFiles(token);
+						aList = fc.listGroups(token);
 						if (aList != null)
 						{
 							for (String s: aList)
