@@ -28,7 +28,15 @@ public class SimpleUI
 		{
 			System.out.print("Enter 1 to login,\nenter 2 to exit...\n> ");
 			inputString = console.nextLine();
-			menuChoice = Integer.parseInt(inputString);
+			
+			try
+			{
+				menuChoice = Integer.parseInt(inputString);
+			}
+			catch(Exception e)
+			{
+				menuChoice = -1;
+			}
 			
 			if (menuChoice == 1)
 			{
@@ -76,7 +84,16 @@ public class SimpleUI
 								 userName + "> ");
 				inputString = console.nextLine();
 				
-				switch (Integer.parseInt(inputString))
+				try
+				{
+					menuChoice = Integer.parseInt(inputString);
+				}
+				catch(Exception e)
+				{
+					menuChoice = -1;
+				}
+
+				switch (menuChoice)
 				{
 					case 1:
 						// prompt user for server address, port
