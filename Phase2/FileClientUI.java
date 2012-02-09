@@ -137,7 +137,7 @@ public class FileClientUI
 						if (currentGroup.length() > 0)
 						{
 							sourceFileName = getNonEmptyString("Enter filename to delete...\n> ", MAXPATHLENGTH);
-							if (fc.delete(sourceFileName, token))
+							if (fc.delete(sourceFileName, currentGroup, token))
 							{
 								System.out.println(sourceFileName + " successfully deleted.");
 							}
