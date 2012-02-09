@@ -20,4 +20,8 @@ USAGE:
  To reset the Group Server, delete UserList.bin.
  
  Note that this implementation supports server side directories.
-
+ 
+ To start using the FileSharing application, launch the SimpleUI java class.
+ You get a menu to login or exit. After login, follow menu to appropriate
+ server. All menu selections are done via integer input. Illegal operations
+ are not allowed and user will be warned.

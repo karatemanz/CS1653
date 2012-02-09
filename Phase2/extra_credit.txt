@@ -1,4 +1,6 @@
 Extra credit information:
 
-
-
+We implemented "Support for the principle of least privilege". In the File
+Client UI, the user must pick a group to establish a workspace in which to 
+handle files, otherwise the file functions (delete, download, upload) will
+not complete if the file's group does not match the workspace group.
