@@ -12,6 +12,8 @@ public class GroupClientUI
 			Scanner console = new Scanner(System.in); // Scanner object for input
 			String userName = token.getSubject();
 			String aUserName, aGroupName;
+			String inputString;
+			int menuChoice;
 			boolean exitKey = false;
 			List<String> aList;
 			final int MAXUSERLENGTH = 32;
@@ -28,9 +30,19 @@ public class GroupClientUI
 								 "enter 7 to delete a user from a group,\n" +
 								 "enter 0 to disconnect from Group Server:\n" +
 								 userName + "> ");
-				String inputString = console.nextLine();
+				inputString = console.nextLine();
 				
-				switch (Integer.parseInt(inputString))
+				try
+				{
+					menuChoice = Integer.parseInt(inputString);
+				}
+				catch(Exception e)
+				{
+					menuChoice = -1;
+				}
+
+				
+				switch (menuChoice)
 				{
 					case 1:
 						if (token.getGroups().contains("ADMIN"))
