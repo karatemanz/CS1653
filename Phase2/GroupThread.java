@@ -500,9 +500,10 @@ public class GroupThread extends Thread
 				if (!my_gs.userList.getUserGroups(username).contains(groupname))
 				{
 					my_gs.userList.addGroup(username, groupname);
+					return true;
 				}
 				
-				return true;
+				return false;
 			}
 			else
 			{
