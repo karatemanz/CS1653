@@ -66,7 +66,7 @@ public class FileClientUI
 						}
 						break;
 					case 2:
-						groupName = getNonEmptyString("Enter the group name to change to...\n" + userPrompt + "> ", MAXGROUPLENGTH);
+						groupName = getNonEmptyString("Enter the group name to change to...\n> ", MAXGROUPLENGTH);
 						aList = fc.changeGroup(groupName, token);
 						if (aList != null)
 						{
@@ -98,8 +98,8 @@ public class FileClientUI
 					case 4:
 						if (currentGroup.length() > 0)
 						{
-							sourceFileName = getNonEmptyString("Enter source file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
-							destFileName = getNonEmptyString("Enter destination file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
+							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
+							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
 							if (fc.upload(sourceFileName, destFileName, currentGroup, token))
 							{
 								System.out.println(destFileName + " successfully uploaded.");
@@ -117,8 +117,8 @@ public class FileClientUI
 					case 5:
 						if (currentGroup.length() > 0)
 						{
-							sourceFileName = getNonEmptyString("Enter source file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
-							destFileName = getNonEmptyString("Enter destination file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
+							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
+							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
 							if (fc.download(sourceFileName, destFileName, token))
 							{
 								System.out.println(destFileName + " successfully downloaded.");
