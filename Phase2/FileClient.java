@@ -18,6 +18,7 @@ public class FileClient extends Client implements FileClientInterface {
 		}
 		Envelope env = new Envelope("DELETEF"); //Success
 	    env.addObject(remotePath);
+	    env.addObject(group);
 	    env.addObject(token);
 	    try {
 			output.writeObject(env);
