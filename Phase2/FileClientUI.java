@@ -14,6 +14,7 @@ public class FileClientUI
 			boolean exitKey = false;
 			final int MAXUSERLENGTH = 32;
 			final int MAXGROUPLENGTH = 32;
+			final int MAXPATHLENGTH = 256;
 			List<String> aList;
 			String groupName;
 			String currentGroup = new String();
@@ -77,22 +78,42 @@ public class FileClientUI
 						}
 						else
 						{
-							System.out.println("Error - user has no groups. Please add groups in Group Server.");
+							System.out.println("Error - please add groups to Group Server.");
 						}
 						break;
 					case 3:
 						aList = fc.listFiles(token);
-						if (aList != null)
+						if (aList != null && aList.size() != 0)
 						{
 							for (String s: aList)
 							{
 								System.out.println(s);
 							}
 						}
+						else
+						{
+							System.out.println("No files present.");
+						}
 						break;
 					case 4:
 						//fc.upload(sourceFile, destFile, group, token); // returns a boolean
-						System.out.println("upload stub");
+						if (currentGroup.length() > 0)
+						{
+							sourceFileName = getNonEmptyString("Enter source file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
+							destFileName = getNonEmptyString("Enter destination file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
+							if (fc.upload(sourceFileName, destFileName, currentGroup, token))
+							{
+								System.out.println(destFileName + " successfully uploaded.");
+							}
+							else
+							{
+								System.out.println("Error uploading " + destFileName + " to File Server.");
+							}
+						}
+						else
+						{
+							System.out.println("You must pick a group for your workspace (option 2).");
+						}
 						break;
 					case 5:
 						//fc.download(sourceFile, destFile, token); // returns a boolean
