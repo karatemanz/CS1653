@@ -134,8 +134,22 @@ public class FileClientUI
 						}
 						break;
 					case 6:
-						//fc.delete(filename, token); // returns a boolean
-						System.out.println("delete stub");
+						if (currentGroup.length() > 0)
+						{
+							sourceFileName = getNonEmptyString("Enter filename to delete...\n> ", MAXPATHLENGTH);
+							if (fc.delete(sourceFileName, token))
+							{
+								System.out.println(sourceFileName + " successfully deleted.");
+							}
+							else
+							{
+								System.out.println("Error deleting " + destFileName + " from File Server. Check file's group and name");
+							}
+						}
+						else
+						{
+							System.out.println("You must pick a group for your workspace (option 2).");
+						}
 						break;
 					case 0:
 						System.out.println("Disconnecting from File Server...");
