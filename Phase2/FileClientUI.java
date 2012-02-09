@@ -26,19 +26,18 @@ public class FileClientUI
 				 * public boolean upload(String sourceFile, String destFile, String group, UserToken token)
 				 */
 				System.out.print("Enter 1 to list files,\n" +
-								 "enter 2 to upload a file to the File Server,\n" +
-								 "enter 3 to download a file to the File Server,\n" +
-								 "enter 4 to delete a file to the File Server,\n" +
-								 "enter 5 to disconnect from File Server:\n" +
+								 "enter 2 to list the groups you belong to,\n" +
+								 "enter 3 to upload a file to the File Server,\n" +
+								 "enter 4 to download a file to the File Server,\n" +
+								 "enter 5 to delete a file to the File Server,\n" +
+								 "enter 6 to disconnect from File Server:\n" +
 								 userName + "> ");
 				String inputString = console.nextLine();
 				
 				switch (Integer.parseInt(inputString))
 				{
 					case 1:
-						System.out.println("1");
 						//aList = fc.listFiles(token);
-						// output the list
 						System.out.println("listFiles stub");
 						aList = fc.listFiles(token);
 						if (aList != null)
@@ -48,23 +47,34 @@ public class FileClientUI
 								System.out.println(s);
 							}
 						}
-
 						break;
 					case 2:
-						System.out.println("2");
+						aList = fc.listFiles(token);
+						if (aList != null)
+						{
+							for (String s: aList)
+							{
+								System.out.println(s);
+							}
+						}
+						else
+						{
+							System.out.println("Error - user has no groups. Please add groups in Group Server.");
+						}
+						break;
+					case 3:
 						//fc.upload(sourceFile, destFile, group, token); // returns a boolean
 						System.out.println("upload stub");
 						break;
-					case 3:
-						System.out.println("3");
+					case 4:
 						//fc.download(sourceFile, destFile, token); // returns a boolean
 						System.out.println("download stub");
 						break;
-					case 4:
+					case 5:
 						//fc.delete(filename, token); // returns a boolean
 						System.out.println("delete stub");
 						break;
-					case 5:
+					case 6:
 						System.out.println("Disconnecting from File Server...");
 						fc.disconnect();
 						exitKey = true;

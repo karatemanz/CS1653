@@ -100,6 +100,7 @@ public class FileClient extends Client implements FileClientInterface {
 				 return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<String> listGroups(UserToken token) {
 		try
 		{
@@ -114,7 +115,7 @@ public class FileClient extends Client implements FileClientInterface {
 			//If server indicates success, return the member list
 			if(e.getMessage().equals("OK"))
 			{ 
-				return (List<String>)e.getObjContents().get(0);
+				return (List<String>)e.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
 			}
 			
 			return null;
