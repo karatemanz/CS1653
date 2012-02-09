@@ -100,6 +100,34 @@ public class FileClient extends Client implements FileClientInterface {
 				 return true;
 	}
 
+	public List<String> listGroups(UserToken token) {
+		try
+		{
+			Envelope message = null, e = null;
+			//Tell the server to return the group list
+			message = new Envelope("LGROUPS");
+			message.addObject(token); //Add requester's token
+			output.writeObject(message); 
+			
+			e = (Envelope)input.readObject();
+			
+			//If server indicates success, return the member list
+			if(e.getMessage().equals("OK"))
+			{ 
+				return (List<String>)e.getObjContents().get(0);
+			}
+			
+			return null;
+			
+		}
+		catch(Exception e)
+		{
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<String> listFiles(UserToken token) {
 		 try
@@ -122,11 +150,11 @@ public class FileClient extends Client implements FileClientInterface {
 			 
 		 }
 		 catch(Exception e)
-			{
-				System.err.println("Error: " + e.getMessage());
-				e.printStackTrace(System.err);
-				return null;
-			}
+		{
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
 	}
 
 	public boolean upload(String sourceFile, String destFile, String group,
