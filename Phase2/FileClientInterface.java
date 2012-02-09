@@ -87,12 +87,13 @@ public interface FileClientInterface
      *
      * @param sourceFile The filename used on the server
      * @param destFile   The filename to use locally
+	 * @param group		 The group of this file
      * @param token      The token of the user uploading the file
      *
      * @return true on success, false on failure
      *
      */
-    public boolean download(final String sourceFile, final String destFile, final UserToken token);
+    public boolean download(final String sourceFile, final String destFile, final String group, final UserToken token);
 
 
     /**
@@ -100,6 +101,7 @@ public interface FileClientInterface
      * the group with which this file is shared.
      *
      * @param filename The file to delete
+     * @param group    The group of this file
      * @param token    The token of the user requesting the delete
      *
      * @return true on success, false on failure
