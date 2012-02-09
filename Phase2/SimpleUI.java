@@ -21,6 +21,8 @@ public class SimpleUI
 		boolean hasToken = false;
 		String userName = new String();
 		UserToken userToken = null;
+		String serverAddress;
+		int portNumber;
 		
 		while (!exitKey)
 		{
@@ -77,10 +79,18 @@ public class SimpleUI
 				switch (Integer.parseInt(inputString))
 				{
 					case 1:
-						System.out.println("Connecting to File Server");
+						// prompt user for server address, port
+						System.out.print("Please enter the IP address of the File Server...\n" +
+										 userName + "> ");
+						serverAddress = console.nextLine();
+						System.out.print("Please enter the port number of the File Server...\n" +
+										 userName + "> ");
+						portNumber = Integer.parseInt(console.nextLine());
+						System.out.println("Connecting to File Server at " +
+										   serverAddress + " port " +
+										   portNumber + "...");
 						FileClientUI fcu = new FileClientUI();
-						// may want to prompt user here for server name, port
-						fcu.launchUI(userToken, "localhost", 4321);
+						fcu.launchUI(userToken, serverAddress, portNumber);
 						break;
 					case 2:
 						System.out.println("Connecting to Group Server...");
