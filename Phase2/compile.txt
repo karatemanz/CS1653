@@ -1,0 +1,4 @@
+Once inside source code folder,
+
+COMPILE: javac *.java
+
