@@ -81,8 +81,6 @@ public class FileClientUI
 						}
 						break;
 					case 3:
-						//aList = fc.listFiles(token);
-						System.out.println("listFiles stub");
 						aList = fc.listFiles(token);
 						if (aList != null)
 						{
@@ -92,7 +90,6 @@ public class FileClientUI
 							}
 						}
 						break;
-
 					case 4:
 						//fc.upload(sourceFile, destFile, group, token); // returns a boolean
 						System.out.println("upload stub");
