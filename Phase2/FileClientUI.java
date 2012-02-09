@@ -14,6 +14,7 @@ public class FileClientUI
 			boolean exitKey = false;
 			List<String> aList;
 			String groupName;
+			String currentGroup = new String();
 			String sourceFileName;
 			String destFileName;
 			
