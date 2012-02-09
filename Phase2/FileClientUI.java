@@ -96,7 +96,6 @@ public class FileClientUI
 						}
 						break;
 					case 4:
-						//fc.upload(sourceFile, destFile, group, token); // returns a boolean
 						if (currentGroup.length() > 0)
 						{
 							sourceFileName = getNonEmptyString("Enter source file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
@@ -117,7 +116,23 @@ public class FileClientUI
 						break;
 					case 5:
 						//fc.download(sourceFile, destFile, token); // returns a boolean
-						System.out.println("download stub");
+						if (currentGroup.length() > 0)
+						{
+							sourceFileName = getNonEmptyString("Enter source file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
+							destFileName = getNonEmptyString("Enter destination file path...\n" + userPrompt + "> ", MAXPATHLENGTH);
+							if (fc.download(sourceFileName, destFileName, token))
+							{
+								System.out.println(destFileName + " successfully downloaded.");
+							}
+							else
+							{
+								System.out.println("Error downloaded " + destFileName + " from File Server.");
+							}
+						}
+						else
+						{
+							System.out.println("You must pick a group for your workspace (option 2).");
+						}
 						break;
 					case 6:
 						//fc.delete(filename, token); // returns a boolean
