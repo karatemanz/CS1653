@@ -30,7 +30,7 @@ public class FileClientUI
 								 "enter 3 to upload a file to the File Server,\n" +
 								 "enter 4 to download a file to the File Server,\n" +
 								 "enter 5 to delete a file to the File Server,\n" +
-								 "enter 6 to disconnect from File Server:\n" +
+								 "enter 6 to disconnect from File Server...\n" +
 								 userName + "> ");
 				String inputString = console.nextLine();
 				
