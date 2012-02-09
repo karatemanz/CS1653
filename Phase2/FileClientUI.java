@@ -62,21 +62,20 @@ public class FileClientUI
 						}
 						break;
 					case 2:
-//						groupName = getNonEmptyString("Enter the group name to change to...\n" + userPrompt + "> ", 64);
-//						aList = fc.changeGroup(groupName, token);
-//						if (aList != null)
-//						{
-//							for (String s: aList)
-//							{
-//								System.out.println("Changed to group " + s + ".");
-//								currentGroup = s;
-//							}
-//						}
-//						else
-//						{
-//							System.out.println("Error - user has no groups. Please add groups in Group Server.");
-//						}
-						System.out.println("changeGroup stub");
+						groupName = getNonEmptyString("Enter the group name to change to...\n" + userPrompt + "> ", 64);
+						aList = fc.changeGroup(groupName, token);
+						if (aList != null)
+						{
+							for (String s: aList)
+							{
+								System.out.println("Changed to group " + s + ".");
+								currentGroup = s;
+							}
+						}
+						else
+						{
+							System.out.println("Error - user has no groups. Please add groups in Group Server.");
+						}
 					case 3:
 						//aList = fc.listFiles(token);
 						System.out.println("listFiles stub");
