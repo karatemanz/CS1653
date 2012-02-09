@@ -1,0 +1,4 @@
+*.class
+shared_files/*
+*.DS_Store
+*.bin
