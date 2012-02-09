@@ -8,7 +8,7 @@ import java.util.List;
 
 public class FileClient extends Client implements FileClientInterface {
 
-	public boolean delete(String filename, UserToken token) {
+	public boolean delete(String filename, String group, UserToken token) {
 		String remotePath;
 		if (filename.charAt(0)=='/') {
 			remotePath = filename.substring(1);

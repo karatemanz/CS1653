@@ -105,7 +105,7 @@ public interface FileClientInterface
      * @return true on success, false on failure
      *
      */
-    public boolean delete(final String filename, final UserToken token);
+    public boolean delete(final String filename, final String group, final UserToken token);
 
 
 }  //-- end interface FileClientInterface
