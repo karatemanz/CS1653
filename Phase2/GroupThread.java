@@ -496,7 +496,11 @@ public class GroupThread extends Thread
 			// Does requester have ownership of group?
 			if (my_gs.userList.getUserOwnership(requester).contains(groupname))
 			{
-				my_gs.userList.addGroup(username, groupname);
+				// Is user already in the group?
+				if (!my_gs.userList.getUserGroups(username).contains(groupname))
+				{
+					my_gs.userList.addGroup(username, groupname);
+				}
 				
 				return true;
 			}
