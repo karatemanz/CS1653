@@ -192,7 +192,8 @@ public class FileThread extends Thread
 				else if (e.getMessage().compareTo("DOWNLOADF")==0) {
 
 					String remotePath = (String)e.getObjContents().get(0);
-					Token t = (Token)e.getObjContents().get(1);
+					String group = (String)e.getObjContents().get(1);
+					Token t = (Token)e.getObjContents().get(2);
 					ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
 					if (sf == null) {
 						System.out.printf("Error: File %s doesn't exist\n", remotePath);
@@ -200,9 +201,9 @@ public class FileThread extends Thread
 						output.writeObject(e);
 
 					}
-					else if (!t.getGroups().contains(sf.getGroup())){
+					else if (!sf.getGroup().equals(group)){
 						System.out.printf("Error user %s doesn't have permission\n", t.getSubject());
-						e = new Envelope("ERROR_PERMISSION");
+						e = new Envelope("ERROR_GROUP_PERMISSION");
 						output.writeObject(e);
 					}
 					else {
