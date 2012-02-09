@@ -13,6 +13,9 @@ public class FileClientUI
 			String userName = token.getSubject();
 			boolean exitKey = false;
 			List<String> aList;
+			String groupName;
+			String sourceFileName;
+			String destFileName;
 			
 			while (!exitKey)
 			{
