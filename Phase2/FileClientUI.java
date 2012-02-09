@@ -76,6 +76,7 @@ public class FileClientUI
 						{
 							System.out.println("Error - user has no groups. Please add groups in Group Server.");
 						}
+						break;
 					case 3:
 						//aList = fc.listFiles(token);
 						System.out.println("listFiles stub");
