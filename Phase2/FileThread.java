@@ -105,15 +105,16 @@ public class FileThread extends Thread
 						{
 							UserToken yourToken = (UserToken)e.getObjContents().get(0); //Extract token
 							String username = yourToken.getSubject();
+							String outputStr;
 							List<ShareFile> fullFileList = FileServer.fileList.getFiles();
 							List<String> userFileList = new ArrayList<String>();
 							if (fullFileList != null)
 							{
 								for (ShareFile sf: fullFileList)
 								{
-									if (sf.getOwner().equals(username)) // add group name later
+									if (sf.getOwner().equals(username)) // add group name now
 									{
-										userFileList.add(sf.getPath());
+										userFileList.add(sf.getPath() + "\t(" + username + "/" + sf.getGroup() + ")");
 									}
 								}
 							}
