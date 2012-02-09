@@ -1,0 +1,22 @@
+CS 1653 Spring 2012
+Term Project, Phase 2
+
+Tucker Trainor <tmt33@pitt.edu>
+Lindsey Bieda <leb35@pitt.edu>
+
+Included files:
+Client.java			README
+Envelope.java			RunFileServer.java
+FileClient.java			RunGroupServer.java
+FileClientInterface.java	Server.java
+FileClientUI.java		ShareFile.java
+FileList.java			SimpleUI.java
+FileServer.java			Token.java
+FileThread.java			UserList.java
+GroupClient.java		UserToken.java
+GroupClientInterface.java	compile.txt
+GroupClientUI.java		extra_credit.txt
+GroupServer.java		usage.txt
+GroupThread.java
+
+
