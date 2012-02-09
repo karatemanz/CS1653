@@ -129,13 +129,9 @@ public class FileClientUI
 						{
 							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
 							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
-							if (fc.download(sourceFileName, destFileName, token))
+							if (fc.download(sourceFileName, destFileName, currentGroup, token))
 							{
 								System.out.println(destFileName + " successfully downloaded.");
-							}
-							else
-							{
-								System.out.println("Error downloading " + destFileName + " from File Server. Check file's group and name");
 							}
 						}
 						else
