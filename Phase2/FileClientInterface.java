@@ -32,19 +32,31 @@ public interface FileClientInterface
     /**
      * Retrieves a list of groups that are encoded in the supplied user token.
      *
-     * @param token The UserToken object assigned to the user invoking this operation
+     * @param token - The UserToken object assigned to the user invoking this operation
      *
      * @return A list of groups that the user belongs to
      *
      */
     public List<String> listGroups(final UserToken token);
+	
+	
+    /**
+     * Retrieves a list of groups that are encoded in the supplied user token.
+     *
+	 * @param group -The group name that the user will work within
+     * @param token - The UserToken object assigned to the user invoking this operation
+     *
+     * @return A list of groups that the user belongs to
+     *
+     */
+    public List<String> changeGroup(final String group, final UserToken token);
 
 
     /**
      * Retrieves a list of files that are allowed to be displayed
      * members of the groups encoded in the supplied user token.
      *
-     * @param token The UserToken object assigned to the user invoking this operation
+     * @param token - The UserToken object assigned to the user invoking this operation
      *
      * @return A list of filenames
      *
