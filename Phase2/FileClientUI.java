@@ -126,7 +126,7 @@ public class FileClientUI
 							}
 							else
 							{
-								System.out.println("Error downloaded " + destFileName + " from File Server.");
+								System.out.println("Error downloading " + destFileName + " from File Server. Check file's group and name");
 							}
 						}
 						else
