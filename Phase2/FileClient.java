@@ -40,7 +40,7 @@ public class FileClient extends Client implements FileClientInterface {
 		return true;
 	}
 
-	public boolean download(String sourceFile, String destFile, UserToken token) {
+	public boolean download(String sourceFile, String destFile, String group, UserToken token) {
 				if (sourceFile.charAt(0)=='/') {
 					sourceFile = sourceFile.substring(1);
 				}
@@ -55,6 +55,7 @@ public class FileClient extends Client implements FileClientInterface {
 					    
 					    Envelope env = new Envelope("DOWNLOADF"); //Success
 					    env.addObject(sourceFile);
+					    env.addObject(group);
 					    env.addObject(token);
 					    output.writeObject(env); 
 					
