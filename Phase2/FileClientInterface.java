@@ -27,6 +27,17 @@ public interface FileClientInterface
      *
      */
     public void disconnect();
+	
+	
+    /**
+     * Retrieves a list of groups that are encoded in the supplied user token.
+     *
+     * @param token The UserToken object assigned to the user invoking this operation
+     *
+     * @return A list of groups that the user belongs to
+     *
+     */
+    public List<String> listGroups(final UserToken token);
 
 
     /**

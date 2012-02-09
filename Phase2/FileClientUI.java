@@ -40,6 +40,15 @@ public class FileClientUI
 						//aList = fc.listFiles(token);
 						// output the list
 						System.out.println("listFiles stub");
+						aList = fc.listFiles(token);
+						if (aList != null)
+						{
+							for (String s: aList)
+							{
+								System.out.println(s);
+							}
+						}
+
 						break;
 					case 2:
 						System.out.println("2");
