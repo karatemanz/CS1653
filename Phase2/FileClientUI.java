@@ -11,6 +11,7 @@ public class FileClientUI
 		{
 			Scanner console = new Scanner(System.in); // Scanner object for input
 			String userName = token.getSubject();
+			int menuChoice = 0;
 			boolean exitKey = false;
 			final int MAXUSERLENGTH = 32;
 			final int MAXGROUPLENGTH = 32;
@@ -49,7 +50,16 @@ public class FileClientUI
 								 userPrompt + "> ");
 				String inputString = console.nextLine();
 				
-				switch (Integer.parseInt(inputString))
+				try
+				{
+					menuChoice = Integer.parseInt(inputString);
+				}
+				catch(Exception e)
+				{
+					menuChoice = -1;
+				}
+				
+				switch (menuChoice)
 				{
 					case 1:
 						aList = fc.listGroups(token);
