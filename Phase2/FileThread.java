@@ -282,7 +282,8 @@ public class FileThread extends Thread
 				else if (e.getMessage().compareTo("DELETEF")==0) {
 
 					String remotePath = (String)e.getObjContents().get(0);
-					Token t = (Token)e.getObjContents().get(1);
+					String group = (String)e.getObjContents().get(1);
+					Token t = (Token)e.getObjContents().get(2);
 					ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
 					if (sf == null) {
 						System.out.printf("Error: File %s doesn't exist\n", remotePath);
