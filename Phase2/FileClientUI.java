@@ -141,10 +141,6 @@ public class FileClientUI
 							{
 								System.out.println(sourceFileName + " successfully deleted.");
 							}
-							else
-							{
-								System.out.println("Error deleting " + sourceFileName + " from File Server. Check file's group and name");
-							}
 						}
 						else
 						{
