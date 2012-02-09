@@ -3,6 +3,7 @@
 import java.lang.Thread;
 import java.net.Socket;
 import java.util.List;
+import java.util.ArrayList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -68,10 +69,21 @@ public class FileThread extends Thread
 							response = new Envelope("FAIL-BADTOKEN");
 						}
 						else {
-//							UserToken yourToken = (UserToken)e.getObjContents().get(0); //Extract token
-//							List<String> groupList = yourToken.getGroups(); // get groups
-//							response = new Envelope("OK"); //Success
-//							response.addObject(groupList);
+							String changeGroup = (String)e.getObjContents().get(0); //Extract group
+							UserToken yourToken = (UserToken)e.getObjContents().get(1); //Extract token
+							// check that it is a valid group
+							if (yourToken.getGroups().contains(changeGroup))
+							{
+								response = new Envelope("OK"); //Success
+								List<String> changeGroupList = new ArrayList<String>();
+								changeGroupList.add(changeGroup);
+								
+								response.addObject(changeGroupList);
+							}
+							else
+							{
+								response = new Envelope("FAIL-BADGROUP");
+							}
 						}
 					}
 					output.writeObject(response);
