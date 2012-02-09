@@ -289,10 +289,9 @@ public class FileThread extends Thread
 						System.out.printf("Error: File %s doesn't exist\n", remotePath);
 						e = new Envelope("ERROR_DOESNTEXIST");
 					}
-					else if (sf.getGroup() != group){
-//						else if (!t.getGroups().contains(sf.getGroup())){
+					else if (!sf.getGroup().equals(group)){
 						System.out.printf("Error user %s doesn't have permission\n", t.getSubject());
-						e = new Envelope("ERROR_PERMISSION");
+						e = new Envelope("ERROR_GROUP_PERMISSION");
 					}
 					else {
 
