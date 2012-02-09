@@ -101,11 +101,25 @@ public class FileThread extends Thread
 						if(e.getObjContents().get(0) == null) {
 							response = new Envelope("FAIL-BADTOKEN");
 						}
-						else {
+						else
+						{
 							UserToken yourToken = (UserToken)e.getObjContents().get(0); //Extract token
-							List<String> groupList = yourToken.getGroups(); // get groups
+							String username = yourToken.getSubject();
+							List<ShareFile> fullFileList = FileServer.fileList.getFiles();
+							List<String> userFileList = new ArrayList<String>();
+							if (fullFileList != null)
+							{
+								for (ShareFile sf: fullFileList)
+								{
+									if (sf.getOwner().equals(username)) // add group name later
+									{
+										userFileList.add(sf.getPath());
+									}
+								}
+							}
+
 							response = new Envelope("OK"); //Success
-							response.addObject(groupList);
+							response.addObject(userFileList);
 						}
 					}
 					output.writeObject(response);
