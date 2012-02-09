@@ -33,6 +33,26 @@ public class FileThread extends Thread
 				Envelope e = (Envelope)input.readObject();
 				System.out.println("Request received: " + e.getMessage());
 
+				if(e.getMessage().equals("LGROUPS"))
+				{
+					if(e.getObjContents().size() < 1)
+					{
+						response = new Envelope("FAIL-BADCONTENTS");
+					}
+					else
+					{
+						if(e.getObjContents().get(0) == null) {
+							response = new Envelope("FAIL-BADTOKEN");
+						}
+						else {
+							UserToken yourToken = (UserToken)e.getObjContents().get(0); //Extract token
+							List<String> groupList = yourToken.getGroups(); // get groups
+							response = new Envelope("OK"); //Success
+							response.addObject(groupList);
+						}
+					}
+					output.writeObject(response);
+				}
 				// Handler to list files that this user is allowed to see
 				if(e.getMessage().equals("LFILES"))
 				{
