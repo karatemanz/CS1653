@@ -43,8 +43,8 @@ public class FileClientUI
 								 "enter 2 to change the current group to traverse,\n" +
 								 "enter 3 to list files,\n" +
 								 "enter 4 to upload a file to the File Server,\n" +
-								 "enter 5 to download a file to the File Server,\n" +
-								 "enter 6 to delete a file to the File Server,\n" +
+								 "enter 5 to download a file from the File Server,\n" +
+								 "enter 6 to delete a file from the File Server,\n" +
 								 "enter 0 to disconnect from File Server...\n" +
 								 userPrompt + "> ");
 				String inputString = console.nextLine();
