@@ -101,12 +101,12 @@ public class FileClient extends Client implements FileClientInterface {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<String> listGroups(UserToken token) {
+	public List<String> listFiles(UserToken token) {
 		try
 		{
 			Envelope message = null, e = null;
-			//Tell the server to return the group list
-			message = new Envelope("LGROUPS");
+			//Tell the server to return the member list
+			message = new Envelope("LFILES");
 			message.addObject(token); //Add requester's token
 			output.writeObject(message); 
 			
