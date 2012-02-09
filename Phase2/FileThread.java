@@ -112,9 +112,9 @@ public class FileThread extends Thread
 							{
 								for (ShareFile sf: fullFileList)
 								{
-									if (sf.getOwner().equals(username)) // add group name now
+									if (yourToken.getGroups().contains(sf.getGroup()))
 									{
-										userFileList.add(sf.getPath() + "\t(" + username + "/" + sf.getGroup() + ")");
+										userFileList.add(sf.getPath() + "\t(" + sf.getOwner() + "/" + sf.getGroup() + ")");
 									}
 								}
 							}
