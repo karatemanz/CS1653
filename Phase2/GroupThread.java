@@ -426,10 +426,10 @@ public class GroupThread extends Thread
 					
 					for (int index = 0; index < deleteOwnedGroup.size(); index++)
 					{
-						if (my_gs.userList.getUserGroups(otherUser).contains(deleteOwnedGroup.get(index)));
+						if (my_gs.userList.getUserGroups(otherUser).contains(groupname));
 						{
 							// delete this group from the user's group list
-							my_gs.userList.removeGroup(otherUser, deleteOwnedGroup.get(index));
+							my_gs.userList.removeGroup(otherUser, groupname);
 						}
 					}
 				}
