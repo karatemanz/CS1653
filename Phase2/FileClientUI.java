@@ -35,30 +35,19 @@ public class FileClientUI
 				{
 					userPrompt = userName;
 				}
-				System.out.print("Enter 1 to list files,\n" +
-								 "enter 2 to list the groups you belong to,\n" +
-								 "enter 3 to upload a file to the File Server,\n" +
-								 "enter 4 to download a file to the File Server,\n" +
-								 "enter 5 to delete a file to the File Server,\n" +
-								 "enter 6 to disconnect from File Server...\n" +
+				System.out.print("Enter 1 to list the groups you belong to,\n" +
+								 "enter 2 to change the current group to traverse,\n" +
+								 "enter 3 to list files,\n" +
+								 "enter 4 to upload a file to the File Server,\n" +
+								 "enter 5 to download a file to the File Server,\n" +
+								 "enter 6 to delete a file to the File Server,\n" +
+								 "enter 0 to disconnect from File Server...\n" +
 								 userPrompt + "> ");
 				String inputString = console.nextLine();
 				
 				switch (Integer.parseInt(inputString))
 				{
 					case 1:
-						//aList = fc.listFiles(token);
-						System.out.println("listFiles stub");
-						aList = fc.listFiles(token);
-						if (aList != null)
-						{
-							for (String s: aList)
-							{
-								System.out.println(s);
-							}
-						}
-						break;
-					case 2:
 						aList = fc.listGroups(token);
 						if (aList != null)
 						{
@@ -72,19 +61,48 @@ public class FileClientUI
 							System.out.println("Error - user has no groups. Please add groups in Group Server.");
 						}
 						break;
+					case 2:
+//						groupName = getNonEmptyString("Enter the group name to change to...\n" + userPrompt + "> ", 64);
+//						aList = fc.changeGroup(groupName, token);
+//						if (aList != null)
+//						{
+//							for (String s: aList)
+//							{
+//								System.out.println("Changed to group " + s + ".");
+//								currentGroup = s;
+//							}
+//						}
+//						else
+//						{
+//							System.out.println("Error - user has no groups. Please add groups in Group Server.");
+//						}
+						System.out.println("changeGroup stub");
 					case 3:
+						//aList = fc.listFiles(token);
+						System.out.println("listFiles stub");
+						aList = fc.listFiles(token);
+						if (aList != null)
+						{
+							for (String s: aList)
+							{
+								System.out.println(s);
+							}
+						}
+						break;
+
+					case 4:
 						//fc.upload(sourceFile, destFile, group, token); // returns a boolean
 						System.out.println("upload stub");
 						break;
-					case 4:
+					case 5:
 						//fc.download(sourceFile, destFile, token); // returns a boolean
 						System.out.println("download stub");
 						break;
-					case 5:
+					case 6:
 						//fc.delete(filename, token); // returns a boolean
 						System.out.println("delete stub");
 						break;
-					case 6:
+					case 0:
 						System.out.println("Disconnecting from File Server...");
 						fc.disconnect();
 						exitKey = true;
