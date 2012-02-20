@@ -526,16 +526,20 @@ public class GroupThread extends Thread
 			// Does the requester have ownsership of group?
 			if (my_gs.userList.getUserOwnership(requester).contains(groupname))
 			{
-				// Is the user a member of the group?
-				if (my_gs.userList.getUserGroups(username).contains(groupname))
-				{
-					my_gs.userList.removeGroup(username, groupname);
-
-					return true;
+				// Does the user exist?
+				if(my_gs.userList.checkUser(username)) {
+					// Is the user a member of the group?
+					if (my_gs.userList.getUserGroups(username).contains(groupname)) {
+						my_gs.userList.removeGroup(username, groupname);
+						
+						return true;
+					}
+					else {
+						return false; // username is not in group
+					}
 				}
-				else
-				{
-					return false; // username is not in group
+				else {
+					return false; // can't delete nonexistent user
 				}
 			}
 			else
