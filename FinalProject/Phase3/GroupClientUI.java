@@ -114,7 +114,7 @@ public class GroupClientUI
 						}
 						else
 						{
-							System.out.println("Error. You are not a member of group " +
+							System.out.println("Error. You are not the owner of group " +
 											   aGroupName + ".");
 						}
 						break;

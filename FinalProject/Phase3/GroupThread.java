@@ -457,11 +457,9 @@ public class GroupThread extends Thread
 		List<String> aList = new ArrayList<String>();
 		
 		//Does requester exist?
-		if(my_gs.userList.checkUser(requester))
-		{
-			ArrayList<String> temp = my_gs.userList.getUserGroups(requester);
-			//requester needs to be in same group as requested
-			if(temp.contains(group))
+		if(my_gs.userList.checkUser(requester)) {
+			// Requester needs to the owner of the group requested
+			if(my_gs.userList.getUserOwnership(requester).contains(group))
 			{
 				// get a list of usernames, loop through each
 				for (Enumeration<String> usernameList = my_gs.userList.getUsernames(); usernameList.hasMoreElements();)
@@ -477,7 +475,7 @@ public class GroupThread extends Thread
 			}
 			else
 			{
-				return null; //requester is not in same group
+				return null; // requester does not own this group
 			}
 		}
 		else
