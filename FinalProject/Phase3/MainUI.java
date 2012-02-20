@@ -4,9 +4,21 @@ import java.util.Arrays; // to create test UserToken
 
 public class MainUI
 {
-    public static void main(String[] args)
-    {
-		loginMenu();
+    public static void main(String[] args) {
+		if (args.length == 2) {
+			try {
+				String groupServer = args[0];
+				int groupPort = Integer.parseInt(args[1]);
+				loginMenu(groupServer, groupPort);
+			}
+			catch (NumberFormatException e) {
+				System.out.printf("Error parsing port number " + args[1] +
+								  " for Group Server - please retry.");
+			}
+		}
+		else {
+			loginMenu("localhost", 8765);
+		}
 	}
 	
 	public static void loginMenu()
