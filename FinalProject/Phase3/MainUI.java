@@ -17,11 +17,11 @@ public class MainUI
 			}
 		}
 		else {
-			loginMenu("localhost", 8765);
+			loginMenu("localhost", 8765); // default to localhost
 		}
 	}
 	
-	public static void loginMenu()
+	public static void loginMenu(String groupServerAddress, int groupServerPort)
 	{
 		FileClient fc = new FileClient();
 		GroupClient gc = new GroupClient();
@@ -56,8 +56,7 @@ public class MainUI
 				userName = console.nextLine();
 
 				// connect to group server and get token
-				// may want to prompt user here for server name, port?
-				gc.connect("localhost", 8765);
+				gc.connect(groupServerAddress, groupServerPort);
 				if (gc.isConnected()) // check that server is running
 				{
 					userToken = gc.getToken(userName);
@@ -74,7 +73,7 @@ public class MainUI
 				}
 				else
 				{
-					System.out.println("Error - Group Server not running. Contact Admin.");
+					System.out.println("Error - Group Server not reached at given address.");
 				}
 			}
 			else if (menuChoice == 2)
@@ -124,8 +123,7 @@ public class MainUI
 					case 2:
 						System.out.println("Connecting to Group Server...");
 						GroupClientUI gcu = new GroupClientUI();
-						// may want to prompt user here for server name, port
-						gcu.launchUI(userToken, "localhost", 8765);
+						gcu.launchUI(userToken, groupServerAddress, groupServerPort);
 						hasToken = false;
 						break;
 					case 3:
