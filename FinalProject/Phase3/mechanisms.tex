@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+%Don't list section numbers
+\setcounter{secnumdepth}{0}
+
+\title{CS 1653: Applied Cryptography and Network Security\\Term Project, Phase 3}
+\author{Lindsey Bieda\quad\texttt{leb35@pitt.edu}\qquad Tucker Trainor\quad\texttt{tmt33@pitt.edu}}
+\date{March 2, 2012} % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+\section{Introduction: Cryptographic Techniques}
+(an introductory paragraph or two that broadly surveys the types of cryptographic techniques that your group has decided to use to address threats T1-T4)
+% Threat 1
+\section{Threat 1: Unauthorized Token Issuance}
+\subsection{Threat Description}
+Begin by describing the threat treated in this section. This may include describing examples of the threat being exploited by an adversary, a short discussion of why this threat is problematic and needs to be addressed, and/or diagrams showing how the threat might manifest in your group’s current (insecure) implementation.
+\subsection{Mechanism Description}
+Next, provide a short description of the mechanism that you chose to implement to protect against this threat. For interactive protocols, it would be helpful to provide a diagram explaining the messages exchanged between participating principals. (See the notes from Lecture 10 for example diagrams.) Be sure to explain any cryptographic choices that your group makes: What types of algorithms, modes of operation, and/or key lengths did you chose? Why? If shared keys are needed, how are they exchanged?
+\subsection{Correctness and Security of Mechanism}
+Lastly, provide a short argument addressing why your proposed mechanism sufficiently addresses this particular threat. This argument should address the correctness of your approach, as well as its overall security. For example, if your mechanism involves a key agreement or key exchange protocol, you should argue that both parties agree on the same key (correctness) and that no other party can figure out the key (security).
+% Threat 2
+\section{Threat 2: Token Modification/Forgery}
+\subsection{Threat Description}
+\subsection{Mechanism Description}
+\subsection{Correctness and Security of Mechanism}
+% Threat 3
+\section{Threat 3: Unauthorized File Servers}
+\subsection{Threat Description}
+\subsection{Mechanism Description}
+\subsection{Correctness and Security of Mechanism}
+% Threat 4
+\section{Threat 4: Information Leakage via Passive Monitoring}
+\subsection{Threat Description}
+\subsection{Mechanism Description}
+\subsection{Correctness and Security of Mechanism}
+\section{Summary and Errata}
+(conclude with a paragraph or two discussing the interplay between your proposed mechanisms, and commenting on the design process that your group followed. Did you discuss other ideas that didn’t pan out before settling on the above-documented approach? Did you end up designing a really interesting protocol suite that addresses multiple threats at once? Use this space to show off your hard work!)
+\end{document}
