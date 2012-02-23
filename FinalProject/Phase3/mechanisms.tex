@@ -41,7 +41,15 @@ Lastly, provide a short argument addressing why your proposed mechanism sufficie
 % Threat 4
 \section{Threat 4: Information Leakage via Passive Monitoring}
 \subsection{Threat Description}
+Suppose Eve can listen to an information exchange between Alice and Bob. Even without being able to interrupt or modify the exchange, Eve can still glean enough information to perform malicious acts. If insufficient security is in place, Eve may be able to gather enough data to
+\begin{itemize}
+\item know the contents of the exchanges;
+\item to impersonate Alice or Bob;
+\item use offline password guessing to discover passwords or other secret information.
+\end{itemize}
+Eve does not need to be an active participant in a conversation to illicitly benefit from it, and thus exchanges between Alice and Bob must be kept secure.
 \subsection{Mechanism Description}
+Shared key/session key to encrypt messages between Alice and Bob.
 \subsection{Correctness and Security of Mechanism}
 \section{Summary and Errata}
 (conclude with a paragraph or two discussing the interplay between your proposed mechanisms, and commenting on the design process that your group followed. Did you discuss other ideas that didn’t pan out before settling on the above-documented approach? Did you end up designing a really interesting protocol suite that addresses multiple threats at once? Use this space to show off your hard work!)
