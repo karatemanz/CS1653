@@ -59,5 +59,7 @@ To maintain a secure channel between Alice and Bob during a continuous series of
 \subsection{Correctness and Security of Mechanism}
 If the key exchange is performed securely, then each session is not only properly encrypted, but is also protected even if the Diffie-Hellman decryption keys are compromised, as the modulo arithmetic prevents direct decryption, which bolsters the security of the mechanism.
 \section{Summary and Errata}
-(conclude with a paragraph or two discussing the interplay between your proposed mechanisms, and commenting on the design process that your group followed. Did you discuss other ideas that didn't pan out before settling on the above-documented approach? Did you end up designing a really interesting protocol suite that addresses multiple threats at once? Use this space to show off your hard work!)
+There are common elements to the protocols that address the above threats. Since Threat 4 involves eavesdropping, most if not all communication over the network will need to be encrypted. Thus, handshake protocols will be present in many of the implementations we have discussed.
+
+Before further elaboration can be done here, the implementation will need to be performed. As all good intentions lead to something else, the process of implementing the protocols will undoubtedly lead to changes in design to accommodate shifting requirements or practicalities.
 \end{document}
