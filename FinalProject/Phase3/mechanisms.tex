@@ -57,7 +57,7 @@ Eve does not need to be an active participant in a conversation to illicitly ben
 \subsection{Mechanism Description}
 To maintain a secure channel between Alice and Bob during a continuous series of messages, the most efficient solution may be to create a session key between them. A session key avoids having to recreate a secure channel after each exchange, resulting in increased efficiency over alternatives. To create a session key, we can implement public-key authentication protocols to not only provide authentication but also continued secrecy after the exchanges. By using a Diffie-Helman exchange to create a shared secret key between Alice and Bob, which can then be used to encrypt a session.
 \subsection{Correctness and Security of Mechanism}
-If the key exchange is performed securely, then each session is not only properly encrypted, but is also protected even if the Diffie-Hellman decryption keys are compromised, as the modulo arithmetic prevents direct decryption.
+If the key exchange is performed securely, then each session is not only properly encrypted, but is also protected even if the Diffie-Hellman decryption keys are compromised, as the modulo arithmetic prevents direct decryption, which bolsters the security of the mechanism.
 \section{Summary and Errata}
 (conclude with a paragraph or two discussing the interplay between your proposed mechanisms, and commenting on the design process that your group followed. Did you discuss other ideas that didn’t pan out before settling on the above-documented approach? Did you end up designing a really interesting protocol suite that addresses multiple threats at once? Use this space to show off your hard work!)
 \end{document}
