@@ -39,8 +39,11 @@ As the hashing process does not necessarily require explanation, the security of
 % Threat 3
 \section{Threat 3: Unauthorized File Servers}
 \subsection{Threat Description}
+The purpose of a secure file server is that, put simply, your files are secure. If a user can unknowingly be directed to an unauthorized file server, any other security safeguards are rendered moot, thus threatening the confidentiality of the user's files and the perceived integrity of the entire service. If a user can be convinced that they are connected to file server $s$ while actually being connected to a malicious file server $s^\prime$, they are at risk of uploading confidential data to an untrusted source or downloading malicious content from an untrusted source.
 \subsection{Mechanism Description}
+In order for a file server to be trusted by a user, it must provide some authentication to the user that only the actual server can know. Though certificates would be an ideal solution, they are outside the scope of our project. Instead, we can rely on public and private keys as a way of validating a file server. Upon the first connection to a server $s$, the user will be asked if they wish to accept the public key $s_\text{k}$. If the user agrees, $s_\text{k}$ is stored by the user in their client application along with other identifying details of the server (e.g. server name, IP address, etc.). When the user wishes to authenticate the server, he or she can use $s_\text{k}$ to encrypt a challenge to $s$. If $s$ is in possession of the private key $s_\text{k}^{-1}$, then $s$ is able to return the challenge to the user and authentication is complete. An unauthorized server $s^\prime$ would be unable to correctly guess $s_\text{k}^{-1}$ and therefore could not decrypt of the challenge and complete authentication.
 \subsection{Correctness and Security of Mechanism}
+The main threat to this mechanism is replay attacks, where a passive monitor might see a repeat of a challenge and be able to perform a man-in-the-middle attack. Therefore, a level of randomness in the challenge as well as encrypting the exchange between the user and $s$ may be necessary to ensure correctness and security.
 % Threat 4
 \section{Threat 4: Information Leakage via Passive Monitoring}
 \subsection{Threat Description}
