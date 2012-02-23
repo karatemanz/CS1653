@@ -19,7 +19,7 @@
 \begin{document}
 \maketitle
 \section{Introduction: Cryptographic Techniques}
-(an introductory paragraph or two that broadly surveys the types of cryptographic techniques that your group has decided to use to address threats T1-T4)
+Protecting communication over networks is a byzantine affair involving prime numbers, modulo arithmetic, and inscrutable ciphertext. No one protocol is enough to cover all vulnerabilities of a secure file server implementation, and often hybridization of protocols is the best solution to thorny security issues. In our implementation of a secure file server, we will include proven methods from both private key cryptography and public key cryptography, and sometimes even combine the two. From the realm of private key cryptography, we will use AES for block cipher encryption. Of public key cryptography, we use the Diffie-Hellman key exchange and RSA encryption to leverage security and efficiency where possible. We will also implement hashing for authenticating data where necessary.
 % Threat 1
 \section{Threat 1: Unauthorized Token Issuance}
 \subsection{Threat Description}
