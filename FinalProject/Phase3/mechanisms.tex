@@ -25,7 +25,7 @@ Protecting communication over networks is a byzantine affair involving prime num
 \subsection{Threat Description}
 For a user to begin using the secure file server, they must be issued a token with which they can perform all the functions of the Group and File Servers. Thus, we need to protect each user's token from anyone other than the user. In Phase 2 of the project, we considered the users trustworthy and therefore didn't require any credentials other than knowing the username of the token's owner. This is almost completely insecure against any malicious agent who knows a username on the system, as they can simply enter any valid username to be issued that user's token.
 \subsection{Mechanism Description}
-We can implement a password mechanism to verify that a user is who they claim to be. By requiring a login sequence consisting of a username and password tuple, we can do a basic authentication of the user. Before defining a sequence of operations to authorize issuance of a token, we can must list assumptions of existing conditions.
+We can implement a password mechanism to verify that a user is who they claim to be. By requiring a login sequence consisting of a username and password tuple, we can do a basic authentication of the user. Before defining a sequence of operations to authorize issuance of a token, we must list assumptions of existing conditions:
 \begin{itemize}
 \item{}The user has been created by an administrator and is in possession of their correct password.
 \item{}The user has connected through the client application to the Group Server and has already saved the Group Server's public key in the file that their client uses to store public keys
