@@ -28,7 +28,8 @@ For a user to begin using the secure file server, they must be issued a token wi
 We can implement a password mechanism to verify that a user is who they claim to be. By requiring a login sequence consisting of a username and password tuple, we can do a basic authentication of the user. Before defining a sequence of operations to authorize issuance of a token, we must list assumptions of existing conditions:
 \begin{itemize}
 \item{}The user has been created by an administrator and is in possession of their correct password.
-\item{}The user has connected through the client application to the Group Server and has already saved the Group Server's public key in the file that their client uses to store public keys
+\item{}The user has connected through the client application to the Group Server and has already saved the Group Server's public key in the file that their client uses to store public keys.
+\item{}The user has an active connection to the Group Server.
 \end{itemize}
 We store the username with a hash of the password instead of the password in cleartext to avoid revealing passwords in the event of a compromise to the Group Server, where a hash table of usernames and hashes would be stored. The user would enter their password, which would be sent to the Group Server over an encrypted channel. If the hashes match, the user is authenticated as who they claim to be and issued their token, otherwise access is denied.
 \subsection{Correctness and Security of Mechanism}
