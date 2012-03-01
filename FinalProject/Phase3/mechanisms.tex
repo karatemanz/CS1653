@@ -90,8 +90,15 @@ Suppose Eve can listen to an information exchange between Alice and Bob. Even wi
 Eve does not need to be an active participant in a conversation to illicitly benefit from it, and thus exchanges between Alice and Bob must be kept secure. Or, to put into context of a secure file server, any exchanges between a user and any server (or even between servers) must be kept confidential if proper security is to be maintained.
 \subsection{Mechanism Description}
 To maintain a secure channel between Alice and Bob during a continuous series of messages, the most efficient solution may be to create a session key between them. A session key avoids having to recreate a secure channel after each exchange, resulting in increased efficiency over alternative methods that would require more frequent overhead or computation. To create a session key, we can implement public-key authentication protocols to provide authentication between two parties and provide them with a shared secret key. The secret key can then be used as a password for symmetric key encryption of all communication during the lifetime of the session. The steps to follow are similar to Threat 2, in which both parties have public/private key pairs.
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics{threat4}
+\caption{Threat 4 Mechanism}
+\label{threat4}
+\end{center}
+\end{figure}
 \subsection{Correctness and Security of Mechanism}
-If the key exchange is performed securely, then each session is not only properly encrypted, but is also protected even if the Diffie-Hellman decryption keys are compromised, as the modulo arithmetic prevents direct decryption, which bolsters the security of the mechanism.
+If the key exchange is performed securely, then each session is properly encrypted.
 \section{Summary and Errata}
 There are common elements to the protocols that address the above threats. Since Threat 4 involves eavesdropping, most if not all communication over the network will need to be encrypted. Thus, handshake protocols will be present in many of the implementations we have discussed.
 
