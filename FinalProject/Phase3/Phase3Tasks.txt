@@ -8,6 +8,8 @@ T1: Unauthorized Token Issuance
 -- set up secure exchange between client and Group Server, save Group Server's
    public key for client (local to them), store also for Group Server (local to
    it? how will Group Server know its key pair?)
+-- should we limit the number of characters possible for a password, or
+   restrict which characters?
 
 T2: Token Modification/Forgery
 - change Token class to store signature, provide tokenized string
