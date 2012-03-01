@@ -29,6 +29,7 @@ We can implement a password mechanism to verify that a user is who they claim to
 \begin{itemize}
 \item{}The user has been created by an administrator and is in possession of their correct password.
 \item{}The user has connected through the client application to the Group Server and has already saved the Group Server's public key in the file that their client uses to store public keys.
+\item{}The Group Server's private key has not been compromised.
 \item{}The user has an active connection to the Group Server.
 \end{itemize}
 With these assumptions in place, we can outline the steps to maintain the confidentiality and integrity of each user's token:
