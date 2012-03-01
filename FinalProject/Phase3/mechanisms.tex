@@ -54,6 +54,13 @@ To maintain the security of the password authentication process, there are two l
 By modifying or forging tokens issued by the Group Server, a user may be able to gain access to files that would otherwise be forbidden. By changing the group information embedded in a token, a malicious user can access groups that they are not members of, which would grant unauthorized access to files belonging to those groups. Furthermore, if a malicious user assigns him or herself as the owner of a specific group, he or she will have the ability to add or delete group members, as well as freely modify files belonging to that group. This threat is a direct attack on the integrity of a secure group server.
 \subsection{Mechanism Description}
 In order to maintain the integrity of token issuance, we should verify that a token is valid every time an operation involving a token is invoked. The best way to verify would be to match the token in question with the one on the Group Server. To efficiently perform this mechanism, we take a hash of both tokens, create an authenticated and encrypted channel between the user's application and the Group Server, and compare the hashes. If the hashes match, then the user is using the same token that is on the Group Server and is thus valid.
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics{threat2}
+\caption{Threat 2 Mechanism}
+\label{threat2}
+\end{center}
+\end{figure}
 \subsection{Correctness and Security of Mechanism}
 As the hashing process does not necessarily require explanation, the security of the mechanism lies with the verification channel between the Group Server and the application requesting validation. If we can maintain the security of the channel and introduce a degree of randomness to foil replay attacks, then we should be able to eliminate token fraud.
 % Threat 3
@@ -62,6 +69,13 @@ As the hashing process does not necessarily require explanation, the security of
 The purpose of a secure file server is that, put simply, your files are secure. If a user can unknowingly be directed to an unauthorized file server, any other security safeguards are rendered moot, thus threatening the confidentiality of the user's files and the perceived integrity of the entire service. If a user can be convinced that they are connected to file server $s$ while actually being connected to a malicious file server $s^\prime$, they are at risk of uploading confidential data to an untrusted source or downloading malicious content from an untrusted source.
 \subsection{Mechanism Description}
 In order for a file server to be trusted by a user, it must provide some authentication to the user that only the actual server can know. Though certificates would be an ideal solution, they are outside the scope of our project. Instead, we can rely on public and private keys as a way of validating a file server. Upon the first connection to a server $s$, the user will be asked if they wish to accept the public key $s_\text{k}$. If the user agrees, $s_\text{k}$ is stored by the user in their client application along with other identifying details of the server (e.g. server name, IP address, etc.). When the user wishes to authenticate the server, he or she can use $s_\text{k}$ to encrypt a challenge to $s$. If $s$ is in possession of the private key $s_\text{k}^{-1}$, then $s$ is able to return the challenge to the user and authentication is complete. An unauthorized server $s^\prime$ would be unable to correctly guess $s_\text{k}^{-1}$ and therefore could not decrypt of the challenge and complete authentication.
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics{threat3}
+\caption{Threat 3 Mechanism}
+\label{threat3}
+\end{center}
+\end{figure}
 \subsection{Correctness and Security of Mechanism}
 The main threat to this mechanism is replay attacks, where a passive monitor might see a repeat of a challenge and be able to perform a man-in-the-middle attack. Therefore, a level of randomness in the challenge as well as encrypting the exchange between the user and $s$ may be necessary to ensure correctness and security.
 % Threat 4
