@@ -31,6 +31,11 @@ We can implement a password mechanism to verify that a user is who they claim to
 \item{}The user has connected through the client application to the Group Server and has already saved the Group Server's public key in the file that their client uses to store public keys.
 \item{}The user has an active connection to the Group Server.
 \end{itemize}
+With these assumptions in place, we can outline the steps to maintain the confidentiality and integrity of each user's token:
+\begin{enumerate}
+\item{}
+\item{}
+\end{enumerate}
 We store the username with a hash of the password instead of the password in cleartext to avoid revealing passwords in the event of a compromise to the Group Server, where a hash table of usernames and hashes would be stored. The user would enter their password, which would be sent to the Group Server over an encrypted channel. If the hashes match, the user is authenticated as who they claim to be and issued their token, otherwise access is denied.
 \subsection{Correctness and Security of Mechanism}
 To maintain the security of the password authentication process, there are two layers that need to be maintained. The password must be hashed so that it remains obfuscated after the user enters it into a login prompt. As a measure of correctness, the hash used by the client should match that which was used by the authenticating server. Additionally, the exchange between the client and server must be encrypted so that the hash value is obscured from an eavesdropper. The inclusion of a random IV in the encryption process is also necessary as a measure to prevent replay attacks.
