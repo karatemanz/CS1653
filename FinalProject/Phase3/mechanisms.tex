@@ -68,7 +68,7 @@ In order to maintain the integrity of token issuance, we should verify that a to
 \end{figure}
 With these assumptions in place, we can begin the protocol to verify a user's token:
 \begin{enumerate}
-\item{}Perform an exchange to establish a shared symmetric key so that the two parties can communicate securely.
+\item{}Perform an exchange to establish a shared symmetric key so that the two parties can communicate securely. (see Threat 1 for expanded explanation)
 \item{}The user sends their token to the third party (e.g. a File Server) using the secret key to encrypt it.
 \item{}The third party decrypts the token, retrieves its tokenized string and its digital signature. After decrypting the signature with K$_\text{g}$, it compares the two strings.
 \item{}If the two strings match, the third party returns an acknowledgement. If forgery is suspected, the third party may terminate the connection or take other evasive action.
@@ -78,9 +78,13 @@ Correctness is partly dependent on the Group Server and how it signs tokens. As 
 % Threat 3
 \section{Threat 3: Unauthorized File Servers}
 \subsection{Threat Description}
-The purpose of a secure file server is that, put simply, your files are secure. If a user can unknowingly be directed to an unauthorized file server, any other security safeguards are rendered moot, thus threatening the confidentiality of the user's files and the perceived integrity of the entire service. If a user can be convinced that they are connected to file server $s$ while actually being connected to a malicious file server $s^\prime$, they are at risk of uploading confidential data to an untrusted source or downloading malicious content from an untrusted source.
+The purpose of a secure file server is that, put simply, your files are secure. If a user can unknowingly be directed to an unauthorized file server, any other security safeguards are rendered moot, thus threatening the confidentiality of the user's files and the perceived integrity of the entire service. If a user can be convinced that they are connected to file server $f$ while actually being connected to a malicious file server $f^\prime$, they are at risk of uploading confidential data to an untrusted source or downloading malicious content from an untrusted source.
 \subsection{Mechanism Description}
-In order for a file server to be trusted by a user, it must provide some authentication to the user that only the actual server can know. Though certificates would be an ideal solution, they are outside the scope of our project. Instead, we can rely on public and private keys as a way of validating a file server. Upon the first connection to a server $s$, the user will be asked if they wish to accept the public key $s_\text{k}$. If the user agrees, $s_\text{k}$ is stored by the user in their client application along with other identifying details of the server (e.g. server name, IP address, etc.). When the user wishes to authenticate the server, he or she can use $s_\text{k}$ to encrypt a challenge to $s$. If $s$ is in possession of the private key $s_\text{k}^{-1}$, then $s$ is able to return the challenge to the user and authentication is complete. An unauthorized server $s^\prime$ would be unable to correctly guess $s_\text{k}^{-1}$ and therefore could not decrypt of the challenge and complete authentication.
+In order for a file server to be trusted by a user, it must provide some authentication to the user that only the actual server can know. Though certificates would be an ideal solution, they are outside the scope of our project. Instead, we can rely on public and private key pairs as a way of validating a File Server. Upon the first connection to a File Server $f$, the user will be asked if they wish to accept the public key K$_\text{f}$. If the user agrees, K$_\text{f}$ is stored by the user through their client application along with other identifying details of the File Server (e.g. server name, IP address, etc.). When the user wishes to authenticate the server, he or she can use K$_\text{f}$ to encrypt a challenge to $f$. If $f$ is in possession of the private key K$_\text{f}^{-1}$, then $f$ is able to return the challenge to the user and authentication is complete. An unauthorized server $f^\prime$ would be unable to correctly guess K$_\text{f}^{-1}$ and therefore could not correctly decrypt of the challenge and complete authentication. We make the following assumptions in this mechanism:
+\begin{itemize}
+\item{}The initial contact between the user and $f$ was legitimate and the user was able to correctly store $f$'s information and public key.
+\item{}The private key of $f$ has not been compromised.
+\end{itemize}
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics{threat3.eps}
@@ -88,8 +92,14 @@ In order for a file server to be trusted by a user, it must provide some authent
 \label{threat3}
 \end{center}
 \end{figure}
+With these assumptions in place, we can begin the protocol to authenticate a File Server:
+\begin{enumerate}
+\item{}Begin an exchange to establish a shared symmetric key so that the two parties can communicate securely. (see Threat 1 for expanded explanation)
+\item{}If the File Server is able to decrypt the message with its private key, then it can only be the server with which the user wishes to communicate with. The File Server returns the challenge value R$_1$ incremented by 1 and encrypts this value with the agreed upon shared symmetric key.
+\item{}The user decrypts the returned challenge and sees that the challenge was correctly interpreted, and thus the File Server is authenticated to the user.
+\end{enumerate}
 \subsection{Correctness and Security of Mechanism}
-The main threat to this mechanism is replay attacks, where a passive monitor might see a repeat of a challenge and be able to perform a man-in-the-middle attack. Therefore, a level of randomness in the challenge as well as encrypting the exchange between the user and $s$ may be necessary to ensure correctness and security.
+Security is held by the secrecy of the File Server's private key, which we assume is safe from attack, and by the strength of the encryption of the communication channel between the two parties. Correctness is held when the user and the File Server agree on the challenge protocol and how the File Server should increment the challenge value.
 % Threat 4
 \section{Threat 4: Information Leakage via Passive Monitoring}
 \subsection{Threat Description}
