@@ -10,6 +10,8 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.*;
+import javax.crypto.*;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class FileThread extends Thread
 {
