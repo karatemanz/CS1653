@@ -37,6 +37,8 @@ public class GroupThread extends Thread
 				if(message.getMessage().equals("GET"))//Client wants a token
 				{
 					String username = (String)message.getObjContents().get(0); //Get the username
+					char[] password = (char[])message.getObjContents().get(1);
+					
 					if(username == null)
 					{
 						response = new Envelope("FAIL");
