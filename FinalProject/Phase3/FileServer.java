@@ -180,10 +180,6 @@ public class FileServer extends Server {
 			e.printStackTrace(System.err);
 		}
 	}
-	
-	public PublicKey getServerPublicKey() {
-		return keys.getPublic();
-	}
 }
 
 //This thread saves user and group lists
