@@ -299,6 +299,7 @@ public class GroupThread extends Thread
 				else
 				{
 					my_gs.userList.addUser(username);
+					my_gs.userList.setUserHash(username, my_gs.getNewPasswordHash());
 					return true;
 				}
 			}
