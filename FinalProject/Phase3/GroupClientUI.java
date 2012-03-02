@@ -50,6 +50,8 @@ public class GroupClientUI
 						if (token.getGroups().contains("ADMIN"))
 						{
 							aUserName = getNonEmptyString("Enter the username to be added: ", MAXUSERLENGTH);
+							char newPW[] = getPasswordPair();
+							
 							if (gc.createUser(aUserName, token))
 							{
 								System.out.println("Added " + aUserName + " to the User List.");
@@ -162,6 +164,22 @@ public class GroupClientUI
 			System.out.println("Error connecting to Group Server");
 			return false;
 		}
+	}
+	
+	public char[] getPasswordPair() {
+		// Get password
+		Console console = System.console();
+		char pwArray1[];
+		do {
+			pwArray1 = console.readPassword("Enter a new password: ");
+			char pwArray2[] = console.readPassword("Re-enter the password: ");
+			if (Arrays.equals(pwArray1,pwArray2)) {
+				break;
+			}
+			System.out.println("Passwords did not match. Please try again");
+		} while (true);
+		// Return password
+		return pwArray1;
 	}
 	
 	public static String getNonEmptyString(String prompt, int maxLength)
