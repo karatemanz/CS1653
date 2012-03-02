@@ -15,6 +15,8 @@ public class FileServer extends Server {
 	
 	public static final int SERVER_PORT = 4321;
 	public static FileList fileList;
+	public static String gsAddress;
+	public static int gsPort;
 	
 	public FileServer() {
 		super(SERVER_PORT, "FilePile");
@@ -23,7 +25,13 @@ public class FileServer extends Server {
 	public FileServer(int _port) {
 		super(_port, "FilePile");
 	}
-	
+
+	public FileServer(int _port, String _gsAddress, int _gsPort) {
+		super(_port, "FilePile");
+		gsAddress = _gsAddress;
+		gsPort = _gsPort;
+	}
+
 	public void start() {
 		String fileFile = "FileList.bin";
 		ObjectInputStream fileStream;
@@ -70,6 +78,7 @@ public class FileServer extends Server {
 		 }
 		
 		// Call Group Server and get its Public Key
+		
 		
 		//Autosave Daemon. Saves lists every 5 minutes
 		AutoSaveFS aSave = new AutoSaveFS();
