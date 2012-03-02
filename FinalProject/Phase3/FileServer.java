@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.security.*;
 
 public class FileServer extends Server {
-	
 	public static final int SERVER_PORT = 4321;
 	public static FileList fileList;
 	public static String gsAddress;
@@ -68,15 +67,15 @@ public class FileServer extends Server {
 		}
 		
 		File file = new File("shared_files");
-		 if (file.mkdir()) {
-			 System.out.println("Created new shared_files directory");
-		 }
-		 else if (file.exists()){
-			 System.out.println("Found shared_files directory");
-		 }
-		 else {
-			 System.out.println("Error creating shared_files directory");				 
-		 }
+		if (file.mkdir()) {
+			System.out.println("Created new shared_files directory");
+		}
+		else if (file.exists()){
+			System.out.println("Found shared_files directory");
+		}
+		else {
+			System.out.println("Error creating shared_files directory");				 
+		}
 		
 		// Call Group Server and get its Public Key
 		GroupClient gc = new GroupClient();
@@ -95,13 +94,11 @@ public class FileServer extends Server {
 		else {
 			System.out.println("Error - Group Server not reached at given address.");
 		}
-
 		
 		//Autosave Daemon. Saves lists every 5 minutes
 		AutoSaveFS aSave = new AutoSaveFS();
 		aSave.setDaemon(true);
 		aSave.start();
-		
 		
 		boolean running = true;
 		
