@@ -30,20 +30,31 @@ public class FileClientUI
 			FileServerID thisFS = new FileServerID(serverAddress, portNumber, fc.getKey());
 
 			// determine whether or not this server has been used before
-			try
-			{
+			try {
 				FileInputStream fis = new FileInputStream(fsFile);
 				ois = new ObjectInputStream(fis);
 				FileServerList fsList = (FileServerList)ois.readObject();
 				
+				if (fsList.hasServer(thisFS)) {
+					// we're cool
+				}
+				else {
+					// ask if we need to add
+					
+					// if yes, add to fsList, save fsList to file
+					
+					// if no, exitKey = true;
+				}
 			}
-			catch(FileNotFoundException e)
-			{
+			catch(FileNotFoundException e) {
 				System.out.println("File Server List Does Not Exist. Creating " + fsFile + "...");
 			}
-			catch(IOException e)
-			{
+			catch(IOException e) {
 				System.out.println("Error reading from " + fsFile);
+				System.exit(-1);
+			}
+			catch(ClassNotFoundException e) {
+				System.out.println("Error reading from UserList file");
 				System.exit(-1);
 			}
 			
@@ -219,9 +230,9 @@ public class FileClientUI
 	public class FileServerID {
 		public String address;
 		public int port;
-		public PrivateKey key;
+		public PublicKey key;
 		
-		public FileServerID(String _address, int _port, PrivateKey _key) {
+		public FileServerID(String _address, int _port, PublicKey _key) {
 			address = _address;
 			port = _port;
 			key = _key;
@@ -230,6 +241,23 @@ public class FileClientUI
 	
 	public class FileServerList {
 		public ArrayList<FileServerID> fileServerList;
+		
+		public FileServerList() {
+			fileServerList = new ArrayList<FileServerID>();
+		}
+		
+		public void addServer(FileServerID fsid) {
+			fileServerList.add(fsid);
+		}
+		
+		public boolean hasServer(FileServerID fsid) {
+			if (fileServerList.contains(fsid)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 	}
 
 }
