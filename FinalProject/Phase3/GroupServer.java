@@ -35,14 +35,37 @@ public class GroupServer extends Server {
 		// Overwrote server.start() because if no user file exists, initial admin account needs to be created
 		
 		String userFile = "UserList.bin";
+		String keyFile = "GSKeyList.bin";
 		Scanner console = new Scanner(System.in);
 		ObjectInputStream userStream;
 		ObjectInputStream groupStream;
 		Security.addProvider(new BouncyCastleProvider());
+		final KeyPair keys;
 		
 		//This runs a thread that saves the lists on program exit
 		Runtime runtime = Runtime.getRuntime();
 		runtime.addShutdownHook(new ShutDownListener(this));
+		
+		// Open or create file with RSA key pairs
+		try {
+			FileInputStream fis = new FileInputStream(keyFile);
+			userStream = new ObjectInputStream(fis);
+			keys = (KeyPair)userStream.readObject();
+		}
+		catch(FileNotFoundException e) {
+			System.out.println("GSKeyList File Does Not Exist. Creating GSKeyList...");
+
+		}
+		catch(IOException e)
+		{
+			System.out.println("Error reading from GSKeyList file");
+			System.exit(-1);
+		}
+		catch(ClassNotFoundException e)
+		{
+			System.out.println("Error reading from GSKeyList file");
+			System.exit(-1);
+		}
 		
 		//Open user file to get user list
 		try
