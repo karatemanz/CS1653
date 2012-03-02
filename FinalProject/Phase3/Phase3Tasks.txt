@@ -5,9 +5,9 @@ T1: Unauthorized Token Issuance
 -- prompt for password when logging in ***DONE
 -- will need to change User/UserList class to store hashed password ***DONE
 -- will need to store hashed password, part of User class? ***DONE
--- set up secure exchange between client and Group Server, save Group Server's
-   public key for client (local to them), store also for Group Server (local to
-   it? how will Group Server know its key pair?)
+-- set up secure exchange between client and Group Server
+-- save Group Server's public key for client (local to them), store also
+   for Group Server ***DONE
 -- should we limit the number of characters possible for a password, or
    restrict which characters? ***currently a min. of any three characters
 
