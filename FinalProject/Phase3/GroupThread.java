@@ -277,6 +277,12 @@ public class GroupThread extends Thread
 			if (my_gs.comparePasswordHash(username, password)) {
 				// Issue a new token with server's name, user's name, and user's groups
 				UserToken yourToken = new Token(my_gs.name, username, my_gs.userList.getUserGroups(username));
+				// Create the token's signature
+				Signature tokenSign = Signature.getInstance("SHA1WithRSA", "BC");
+				tokenSign.initSign(my_gs.keys.getPrivate());
+				tokenSign.update(yourToken.getContents().getBytes());
+				yourToken.setToken(tokenSign.sign());
+
 				return yourToken;
 			}
 			else {
