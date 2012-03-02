@@ -5,9 +5,38 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.security.*;
 
 public class FileClient extends Client implements FileClientInterface {
-
+	public PublicKey getKey() {
+		try {
+			Envelope message = null, response = null;
+			
+			// Tell the server to return its public key.
+			message = new Envelope("GETPUBKEY");
+			output.writeObject(message);
+			// Get the response from the server
+			response = (Envelope)input.readObject();
+			// Successful response
+			if(response.getMessage().equals("OK"))
+			{
+				//If there is a public key in the Envelope, return it 
+				ArrayList<Object> temp = null;
+				temp = response.getObjContents();
+				
+				if(temp.size() == 1) {
+					return (PublicKey)temp.get(0);
+				}
+			}
+			return null;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+	
 	public boolean delete(String filename, String group, UserToken token) {
 		String remotePath;
 		if (filename.charAt(0)=='/') {
