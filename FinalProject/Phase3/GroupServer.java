@@ -113,9 +113,16 @@ public class GroupServer extends Server {
 			pwArray1 = secret.readPassword("Enter a new password: ");
 			char pwArray2[] = secret.readPassword("Re-enter the password: ");
 			if (Arrays.equals(pwArray1,pwArray2)) {
-				break;
+				if (pwArray1.length >= 3) {
+					break;
+				}
+				else {
+					System.out.println("Password must be at least three characters long. Please try again");
+				}
 			}
-			System.out.println("Passwords did not match. Please try again");
+			else {
+				System.out.println("Passwords did not match. Please try again");
+			}
 		} while (true);
 		// Do the hash and return it
 		return getHash(pwArray1);
