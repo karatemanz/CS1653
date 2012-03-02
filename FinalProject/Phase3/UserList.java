@@ -75,13 +75,23 @@ import java.util.*;
 		 * 
 		 */
 		private static final long serialVersionUID = -6699986336399821598L;
+		private byte pwHash[20]; // 160 bit hash from SHA-1
 		private ArrayList<String> groups;
 		private ArrayList<String> ownership;
 		
 		public User()
 		{
+			pwHash = new byte[20];
 			groups = new ArrayList<String>();
 			ownership = new ArrayList<String>();
+		}
+		
+		public void setHash(byte newHash[20]) {
+			pwHash = newHash;
+		}
+		
+		public byte[] getHash() {
+			return pwHash;
 		}
 		
 		public ArrayList<String> getGroups()
