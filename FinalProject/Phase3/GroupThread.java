@@ -242,7 +242,7 @@ public class GroupThread extends Thread
 					output.writeObject(response);
 				}
 				else if (message.getMessage().equals("GETPUBKEY")) { // Client wants the public key
-					response = new Envelope("PUBKEY");
+					response = new Envelope("OK");
 					response.addObject(my_gs.getServerPublicKey());
 					output.writeObject(response);
 				}
