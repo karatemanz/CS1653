@@ -6,10 +6,8 @@ import java.io.ObjectInputStream;
 
 public class GroupClient extends Client implements GroupClientInterface {
  
-	 public UserToken getToken(String username)
-	 {
-		try
-		{
+	 public UserToken getToken(String username, byte[] password) {
+		try {
 			UserToken token = null;
 			Envelope message = null, response = null;
 		 		 	
