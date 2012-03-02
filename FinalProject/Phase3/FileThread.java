@@ -27,6 +27,8 @@ public class FileThread extends Thread
 	public void run()
 	{
 		boolean proceed = true;
+		Security.addProvider(new BouncyCastleProvider());
+
 		try
 		{
 			System.out.println("*** New connection from " + socket.getInetAddress() + ":" + socket.getPort() + "***");
