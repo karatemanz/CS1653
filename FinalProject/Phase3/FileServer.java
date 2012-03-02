@@ -78,7 +78,56 @@ public class FileServer extends Server {
 		else {
 			System.out.println("Error creating shared_files directory");				 
 		}
-		
+
+		// Open or create file with RSA key pairs
+		try {
+			FileInputStream fis = new FileInputStream(keyFile);
+			userStream = new ObjectInputStream(fis);
+			keys = (KeyPair)userStream.readObject();
+			userStream.close();
+			fis.close();
+			System.out.println("Loaded keys.");
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("GSKeyList File Does Not Exist. Creating GSKeyList...");
+			// create the keys
+			try {
+				KeyPairGenerator keyGenRSA = KeyPairGenerator.getInstance("RSA", "BC");
+				SecureRandom keyGenRandom = new SecureRandom();
+				byte bytes[] = new byte[20];
+				keyGenRandom.nextBytes(bytes);
+				keyGenRSA.initialize(RSAKEYSIZE, keyGenRandom);
+				keys = keyGenRSA.generateKeyPair();
+				System.out.println("Created keys.");
+			}
+			catch (Exception ee) {
+				System.err.println("Error generating RSA keys.");
+				ee.printStackTrace(System.err);
+				System.exit(-1);
+			}
+			// save the keys
+			System.out.println("Saving GSKeyList...");
+			ObjectOutputStream keyOut;
+			try {
+				keyOut = new ObjectOutputStream(new FileOutputStream(keyFile));
+				keyOut.writeObject(keys);
+				keyOut.close();
+			}
+			catch(Exception ee) {
+				System.err.println("Error writing to GSKeyList.");
+				ee.printStackTrace(System.err);
+				System.exit(-1);
+			}
+		}
+		catch (IOException e) {
+			System.out.println("Error reading from GSKeyList file");
+			System.exit(-1);
+		}
+		catch (ClassNotFoundException e) {
+			System.out.println("Error reading from GSKeyList file");
+			System.exit(-1);
+		}
+
 		// Call Group Server and get its Public Key
 		GroupClient gc = new GroupClient();
 		gc.connect(gsAddress, gsPort);
