@@ -1,6 +1,7 @@
 import java.util.Scanner; // Scanner class required for user input
 import java.io.Console;
 import java.util.List;
+import java.util.Arrays;
 
 public class GroupClientUI
 {
