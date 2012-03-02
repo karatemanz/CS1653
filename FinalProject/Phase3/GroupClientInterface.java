@@ -33,12 +33,13 @@ public interface GroupClientInterface
      * there are no security checks.
      *
      * @param username The user whose token is being requested
+     * @param password The user's password
      *
      * @return A UserToken describing the permissions of "username."
      *         If this user does not exist, a null value will be returned.
      *
      */
-    public UserToken getToken(final String username);
+    public UserToken getToken(final String username, final byte[] password);
 
 
     /**
