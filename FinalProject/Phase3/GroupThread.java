@@ -281,9 +281,8 @@ public class GroupThread extends Thread
 				Signature tokenSign = Signature.getInstance("SHA1WithRSA", "BC");
 				tokenSign.initSign(my_gs.keys.getPrivate());
 				tokenSign.update(yourToken.getContents().getBytes());
-				yourToken.setToken(tokenSign.sign());
 
-				return yourToken;
+				return my_gs.getSignedToken(yourToken);
 			}
 			else {
 				return null;

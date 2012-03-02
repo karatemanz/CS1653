@@ -162,12 +162,19 @@ public class GroupServer extends Server {
 	}
 	
 	public Token getSignedToken(Token aToken) {
-		// Create the token's signature
-		Signature tokenSign = Signature.getInstance("SHA1WithRSA", "BC");
-		tokenSign.initSign(keys.getPrivate());
-		tokenSign.update(aToken.getContents().getBytes());
-		aToken.setSignature(aToken.sign());
-		return aToken;
+		try {
+			// Create the token's signature
+			Signature tokenSign = Signature.getInstance("SHA1WithRSA", "BC");
+			tokenSign.initSign(keys.getPrivate());
+			tokenSign.update(aToken.getContents().getBytes());
+			aToken.setSignature(tokenSign.sign());
+			return aToken;
+		}
+		catch (Exception e) {
+			System.err.println("Signing Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
 	}
 	
 	public byte[] getNewPasswordHash() {
