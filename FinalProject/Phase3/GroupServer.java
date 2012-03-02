@@ -38,6 +38,7 @@ public class GroupServer extends Server {
 		Scanner console = new Scanner(System.in);
 		ObjectInputStream userStream;
 		ObjectInputStream groupStream;
+		Security.addProvider(new BouncyCastleProvider());
 		
 		//This runs a thread that saves the lists on program exit
 		Runtime runtime = Runtime.getRuntime();
