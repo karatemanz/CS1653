@@ -6,8 +6,6 @@ import java.io.ObjectInputStream;
 import java.security.*;
 
 public class GroupClient extends Client implements GroupClientInterface {
- 
-	
 	public PublicKey getKey() {
 		try {
 			Envelope message = null, response = null;
