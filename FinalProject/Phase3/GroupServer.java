@@ -40,7 +40,8 @@ public class GroupServer extends Server {
 		ObjectInputStream userStream;
 		ObjectInputStream groupStream;
 		Security.addProvider(new BouncyCastleProvider());
-		final KeyPair keys;
+		KeyPair keys = null;
+		final int RSAKEYSIZE = 1024;
 		
 		//This runs a thread that saves the lists on program exit
 		Runtime runtime = Runtime.getRuntime();
@@ -52,17 +53,41 @@ public class GroupServer extends Server {
 			userStream = new ObjectInputStream(fis);
 			keys = (KeyPair)userStream.readObject();
 		}
-		catch(FileNotFoundException e) {
+		catch (FileNotFoundException e) {
 			System.out.println("GSKeyList File Does Not Exist. Creating GSKeyList...");
-
+			// create the keys
+			try {
+				KeyPairGenerator keyGenRSA = KeyPairGenerator.getInstance("RSA", "BC");
+				SecureRandom keyGenRandom = new SecureRandom();
+				byte bytes[] = new byte[20];
+				keyGenRandom.nextBytes(bytes);
+				keyGenRSA.initialize(RSAKEYSIZE, keyGenRandom);
+				keys = keyGenRSA.generateKeyPair();
+			}
+			catch (Exception ee) {
+				System.err.println("Error generating RSA keys.");
+				ee.printStackTrace(System.err);
+				System.exit(-1);
+			}
+			// save the keys
+			System.out.println("Saving GSKeyList...");
+			ObjectOutputStream keyOut;
+			try {
+				keyOut = new ObjectOutputStream(new FileOutputStream(keyFile));
+				keyOut.writeObject(keys);
+				keyOut.close();
+			}
+			catch(Exception ee) {
+				System.err.println("Error writing to GSKeyList.");
+				ee.printStackTrace(System.err);
+				System.exit(-1);
+			}
 		}
-		catch(IOException e)
-		{
+		catch (IOException e) {
 			System.out.println("Error reading from GSKeyList file");
 			System.exit(-1);
 		}
-		catch(ClassNotFoundException e)
-		{
+		catch (ClassNotFoundException e) {
 			System.out.println("Error reading from GSKeyList file");
 			System.exit(-1);
 		}
