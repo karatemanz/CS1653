@@ -1,16 +1,25 @@
 import java.util.List;
 import java.util.Arrays;
+import java.lang.StringBuilder;
 
 public class Token implements UserToken, java.io.Serializable
 {
 	private String issuer;
 	private String subject;
 	private List<String> groups;
+	private byte[] signature;
 
 	public Token(String anIssuer, String aSubject, List<String> theGroups) {
 		issuer = new String(anIssuer);
 		subject = new String(aSubject);
 		groups = theGroups;
+	}
+
+	public Token(String anIssuer, String aSubject, List<String> theGroups, byte[] theSignature) {
+		issuer = new String(anIssuer);
+		subject = new String(aSubject);
+		groups = theGroups;
+		signature = theSignature;
 	}
 
 	/**
@@ -54,5 +63,13 @@ public class Token implements UserToken, java.io.Serializable
     public List<String> getGroups() {
 		return groups;
     }
-
+	
+	public String getContents() {
+		StringBuilder contents = new StringBuilder(issuer);
+		contents.append(subject);
+		for (int i = 0; i < groups.size(); i++) {
+			contents.append(groups.get(i));
+		}
+		return contents.toString();
+	}
 }
