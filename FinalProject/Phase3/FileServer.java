@@ -19,6 +19,7 @@ public class FileServer extends Server {
 	public static String gsAddress;
 	public static int gsPort;
 	public static PublicKey gsPublicKey;
+	private KeyPair keys = null;
 	
 	public FileServer() {
 		super(SERVER_PORT, "FilePile");
@@ -36,7 +37,10 @@ public class FileServer extends Server {
 
 	public void start() {
 		String fileFile = "FileList.bin";
+		String keyFile = "FS" + port + "KeyList.bin";
 		ObjectInputStream fileStream;
+		Security.addProvider(new BouncyCastleProvider());
+		final int RSAKEYSIZE = 1024;
 		
 		//This runs a thread that saves the lists on program exit
 		Runtime runtime = Runtime.getRuntime();
