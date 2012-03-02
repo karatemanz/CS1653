@@ -33,6 +33,14 @@ import java.util.*;
 			}
 		}
 		
+		public synchronized void setUserHash(String username, byte[] passHash) {
+			list.get(username).setHash(passHash);
+		}
+		
+		public synchronized byte[] getUserHash(String username) {
+			return list.get(username).getHash();
+		}
+		
 		public synchronized Enumeration<String> getUsernames()
 		{
 			return list.keys();
@@ -75,7 +83,7 @@ import java.util.*;
 		 * 
 		 */
 		private static final long serialVersionUID = -6699986336399821598L;
-		private byte pwHash[20]; // 160 bit hash from SHA-1
+		private byte pwHash[]; // 160 bit hash from SHA-1
 		private ArrayList<String> groups;
 		private ArrayList<String> ownership;
 		
@@ -86,7 +94,7 @@ import java.util.*;
 			ownership = new ArrayList<String>();
 		}
 		
-		public void setHash(byte newHash[20]) {
+		public void setHash(byte newHash[]) {
 			pwHash = newHash;
 		}
 		
