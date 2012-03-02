@@ -47,12 +47,13 @@ public interface GroupClientInterface
      * user invoking it is a member of the special group "ADMIN".
      *
      * @param username The name of the user to create
+     * @param password The password for the user
      * @param token    The token of the user requesting the create operation
      *
      * @return true if the new user was created, false otherwise
      *
      */
-    public boolean createUser(final String username, final UserToken token);
+    public boolean createUser(final String username, final char[] password, final UserToken token);
 
 
     /**
