@@ -1,15 +1,15 @@
 T1: Unauthorized Token Issuance
 - require password creation/confirmation
 -- Group Server, when first launched without a UserList.bin file, needs to
-   prompt for password when creating first user/admin
--- prompt for password when logging in
--- will need to change User/UserList class to store hashed password
--- will need to store hashed password, part of User class?
+   prompt for password when creating first user/admin ***DONE
+-- prompt for password when logging in ***DONE
+-- will need to change User/UserList class to store hashed password ***DONE
+-- will need to store hashed password, part of User class? ***DONE
 -- set up secure exchange between client and Group Server, save Group Server's
    public key for client (local to them), store also for Group Server (local to
    it? how will Group Server know its key pair?)
 -- should we limit the number of characters possible for a password, or
-   restrict which characters?
+   restrict which characters? ***currently a min. of any three characters
 
 T2: Token Modification/Forgery
 - change Token class to store signature, provide tokenized string
@@ -31,4 +31,4 @@ T4: Information Leakage via Passive Monitoring
 - use the same methods as we used in T1 - T3 to encrypt communication, ya dummy
 
 Notes:
-- maybe to do later - add PW change - no time right now (?)
+- maybe to do later - add PW change to GroupClientUI - no time right now (?)
