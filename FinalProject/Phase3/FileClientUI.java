@@ -1,5 +1,6 @@
 import java.util.Scanner; // Scanner class required for user input
 import java.util.List;
+import java.io.*;
 
 public class FileClientUI
 {
@@ -22,7 +23,42 @@ public class FileClientUI
 			String userPrompt;
 			String sourceFileName;
 			String destFileName;
+			String fsFile = "FileServerList.bin";
+			ObjectInputStream userStream;
+			ObjectInputStream groupStream;
 
+			// determine whether or not this server has been used before
+			try
+			{
+				FileInputStream fis = new FileInputStream(fsFile);
+				userStream = new ObjectInputStream(fis);
+				userList = (UserList)userStream.readObject();
+			}
+			catch(FileNotFoundException e)
+			{
+				System.out.println("UserList File Does Not Exist. Creating UserList...");
+				System.out.println("No users currently exist. Your account will be the administrator.");
+				System.out.print("Enter your username: ");
+				String username = console.next();
+				byte pwHash[] = getNewPasswordHash();
+				
+				//Create a new list, add current user to the ADMIN group. They now own the ADMIN group.
+				userList = new UserList();
+				userList.addUser(username);
+				userList.setUserHash(username, pwHash);
+				userList.addGroup(username, "ADMIN");
+				userList.addOwnership(username, "ADMIN");
+			}
+			catch(IOException e)
+			{
+				System.out.println("Error reading from UserList file");
+				System.exit(-1);
+			}
+			catch(ClassNotFoundException e)
+			{
+				System.out.println("Error reading from UserList file");
+				System.exit(-1);
+			}
 			
 			while (!exitKey) {
 				if (currentGroup.length() > 0)
