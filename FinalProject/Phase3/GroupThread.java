@@ -269,10 +269,14 @@ public class GroupThread extends Thread
 		//Check that user exists
 		if (my_gs.userList.checkUser(username)) {
 			// verify password
-			
-			// Issue a new token with server's name, user's name, and user's groups
-			UserToken yourToken = new Token(my_gs.name, username, my_gs.userList.getUserGroups(username));
-			return yourToken;
+			if (my_gs.comparePasswordHash(username, password)) {
+				// Issue a new token with server's name, user's name, and user's groups
+				UserToken yourToken = new Token(my_gs.name, username, my_gs.userList.getUserGroups(username));
+				return yourToken;
+			}
+			else {
+				return null;
+			}
 		}
 		else
 		{
