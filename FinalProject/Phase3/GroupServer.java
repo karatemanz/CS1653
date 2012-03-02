@@ -106,6 +106,7 @@ public class GroupServer extends Server {
 	}
 	
 	public byte[] getNewPasswordHash() {
+		// Get password
 		Console secret = System.console();
 		char pwArray1[];
 		do {
@@ -116,24 +117,8 @@ public class GroupServer extends Server {
 			}
 			System.out.println("Passwords did not match. Please try again");
 		} while (true);
-		// Prepare to do the hash
-		byte pwHash[] = null;
-		try { // to create array of bytes from input
-			pwHash = new String(pwArray1).getBytes("UTF8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace(System.err);
-			return null;
-		}
-		try { // to get hash of byte array
-			MessageDigest messageDigest = MessageDigest.getInstance("SHA1", "BC");
-			messageDigest.update(pwHash);
-			return messageDigest.digest();
-		}
-		catch (Exception e) {
-			e.printStackTrace(System.err);
-			return null;
-		}
+		// Do the hash and return it
+		return getHash(pwArray1);
 	}
 
 	public byte[] getHash(char[] input) {
