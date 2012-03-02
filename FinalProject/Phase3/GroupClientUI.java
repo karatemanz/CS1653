@@ -52,7 +52,7 @@ public class GroupClientUI
 							aUserName = getNonEmptyString("Enter the username to be added: ", MAXUSERLENGTH);
 							char newPW[] = getPasswordPair();
 							
-							if (gc.createUser(aUserName, token))
+							if (gc.createUser(aUserName, newPW, token))
 							{
 								System.out.println("Added " + aUserName + " to the User List.");
 							}
