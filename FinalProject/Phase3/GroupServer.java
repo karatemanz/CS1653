@@ -161,6 +161,15 @@ public class GroupServer extends Server {
 		return keys.getPublic();
 	}
 	
+	public Token getSignedToken(Token aToken) {
+		// Create the token's signature
+		Signature tokenSign = Signature.getInstance("SHA1WithRSA", "BC");
+		tokenSign.initSign(keys.getPrivate());
+		tokenSign.update(aToken.getContents().getBytes());
+		aToken.setSignature(aToken.sign());
+		return aToken;
+	}
+	
 	public byte[] getNewPasswordHash() {
 		// Get password
 		Console secret = System.console();
