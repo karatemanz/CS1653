@@ -7,11 +7,10 @@ public class Token implements UserToken, java.io.Serializable
 	private String subject;
 	private List<String> groups;
 
-	public Token(String anIssuer, String aSubject, List<String> theGroups)
-	{
+	public Token(String anIssuer, String aSubject, List<String> theGroups) {
 		issuer = new String(anIssuer);
 		subject = new String(aSubject);
-		groups = theGroups; // better way to instantiate?
+		groups = theGroups;
 	}
 
 	/**
@@ -24,9 +23,7 @@ public class Token implements UserToken, java.io.Serializable
      * @return The issuer of this token
      *
      */
-    public String getIssuer()
-    {
-		//return "getIssuer stub";
+    public String getIssuer() {
     	return issuer;
     }
 
@@ -40,9 +37,7 @@ public class Token implements UserToken, java.io.Serializable
      * @return The subject of this token
      *
      */
-    public String getSubject()
-    {
-    	//return "getSubject stub";
+    public String getSubject() {
     	return subject;
     }
 
@@ -56,11 +51,7 @@ public class Token implements UserToken, java.io.Serializable
      * @return The list of group memberships encoded in this token
      *
      */
-    public List<String> getGroups()
-    {
-    	//String[] words = {"this", "is", "the", "getGroups", "stub"};
-		//List<String> wordList = Arrays.asList(words);
-		//return wordList;
+    public List<String> getGroups() {
 		return groups;
     }
 
