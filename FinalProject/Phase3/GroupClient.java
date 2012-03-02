@@ -45,34 +45,31 @@ public class GroupClient extends Client implements GroupClientInterface {
 		
 	 }
 	 
-	 public boolean createUser(String username, UserToken token)
-	 {
-		 try
-			{
-				Envelope message = null, response = null;
-				//Tell the server to create a user
-				message = new Envelope("CUSER");
-				message.addObject(username); //Add user name string
-				message.addObject(token); //Add the requester's token
-				output.writeObject(message);
+	 public boolean createUser(String username, char[] password, UserToken token) {
+		 try {
+			Envelope message = null, response = null;
+			//Tell the server to create a user
+			message = new Envelope("CUSER");
+			message.addObject(username); //Add user name string
+			message.addObject(password); //Add user password
+			message.addObject(token); //Add the requester's token
+			output.writeObject(message);
+		
+			response = (Envelope)input.readObject();
 			
-				response = (Envelope)input.readObject();
-				
-				//If server indicates success, return true
-				if(response.getMessage().equals("OK"))
-				{
-					return true;
-				}
-				
-				return false;
+			//If server indicates success, return true
+			if(response.getMessage().equals("OK")) {
+				return true;
 			}
-			catch(Exception e)
-			{
-				System.err.println("Error: " + e.getMessage());
-				e.printStackTrace(System.err);
-				return false;
-			}
-	 }
+			
+			return false;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return false;
+		}
+	}
 	 
 	 public boolean deleteUser(String username, UserToken token)
 	 {
