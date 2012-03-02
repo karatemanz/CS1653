@@ -9,6 +9,29 @@ import java.util.ArrayList;
 import java.security.*;
 
 public class FileClient extends Client implements FileClientInterface {
+	public PublicKey getKey() {
+		try {
+			Envelope message = null, e = null;
+			message = new Envelope("GETPUBKEY");
+			output.writeObject(message); 
+			
+			e = (Envelope)input.readObject();
+			
+			//If server indicates success, return the member list
+			if(e.getMessage().equals("OK"))
+			{ 
+				return (PublicKey)e.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
+			}
+			
+			return null;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+	
 	public boolean delete(String filename, String group, UserToken token) {
 		String remotePath;
 		if (filename.charAt(0)=='/') {
