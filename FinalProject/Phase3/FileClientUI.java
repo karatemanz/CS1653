@@ -24,14 +24,7 @@ public class FileClientUI
 			String destFileName;
 
 			
-			while (!exitKey)
-			{
-				/* FileClient methods:
-				 * public boolean delete(String filename, UserToken token)
-				 * public boolean download(String sourceFile, String destFile, UserToken token)
-				 * public List<String> listFiles(UserToken token)
-				 * public boolean upload(String sourceFile, String destFile, String group, UserToken token)
-				 */
+			while (!exitKey) {
 				if (currentGroup.length() > 0)
 				{
 					userPrompt = userName + "/" + currentGroup;
