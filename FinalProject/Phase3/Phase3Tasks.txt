@@ -12,12 +12,12 @@ T1: Unauthorized Token Issuance
    restrict which characters? ***currently a min. of any three characters
 
 T2: Token Modification/Forgery
-- change Token class to store signature, provide tokenized string
+- change Token class to store signature, provide tokenized stringv ***DONE
 - set up secure exchange between client and File Server to pass information
 - set up File Server to decrypt signature (how will it get Group Server public
-  key?)
+  key?) ***DONE
 - set up client to accept ACK, continue on with transaction
-- authorize token at every transaction
+- authorize token at every transaction ***DONE
 
 T3: Unauthorized File Servers
 - have client get and store public key from File Server when first contacting
