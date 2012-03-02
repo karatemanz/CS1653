@@ -269,14 +269,14 @@ public class GroupThread extends Thread
 	}
 	
 	//Method to create tokens
-	private UserToken createToken(String username, char[] password) 
+	private Token createToken(String username, char[] password) 
 	{
 		//Check that user exists
 		if (my_gs.userList.checkUser(username)) {
 			// verify password
 			if (my_gs.comparePasswordHash(username, password)) {
 				// Issue a new token with server's name, user's name, and user's groups
-				UserToken yourToken = new Token(my_gs.name, username, my_gs.userList.getUserGroups(username));
+				Token yourToken = new Token(my_gs.name, username, my_gs.userList.getUserGroups(username));
 
 				return my_gs.getSignedToken(yourToken);
 			}
