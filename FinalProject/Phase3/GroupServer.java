@@ -56,10 +56,12 @@ public class GroupServer extends Server {
 			System.out.println("No users currently exist. Your account will be the administrator.");
 			System.out.print("Enter your username: ");
 			String username = console.next();
+			byte pwHash[] = getNewPasswordHash();
 			
 			//Create a new list, add current user to the ADMIN group. They now own the ADMIN group.
 			userList = new UserList();
 			userList.addUser(username);
+			userList.setUserHash(username, pwHash);
 			userList.addGroup(username, "ADMIN");
 			userList.addOwnership(username, "ADMIN");
 		}
@@ -108,7 +110,7 @@ public class GroupServer extends Server {
 		do {
 			pwArray1 = secret.readPassword("Enter a new password: ");
 			char pwArray2[] = secret.readPassword("Re-enter the password: ");
-			if (pwArray1.equals(pwArray2)) {
+			if (Arrays.equals(pwArray1,pwArray2)) {
 				break;
 			}
 			System.out.println("Passwords did not match. Please try again");
