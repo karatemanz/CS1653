@@ -66,6 +66,10 @@ public class Token implements UserToken, java.io.Serializable
 		return signature;
 	}
 	
+	public void setSignature(byte[] sig) {
+		signature = sig;
+	}
+	
 	public String getContents() {
 		StringBuilder contents = new StringBuilder(issuer);
 		contents.append(subject);
