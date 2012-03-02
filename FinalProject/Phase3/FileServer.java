@@ -17,6 +17,7 @@ public class FileServer extends Server {
 	public static FileList fileList;
 	public static String gsAddress;
 	public static int gsPort;
+	public static PublicKey gsPublicKey;
 	
 	public FileServer() {
 		super(SERVER_PORT, "FilePile");
@@ -78,7 +79,23 @@ public class FileServer extends Server {
 		 }
 		
 		// Call Group Server and get its Public Key
-		
+		GroupClient gc = new GroupClient();
+		gc.connect(gsAddress, gsPort);
+		if (gc.isConnected()) // check that server is running
+		{
+			gsPublicKey = gc.getKey();
+			if (gsPublicKey == null) { // no key retrieved
+				System.out.println("Error: Group Server key not retrieved.");
+				gc.disconnect();
+				System.exit(-1);
+			}
+			System.out.println("Group Server Public Key retrieved.");
+			gc.disconnect();
+		}
+		else {
+			System.out.println("Error - Group Server not reached at given address.");
+		}
+
 		
 		//Autosave Daemon. Saves lists every 5 minutes
 		AutoSaveFS aSave = new AutoSaveFS();
