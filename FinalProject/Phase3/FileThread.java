@@ -345,4 +345,7 @@ public class FileThread extends Thread
 		}
 	}
 
+	public boolean authToken(Token aToken) {
+		
+	}
 }
