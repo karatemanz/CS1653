@@ -22,6 +22,7 @@ public class GroupServer extends Server {
 
 	public static final int SERVER_PORT = 8765;
 	public UserList userList;
+	private KeyPair keys = null;
     
 	public GroupServer() {
 		super(SERVER_PORT, "ALPHA");
@@ -40,7 +41,6 @@ public class GroupServer extends Server {
 		ObjectInputStream userStream;
 		ObjectInputStream groupStream;
 		Security.addProvider(new BouncyCastleProvider());
-		KeyPair keys = null;
 		final int RSAKEYSIZE = 1024;
 		
 		//This runs a thread that saves the lists on program exit
