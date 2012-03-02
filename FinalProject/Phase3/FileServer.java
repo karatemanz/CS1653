@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.*;
 
 public class FileServer extends Server {
 	
@@ -67,6 +68,8 @@ public class FileServer extends Server {
 		 else {
 			 System.out.println("Error creating shared_files directory");				 
 		 }
+		
+		// Call Group Server and get its Public Key
 		
 		//Autosave Daemon. Saves lists every 5 minutes
 		AutoSaveFS aSave = new AutoSaveFS();
