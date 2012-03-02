@@ -86,14 +86,14 @@ public class FileServer extends Server {
 		// Open or create file with RSA key pairs
 		try {
 			FileInputStream fis = new FileInputStream(keyFile);
-			userStream = new ObjectInputStream(fis);
-			keys = (KeyPair)userStream.readObject();
-			userStream.close();
+			fileStream = new ObjectInputStream(fis);
+			keys = (KeyPair)fileStream.readObject();
+			fileStream.close();
 			fis.close();
 			System.out.println("Loaded keys.");
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("GSKeyList File Does Not Exist. Creating GSKeyList...");
+			System.out.println(keyFile + " File Does Not Exist. Creating " + keyFile + "...");
 			// create the keys
 			try {
 				KeyPairGenerator keyGenRSA = KeyPairGenerator.getInstance("RSA", "BC");
@@ -110,7 +110,7 @@ public class FileServer extends Server {
 				System.exit(-1);
 			}
 			// save the keys
-			System.out.println("Saving GSKeyList...");
+			System.out.println("Saving " + keyFile + "...");
 			ObjectOutputStream keyOut;
 			try {
 				keyOut = new ObjectOutputStream(new FileOutputStream(keyFile));
@@ -118,17 +118,17 @@ public class FileServer extends Server {
 				keyOut.close();
 			}
 			catch(Exception ee) {
-				System.err.println("Error writing to GSKeyList.");
+				System.err.println("Error writing to " + keyFile + ".");
 				ee.printStackTrace(System.err);
 				System.exit(-1);
 			}
 		}
 		catch (IOException e) {
-			System.out.println("Error reading from GSKeyList file");
+			System.out.println("Error reading from " + keyFile + " file");
 			System.exit(-1);
 		}
 		catch (ClassNotFoundException e) {
-			System.out.println("Error reading from GSKeyList file");
+			System.out.println("Error reading from " + keyFile + " file");
 			System.exit(-1);
 		}
 
