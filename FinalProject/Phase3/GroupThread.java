@@ -62,15 +62,16 @@ public class GroupThread extends Thread
 					else {
 						response = new Envelope("FAIL");
 						
-						if (message.getObjContents().get(0) != null) {
-							if (message.getObjContents().get(1) != null) {
-								String username = (String)message.getObjContents().get(0); //Extract the username
-								char[] password = (char[])message.getObjContents().get(1); //Extract the password
-								UserToken yourToken = (UserToken)message.getObjContents().get(2); //Extract the token
-								
-								if (createUser(username, password, yourToken)) {
-									response = new Envelope("OK"); //Success
-								}
+						if (message.getObjContents().get(0) != null &&
+							message.getObjContents().get(1) != null &&
+							message.getObjContents().get(2) != null) {
+
+							String username = (String)message.getObjContents().get(0); //Extract the username
+							char[] password = (char[])message.getObjContents().get(1); //Extract the password
+							UserToken yourToken = (UserToken)message.getObjContents().get(2); //Extract the token
+							
+							if (createUser(username, password, yourToken)) {
+								response = new Envelope("OK"); //Success
 							}
 						}
 					}
