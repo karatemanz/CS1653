@@ -1,5 +1,6 @@
 import java.util.Scanner; // Scanner class required for user input
 import java.util.List;
+import java.util.ArrayList;
 import java.io.*;
 import java.security.*;
 
@@ -25,30 +26,20 @@ public class FileClientUI
 			String sourceFileName;
 			String destFileName;
 			String fsFile = "FileServerList.bin";
-			ObjectInputStream userStream;
-			ObjectInputStream groupStream;
+			ObjectInputStream ois;
+			FileServerID thisFS = new FileServerID(serverAddress, portNumber, fc.getKey());
 
 			// determine whether or not this server has been used before
 			try
 			{
 				FileInputStream fis = new FileInputStream(fsFile);
-				userStream = new ObjectInputStream(fis);
-//				userList = (UserList)userStream.readObject();
+				ois = new ObjectInputStream(fis);
+				FileServerList fsList = (FileServerList)ois.readObject();
+				
 			}
 			catch(FileNotFoundException e)
 			{
-				System.out.println("UserList File Does Not Exist. Creating UserList...");
-				System.out.println("No users currently exist. Your account will be the administrator.");
-				System.out.print("Enter your username: ");
-				String username = console.next();
-//				byte pwHash[] = getNewPasswordHash();
-//				
-//				//Create a new list, add current user to the ADMIN group. They now own the ADMIN group.
-//				userList = new UserList();
-//				userList.addUser(username);
-//				userList.setUserHash(username, pwHash);
-//				userList.addGroup(username, "ADMIN");
-//				userList.addOwnership(username, "ADMIN");
+				System.out.println("File Server List Does Not Exist. Creating " + fsFile + "...");
 			}
 			catch(IOException e)
 			{
@@ -229,5 +220,16 @@ public class FileClientUI
 		public String address;
 		public int port;
 		public PrivateKey key;
+		
+		public FileServerID(String _address, int _port, PrivateKey _key) {
+			address = _address;
+			port = _port;
+			key = _key;
+		}
 	}
+	
+	public class FileServerList {
+		public ArrayList<FileServerID> fileServerList;
+	}
+
 }
