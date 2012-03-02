@@ -26,7 +26,8 @@ public class MainUI
 	{
 		FileClient fc = new FileClient();
 		GroupClient gc = new GroupClient();
-		Scanner console = new Scanner(System.in); // Scanner object for input
+		Scanner scan = new Scanner(System.in); // Scanner object for input
+		Console console = System.console(); // for password input
 
 		String inputString;
 		int menuChoice;
@@ -40,7 +41,7 @@ public class MainUI
 		while (!exitKey)
 		{
 			System.out.print("Enter 1 to login,\nenter 2 to exit...\n> ");
-			inputString = console.nextLine();
+			inputString = scan.nextLine();
 			
 			try
 			{
@@ -54,7 +55,7 @@ public class MainUI
 			if (menuChoice == 1)
 			{
 				System.out.print("Enter your username to login...\n> ");
-				userName = console.nextLine();
+				userName = scan.nextLine();
 
 				// connect to group server and get token
 				gc.connect(groupServerAddress, groupServerPort);
@@ -94,7 +95,7 @@ public class MainUI
 								 "enter 2 to connect to the Group Server,\n" +
 								 "enter 3 to logout...\n" +
 								 userName + "> ");
-				inputString = console.nextLine();
+				inputString = scan.nextLine();
 				
 				try
 				{
@@ -111,10 +112,10 @@ public class MainUI
 						// prompt user for server address, port
 						System.out.print("Please enter the IP address of the File Server...\n" +
 										 userName + "> ");
-						serverAddress = console.nextLine();
+						serverAddress = scan.nextLine();
 						System.out.print("Please enter the port number of the File Server...\n" +
 										 userName + "> ");
-						portNumber = Integer.parseInt(console.nextLine());
+						portNumber = Integer.parseInt(scan.nextLine());
 						System.out.println("Connecting to File Server at " +
 										   serverAddress + " port " +
 										   portNumber + "...");
