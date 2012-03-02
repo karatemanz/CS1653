@@ -136,6 +136,26 @@ public class GroupServer extends Server {
 		}
 	}
 
+	public byte[] getHash(char[] input) {
+		byte doHash[] = null;
+		try { // to create array of bytes from input
+			doHash = new String(input).getBytes("UTF8");
+		}
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace(System.err);
+			return null;
+		}
+		try { // to get hash of byte array
+			MessageDigest messageDigest = MessageDigest.getInstance("SHA1", "BC");
+			messageDigest.update(doHash);
+			return messageDigest.digest();
+		}
+		catch (Exception e) {
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+
 	public boolean comparePasswordHash(String username, char[] password) {
 		// Prepare to do the hash
 		byte pwHash[] = null;
