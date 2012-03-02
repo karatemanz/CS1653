@@ -1,6 +1,7 @@
 import java.util.Scanner; // Scanner class required for user input
 import java.util.List;
 import java.io.*;
+import java.security.*;
 
 public class FileClientUI
 {
@@ -32,7 +33,7 @@ public class FileClientUI
 			{
 				FileInputStream fis = new FileInputStream(fsFile);
 				userStream = new ObjectInputStream(fis);
-				userList = (UserList)userStream.readObject();
+//				userList = (UserList)userStream.readObject();
 			}
 			catch(FileNotFoundException e)
 			{
@@ -40,23 +41,18 @@ public class FileClientUI
 				System.out.println("No users currently exist. Your account will be the administrator.");
 				System.out.print("Enter your username: ");
 				String username = console.next();
-				byte pwHash[] = getNewPasswordHash();
-				
-				//Create a new list, add current user to the ADMIN group. They now own the ADMIN group.
-				userList = new UserList();
-				userList.addUser(username);
-				userList.setUserHash(username, pwHash);
-				userList.addGroup(username, "ADMIN");
-				userList.addOwnership(username, "ADMIN");
+//				byte pwHash[] = getNewPasswordHash();
+//				
+//				//Create a new list, add current user to the ADMIN group. They now own the ADMIN group.
+//				userList = new UserList();
+//				userList.addUser(username);
+//				userList.setUserHash(username, pwHash);
+//				userList.addGroup(username, "ADMIN");
+//				userList.addOwnership(username, "ADMIN");
 			}
 			catch(IOException e)
 			{
-				System.out.println("Error reading from UserList file");
-				System.exit(-1);
-			}
-			catch(ClassNotFoundException e)
-			{
-				System.out.println("Error reading from UserList file");
+				System.out.println("Error reading from " + fsFile);
 				System.exit(-1);
 			}
 			
@@ -227,5 +223,11 @@ public class FileClientUI
 		}
 		
 		return str;
+	}
+	
+	public class FileServerID {
+		public String address;
+		public int port;
+		public PrivateKey key;
 	}
 }
