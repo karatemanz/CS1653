@@ -135,6 +135,32 @@ public class GroupServer extends Server {
 			return null;
 		}
 	}
+
+	public boolean comparePasswordHash(String username, char[] password) {
+		// Prepare to do the hash
+		byte pwHash[] = null;
+		try { // to create array of bytes from input
+			pwHash = new String(password).getBytes("UTF8");
+		}
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace(System.err);
+			return false;
+		}
+		try { // to get hash of byte array
+			MessageDigest messageDigest = MessageDigest.getInstance("SHA1", "BC");
+			messageDigest.update(pwHash);
+			if (Arrays.equals(messageDigest.digest(), userList.getUserHash(username))) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace(System.err);
+			return false;
+		}
+	}
 }
 
 //This thread saves the user list
