@@ -56,12 +56,13 @@ public class MainUI
 			{
 				System.out.print("Enter your username to login...\n> ");
 				userName = scan.nextLine();
-
+				char pwArray[] = console.readPassword("Enter your password...\n> ");
+				
 				// connect to group server and get token
 				gc.connect(groupServerAddress, groupServerPort);
 				if (gc.isConnected()) // check that server is running
 				{
-					userToken = gc.getToken(userName);
+					userToken = gc.getToken(userName, pwArray);
 					if (userToken == null) // no login for that name
 					{
 						System.out.println("Username not recognized. Contact Admin.");
