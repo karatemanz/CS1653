@@ -56,12 +56,10 @@ public class GroupThread extends Thread
 				}
 				else if(message.getMessage().equals("CUSER")) //Client wants to create a user
 				{
-					if(message.getObjContents().size() < 2)
-					{
+					if (message.getObjContents().size() < 3) {
 						response = new Envelope("FAIL");
 					}
-					else
-					{
+					else {
 						response = new Envelope("FAIL");
 						
 						if (message.getObjContents().get(0) != null) {
