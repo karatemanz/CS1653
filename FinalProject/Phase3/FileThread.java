@@ -16,11 +16,13 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 public class FileThread extends Thread
 {
 	private final Socket socket;
+	public final PublicKey fsKey;
 	public final PublicKey gsKey;
 
-	public FileThread(Socket _socket, PublicKey _gsKey)
+	public FileThread(Socket _socket, PublicKey _fsKey, PublicKey _gsKey)
 	{
 		socket = _socket;
+		fsKey = _fsKey;
 		gsKey = _gsKey;
 	}
 
@@ -365,9 +367,9 @@ public class FileThread extends Thread
 						output.writeObject(e);
 					}
 				}
-				else if (message.getMessage().equals("GETPUBKEY")) { // Client wants the public key
+				else if (e.getMessage().compareTo("GETPUBKEY") == 0) { // Client wants the public key
 					response = new Envelope("OK");
-					response.addObject(FileServer.getServerPublicKey());
+					response.addObject(fsKey);
 					output.writeObject(response);
 				}
 				else if(e.getMessage().equals("DISCONNECT"))
