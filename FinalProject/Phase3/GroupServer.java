@@ -97,9 +97,21 @@ public class GroupServer extends Server {
 			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace(System.err);
 		}
-
 	}
 	
+	public byte[] getNewPasswordHash() {
+		Console secret = System.console();
+		char pwArray1[];
+		do {
+			pwArray1 = secret.readPassword("Enter a new password: ");
+			char pwArray2[] = secret.readPassword("Re-enter the password: ");
+			if (pwArray1.equals(pwArray2)) {
+				break;
+			}
+			System.out.println("Passwords did not match. Please try again");
+		} while (true);
+		return pwArray1;
+	}
 }
 
 //This thread saves the user list
