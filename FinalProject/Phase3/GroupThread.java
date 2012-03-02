@@ -64,15 +64,13 @@ public class GroupThread extends Thread
 					{
 						response = new Envelope("FAIL");
 						
-						if(message.getObjContents().get(0) != null)
-						{
-							if(message.getObjContents().get(1) != null)
-							{
+						if (message.getObjContents().get(0) != null) {
+							if (message.getObjContents().get(1) != null) {
 								String username = (String)message.getObjContents().get(0); //Extract the username
-								UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
+								char[] password = (char[])message.getObjContents().get(1); //Extract the password
+								UserToken yourToken = (UserToken)message.getObjContents().get(2); //Extract the token
 								
-								if(createUser(username, yourToken))
-								{
+								if (createUser(username, password, yourToken)) {
 									response = new Envelope("OK"); //Success
 								}
 							}
@@ -286,7 +284,7 @@ public class GroupThread extends Thread
 	
 	
 	//Method to create a user
-	private boolean createUser(String username, UserToken yourToken)
+	private boolean createUser(String username, char[] password, UserToken yourToken)
 	{
 		String requester = yourToken.getSubject();
 		
@@ -296,17 +294,14 @@ public class GroupThread extends Thread
 			//Get the user's groups
 			ArrayList<String> temp = my_gs.userList.getUserGroups(requester);
 			//requester needs to be an administrator
-			if(temp.contains("ADMIN"))
-			{
+			if (temp.contains("ADMIN")) {
 				//Does user already exist?
-				if(my_gs.userList.checkUser(username))
-				{
+				if (my_gs.userList.checkUser(username)) {
 					return false; //User already exists
 				}
-				else
-				{
+				else {
 					my_gs.userList.addUser(username);
-					my_gs.userList.setUserHash(username, my_gs.getNewPasswordHash());
+					my_gs.userList.setUserHash(username, my_gs.getHash(password));
 					return true;
 				}
 			}
