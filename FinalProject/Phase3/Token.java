@@ -36,7 +36,6 @@ public class Token implements UserToken, java.io.Serializable
     	return issuer;
     }
 
-
     /**
      * This method should return a string indicating the name of the
      * subject of the token.  For instance, if "Alice" requests a
@@ -49,7 +48,6 @@ public class Token implements UserToken, java.io.Serializable
     public String getSubject() {
     	return subject;
     }
-
 
     /**
      * This method extracts the list of groups that the owner of this
