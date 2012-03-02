@@ -1,4 +1,5 @@
 import java.util.List;
+import java.security.*;
 
 /**
  * Interface describing the operations that must be supported by the
@@ -27,7 +28,8 @@ public interface GroupClientInterface
      */
     public void disconnect();
 
-
+	public PublicKey getKey();
+	
     /**
      * Method used to get a token from the group server.  Right now,
      * there are no security checks.
