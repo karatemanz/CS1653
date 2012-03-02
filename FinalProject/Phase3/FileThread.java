@@ -9,14 +9,17 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.*;
 
 public class FileThread extends Thread
 {
 	private final Socket socket;
+	public final PublicKey gsKey;
 
-	public FileThread(Socket _socket)
+	public FileThread(Socket _socket, PublicKey _gsKey)
 	{
 		socket = _socket;
+		gsKey = _gsKey;
 	}
 
 	public void run()
