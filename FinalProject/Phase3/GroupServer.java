@@ -52,6 +52,9 @@ public class GroupServer extends Server {
 			FileInputStream fis = new FileInputStream(keyFile);
 			userStream = new ObjectInputStream(fis);
 			keys = (KeyPair)userStream.readObject();
+			userStream.close();
+			fis.close();
+			System.out.println("Loaded keys.");
 		}
 		catch (FileNotFoundException e) {
 			System.out.println("GSKeyList File Does Not Exist. Creating GSKeyList...");
@@ -63,6 +66,7 @@ public class GroupServer extends Server {
 				keyGenRandom.nextBytes(bytes);
 				keyGenRSA.initialize(RSAKEYSIZE, keyGenRandom);
 				keys = keyGenRSA.generateKeyPair();
+				System.out.println("Created keys.");
 			}
 			catch (Exception ee) {
 				System.err.println("Error generating RSA keys.");
