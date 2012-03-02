@@ -365,6 +365,11 @@ public class FileThread extends Thread
 						output.writeObject(e);
 					}
 				}
+				else if (message.getMessage().equals("GETPUBKEY")) { // Client wants the public key
+					response = new Envelope("OK");
+					response.addObject(FileServer.getServerPublicKey());
+					output.writeObject(response);
+				}
 				else if(e.getMessage().equals("DISCONNECT"))
 				{
 					socket.close();
