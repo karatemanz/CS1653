@@ -157,6 +157,10 @@ public class GroupServer extends Server {
 		}
 	}
 	
+	public PublicKey getServerPublicKey() {
+		return keys.getPublic();
+	}
+	
 	public byte[] getNewPasswordHash() {
 		// Get password
 		Console secret = System.console();
