@@ -4,12 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.ObjectInputStream;
 import java.security.*;
+import javax.crypto.*;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class GroupClient extends Client implements GroupClientInterface {
+	public Key getSharedKey() {
+		try {
+			// create symmetric shared key
+			Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			KeyGenerator keyGenAES = KeyGenerator.getInstance("AES", "BC");
+			SecureRandom keyGenRandom = new SecureRandom();
+			byte keyBytes[] = new byte[20];
+			keyGenRandom.nextBytes(keyBytes);
+			keyGenAES.init(128, keyGenRandom);
+			Key sharedKey = keyGenAES.generateKey();
+			int challenge = keyGenRandom.nextInt();
+			
+			// encrypt key and challenge with Group Client's public key
+			
+			// challenge.getValue()
+			// String.getBytes()
+			// sharedKey.getEncoded()
+			
+			return sharedKey;
+		}
+		catch(Exception e) {
+			System.out.println("Error performing AES encryption/decryption tests.");
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	public PublicKey getKey() {
 		try {
-			Envelope message = null, response = null;
-			
+			Envelope message = null, response = null;			
 			// Tell the server to return its public key.
 			message = new Envelope("GETPUBKEY");
 			output.writeObject(message);
