@@ -40,6 +40,10 @@ public class FileClientUI
 				}
 				else {
 					// ask if we need to add
+					System.out.println("This File Server's identity has not been recorded previously...");
+					System.out.println("Address: " + serverAddress);
+					System.out.println("Port: " + serverAddress);
+					System.out.println("Public Key: " + fc.getKey().getEncoded());
 					
 					// if yes, add to fsList, save fsList to file
 					
@@ -48,6 +52,19 @@ public class FileClientUI
 			}
 			catch(FileNotFoundException e) {
 				System.out.println("File Server List Does Not Exist. Creating " + fsFile + "...");
+				ObjectOutputStream oos;
+				try {
+					FileServerList fsl = new FileServerList();
+					oos = new ObjectOutputStream(new FileOutputStream(fsFile));
+					oos.writeObject(fsl);
+					oos.close();
+				}
+				catch(Exception ee) {
+					System.err.println("Error writing to " + fsFile + ".");
+					ee.printStackTrace(System.err);
+					System.exit(-1);
+				}
+
 			}
 			catch(IOException e) {
 				System.out.println("Error reading from " + fsFile);
