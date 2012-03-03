@@ -47,11 +47,34 @@ public class FileClientUI
 					System.out.println("This File Server's identity has not been recorded previously...");
 					System.out.println("Address: " + serverAddress);
 					System.out.println("Port: " + portNumber);
-					System.out.println("Public Key: " + toHexString(thisFSKey.getEncoded()));
+					System.out.println("Public Key (hex): " + toHexString(thisFSKey.getEncoded()) + "\n");
 					
-					// if yes, add to fsList, save fsList to file
-					
-					// if no, exitKey = true;
+					// Prompt user if would like to add to FileServerList
+					System.out.println("Would you like to add this server to your trusted server list? (y/n)");
+					String answer = getNonEmptyString("> ", 32);
+					if (answer.charAt(0) == 'y' || answer.charAt(0) == 'Y') {
+						FileOutputStream fos;
+						ObjectOutputStream oos;
+						try {
+							FileServerList fsl = new FileServerList();
+							fsl.addServer(thisFS);
+							fos = new FileOutputStream(fsFile);
+							oos = new ObjectOutputStream(fos);
+							oos.writeObject(fsl);
+							oos.close();
+							fos.close();
+							System.out.println("File Server added to trusted server list.");
+						}
+						catch(Exception ee) {
+							System.err.println("Error writing to " + fsFile + ".");
+							ee.printStackTrace(System.err);
+							System.exit(-1);
+						}
+					}
+					else {
+						System.out.println("Server will not be added. Exiting.");
+						exitKey = true;
+					}
 				}
 			}
 			catch(FileNotFoundException e) {
