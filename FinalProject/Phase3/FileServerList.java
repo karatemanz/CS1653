@@ -14,12 +14,17 @@ import java.security.*;
 		}
 
 		public synchronized boolean hasServer(FileServerID fsid) {
-			if (fileServerList.contains(fsid)) {
-				return true;
+			for (int i = 0; i < fileServerList.size(); i++) {
+				if (fileServerList.get(i).getPort() == fsid.getPort() &&
+					fileServerList.get(i).getAddr().equals(fsid.getAddr())) {
+					// Compare byte arrays from keys
+					if (Arrays.equals(fileServerList.get(i).getKey().getEncoded(),
+									  fsid.getKey().getEncoded())) {
+						return true;
+					}
+				}
 			}
-			else {
-				return false;
-			}
+			return false;
 		}
 	}
 
@@ -33,6 +38,18 @@ import java.security.*;
 			address = _address;
 			port = _port;
 			key = _key;
+		}
+		
+		public String getAddr() {
+			return address;
+		}
+		
+		public int getPort() {
+			return port;
+		}
+		
+		public PublicKey getKey() {
+			return key;
 		}
 	}
 
