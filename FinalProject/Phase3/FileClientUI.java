@@ -27,23 +27,27 @@ public class FileClientUI
 			String destFileName;
 			String fsFile = "FileServerList.bin";
 			ObjectInputStream ois;
-			FileServerID thisFS = new FileServerID(serverAddress, portNumber, fc.getKey());
+			PublicKey thisFSKey = fc.getKey();
+			FileServerID thisFS = new FileServerID(serverAddress, portNumber, thisFSKey);
 
 			// determine whether or not this server has been used before
 			try {
 				FileInputStream fis = new FileInputStream(fsFile);
 				ois = new ObjectInputStream(fis);
 				FileServerList fsList = (FileServerList)ois.readObject();
+				ois.close();
+				fis.close();
 				
 				if (fsList.hasServer(thisFS)) {
 					// we're cool
+					System.out.println("we're cool");
 				}
 				else {
 					// ask if we need to add
 					System.out.println("This File Server's identity has not been recorded previously...");
 					System.out.println("Address: " + serverAddress);
 					System.out.println("Port: " + serverAddress);
-					System.out.println("Public Key: " + fc.getKey().getEncoded());
+					System.out.println("Public Key: " + thisFSKey.getEncoded());
 					
 					// if yes, add to fsList, save fsList to file
 					
@@ -52,12 +56,16 @@ public class FileClientUI
 			}
 			catch(FileNotFoundException e) {
 				System.out.println("File Server List Does Not Exist. Creating " + fsFile + "...");
+				FileOutputStream fos;
 				ObjectOutputStream oos;
 				try {
 					FileServerList fsl = new FileServerList();
-					oos = new ObjectOutputStream(new FileOutputStream(fsFile));
+					fsl.addServer(thisFS);
+					fos = new FileOutputStream(fsFile);
+					oos = new ObjectOutputStream(fos);
 					oos.writeObject(fsl);
 					oos.close();
+					fos.close();
 				}
 				catch(Exception ee) {
 					System.err.println("Error writing to " + fsFile + ".");
@@ -243,39 +251,4 @@ public class FileClientUI
 		
 		return str;
 	}
-	
-	public class FileServerID {
-		public String address;
-		public int port;
-		public PublicKey key;
-		
-		public FileServerID(String _address, int _port, PublicKey _key) {
-			address = _address;
-			port = _port;
-			key = _key;
-		}
-	}
-	
-	public class FileServerList implements java.io.Serializable {
-		private static final long serialVersionUID = 5634179927600343803L;
-		public ArrayList<FileServerID> fileServerList;
-		
-		public FileServerList() {
-			fileServerList = new ArrayList<FileServerID>();
-		}
-		
-		public void addServer(FileServerID fsid) {
-			fileServerList.add(fsid);
-		}
-		
-		public boolean hasServer(FileServerID fsid) {
-			if (fileServerList.contains(fsid)) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-	}
-
 }
