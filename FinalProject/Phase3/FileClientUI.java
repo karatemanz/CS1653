@@ -256,7 +256,8 @@ public class FileClientUI
 		}
 	}
 	
-	public class FileServerList {
+	public class FileServerList implements java.io.Serializable {
+		private static final long serialVersionUID = 5634179927600343803L;
 		public ArrayList<FileServerID> fileServerList;
 		
 		public FileServerList() {
