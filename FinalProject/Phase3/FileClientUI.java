@@ -39,15 +39,15 @@ public class FileClientUI
 				fis.close();
 				
 				if (fsList.hasServer(thisFS)) {
-					// we're cool
-					System.out.println("we're cool");
+					// We're cool
+					System.out.println("File Server's ID is on file. Connection successful.");
 				}
-				else {
-					// ask if we need to add
+				else { // Notify user of unknown File Server
+					
 					System.out.println("This File Server's identity has not been recorded previously...");
 					System.out.println("Address: " + serverAddress);
-					System.out.println("Port: " + serverAddress);
-					System.out.println("Public Key: " + thisFSKey.getEncoded());
+					System.out.println("Port: " + portNumber);
+					System.out.println("Public Key: " + toHexString(thisFSKey.getEncoded()));
 					
 					// if yes, add to fsList, save fsList to file
 					
@@ -251,4 +251,36 @@ public class FileClientUI
 		
 		return str;
 	}
+	
+	// The following methods are from Oracle:
+	// http://docs.oracle.com/cd/E17409_01/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html#Examples
+	
+	/*
+     * Converts a byte to hex digit and writes to the supplied buffer
+     */
+    private static void byte2hex(byte b, StringBuffer buf) {
+        char[] hexChars = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
+			'9', 'A', 'B', 'C', 'D', 'E', 'F' };
+        int high = ((b & 0xf0) >> 4);
+        int low = (b & 0x0f);
+        buf.append(hexChars[high]);
+        buf.append(hexChars[low]);
+    }
+	
+    /*
+     * Converts a byte array to hex string
+     */
+    private static String toHexString(byte[] block) {
+        StringBuffer buf = new StringBuffer();
+		
+        int len = block.length;
+		
+        for (int i = 0; i < len; i++) {
+			byte2hex(block[i], buf);
+			if (i < len-1) {
+				buf.append(":");
+			}
+        }
+        return buf.toString();
+    }
 }
