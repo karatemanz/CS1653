@@ -21,11 +21,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 			int challenge = keyGenRandom.nextInt();
 			
 			// encrypt key and challenge with Group Client's public key
-			ArrayList<byte[]> byteList = new ArrayList<byte>();
-			byteList.addObject(challenge.getValue());
-			// challenge.getValue()
-			// String.getBytes()
-			// sharedKey.getEncoded()
+
+			// verify challenge value + 1 was returned
 			
 			return sharedKey;
 		}
