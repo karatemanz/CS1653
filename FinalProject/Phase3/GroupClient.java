@@ -5,6 +5,7 @@ import java.util.List;
 import java.io.ObjectInputStream;
 import java.security.*;
 import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.math.BigInteger;
 
@@ -19,7 +20,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 			byte b[] = new byte[20];
 			rand.nextBytes(b);
 			keyGenAES.init(128, rand);
-			Key sharedKey = keyGenAES.generateKey();
+			Key sharedKey = new SecretKeySpec(keyGenAES.generateKey().getEncoded(), "AES");
+//			Key sharedKey = keyGenAES.generateKey();
 			System.out.println(sharedKey.getEncoded());
 			
 			// get challenge from same generator as key - may want to change
@@ -68,7 +70,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			response = (Envelope)input.readObject();
 
 			// decrypt and verify challenge value + 1 was returned
-			if(response.getMessage().equals("OK")) {
+			if(response.getMessage().equals("ACK")) {
 				ArrayList<Object> temp = null;
 				byte[] challResp = null;
 				temp = response.getObjContents();
