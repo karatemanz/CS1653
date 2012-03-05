@@ -137,7 +137,7 @@ public class FileServer extends Server {
 		gc.connect(gsAddress, gsPort);
 		if (gc.isConnected()) // check that server is running
 		{
-			gsPublicKey = gc.getKey();
+			gsPublicKey = gc.getPubKey();
 			if (gsPublicKey == null) { // no key retrieved
 				System.out.println("Error: Group Server key not retrieved.");
 				gc.disconnect();
