@@ -11,7 +11,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 	public Key getSharedKey() {
 		try {
 			// create symmetric shared key
-			Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			Cipher sharedCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			KeyGenerator keyGenAES = KeyGenerator.getInstance("AES", "BC");
 			SecureRandom keyGenRandom = new SecureRandom();
 			byte keyBytes[] = new byte[20];
@@ -19,8 +19,21 @@ public class GroupClient extends Client implements GroupClientInterface {
 			keyGenAES.init(128, keyGenRandom);
 			Key sharedKey = keyGenAES.generateKey();
 			int challenge = keyGenRandom.nextInt();
+			Envelope message = null, ciphertext = null, response = null;	
+			PublicKey groupPubKey = getPubKey();
 			
 			// encrypt key and challenge with Group Client's public key
+			ciphertext = new Envelope("challenge");
+			message.addObject(challenge);
+			message.addObject(sharedKey);
+			Cipher envCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+			envCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
+			SealedObject sealedObject = new SealedObject(ciphertext, envCipher);			
+			
+			// send it to the server
+			message = new Envelope("KCG");
+			message.addObject(sealedObject);
+			output.writeObject(message);
 
 			// verify challenge value + 1 was returned
 			
@@ -34,7 +47,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 		return null;
 	}
 	
-	public PublicKey getKey() {
+	public PublicKey getPubKey() {
 		try {
 			Envelope message = null, response = null;			
 			// Tell the server to return its public key.
