@@ -39,53 +39,21 @@ public class GroupThread extends Thread
 				Envelope response;
 				
 				if (message.getMessage().equals("KCG")) { // Client wants a session key
+					// decrypt sealed object with private key
 					SealedObject sealedObject = (SealedObject)message.getObjContents().get(0);
-					String algorithmName = sealedObject.getAlgorithm();
-					Cipher cipher = Cipher.getInstance(algorithmName);
+					String algo = sealedObject.getAlgorithm();
+					Cipher cipher = Cipher.getInstance(algo);
 					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
-					byte kcg[] = (byte[])sealedObject.getObject(cipher);
-
-//					byte kcg[] = (byte[])message.getObjContents().get(0);
-					System.out.println(kcg.length);
-					byte IVseed[] = {kcg[0], kcg[1], kcg[2], kcg[3]};
-					SecureRandom IV = new SecureRandom(IVseed);
-					byte keyArray[] = new byte[16];
-					for (int i = 0; i < 16; i++) {
-						keyArray[i] = kcg[i + 4];
-					}
-					for (int i = 0; i < 20; i++) {
-						System.out.print(kcg[i] + ":");
-					}
-					System.out.println();
+					// get KeyPack
+					KeyPack kcg = (KeyPack)sealedObject.getObject(cipher);
 					
+					int challenge = kcg.getChallenge();
+					Key sharedKey = kcg.getSecretKey();
 					
-					Key sharedKey = new SecretKeySpec(keyArray, "AES");
 					System.out.println(sharedKey.getEncoded());
-					// second obj is a byte array w/ challenge and shared key
-//					SealedObject sealedObj = (SealedObject)message.getObjContents().get(1);
-					
-					
-					// decrypt SealedObject
-//					String algoName = sealedObj.getAlgorithm();
-//					Cipher cipher = Cipher.getInstance(algoName);
-//					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
-//					Envelope pack = (Envelope)sealedObj.getObject(cipher);
-					
-					// first obj is the numerical challenge
-//					int challenge = (Integer)pack.getObjContents().get(0);
-					// second obj is the shared AES key
-//					Key sharedKey = (Key)pack.getObjContents().get(1);
-					
-					// encrypt challenge + 1 and send it back
-					int l = 0;
-					l |= kcg[0] & 0xFF;
-					l <<= 8;
-					l |= kcg[1] & 0xFF;
-					l <<= 8;
-					l |= kcg[2] & 0xFF;
-					l <<= 8;
-					l |= kcg[3] & 0xFF;
-					System.out.println(l + 1);
+
+//					byte IVseed[] = {kcg[0], kcg[1], kcg[2], kcg[3]};
+//					SecureRandom IV = new SecureRandom(IVseed);
 					
 					// set shared key to global
 					
