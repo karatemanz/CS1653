@@ -33,17 +33,34 @@ public class GroupClient extends Client implements GroupClientInterface {
 			
 			// encrypt key and challenge with Group Client's public key
 			Envelope message = null, ciphertext = null, response = null;
-			ciphertext = new Envelope("CHAL");
-			ciphertext.addObject(challenge);
-			ciphertext.addObject(sharedKey);
-			Cipher envCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
-			envCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
-			SealedObject sealedObject = new SealedObject(ciphertext, envCipher);			
+//			ciphertext = new Envelope("CHAL");
+//			ciphertext.addObject(challenge);
+//			ciphertext.addObject(sharedKey);
+//			Cipher envCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+//			envCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
+//			SealedObject sealedObject = new SealedObject(ciphertext, envCipher);
+			
+			byte ct[] = new byte[20];
+			// generate challenge (stub)
+			ct[0] = 13;
+			ct[1] = 67;
+			ct[2] = 59;
+			ct[3] = 3;
+			// add key to byte array
+			byte ka[] = sharedKey.getEncoded();
+			for (int i = 4; i < ct.length; i++) {
+				ct[i] = ka[i - 4];
+			}
+			// encrypt byte array
+			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+			msgCipher.init(Cipher.DECRYPT_MODE, groupPubKey);			
+			byte[] outCipher = msgCipher.doFinal(ct);
 			
 			// send it to the server
 			message = new Envelope("KCG");
 			message.addObject(IVseed); // add the IVseed for AES encrypt/decrypt
-			message.addObject(sealedObject);
+//			message.addObject(sealedObject);
+			message.addObject(outCipher);
 			output.writeObject(message);
 
 			// Get the response from the server
