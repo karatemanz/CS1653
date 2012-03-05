@@ -73,6 +73,8 @@ public class GroupThread extends Thread
 					plaintext[3] = (byte)(challenge /*>> 0*/);
 					theCipher.init(Cipher.ENCRYPT_MODE, sharedKey, IV);			
 					byte[] cipherText = theCipher.doFinal(plaintext);
+					
+//					System.out.println("getIV(): " + theCipher.getIV());
 
 //					byte IVseed[] = {kcg[0], kcg[1], kcg[2], kcg[3]};
 //					SecureRandom IV = new SecureRandom(IVseed);
@@ -82,6 +84,7 @@ public class GroupThread extends Thread
 					// Respond to the client
 					response = new Envelope("OK");
 					response.addObject(cipherText);
+					response.addObject(theCipher.getIV());
 					output.writeObject(response);
 
 				}
