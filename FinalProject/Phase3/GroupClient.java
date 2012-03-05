@@ -20,6 +20,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			rand.nextBytes(b);
 			keyGenAES.init(128, rand);
 			Key sharedKey = keyGenAES.generateKey();
+			System.out.println(sharedKey.getEncoded());
 			
 			// get challenge from same generator as key - may want to change
 			int challenge = (Integer)rand.nextInt();
@@ -51,7 +52,6 @@ public class GroupClient extends Client implements GroupClientInterface {
 			for (int i = 4; i < 16; i++) {
 				ct[i] = ka[i - 4];
 			}
-			System.out.println(ct.length);
 			// encrypt byte array
 			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
 			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);			
@@ -59,7 +59,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			
 			// send it to the server
 			message = new Envelope("KCG");
-			message.addObject(IVseed); // add the IVseed for AES encrypt/decrypt
+//			message.addObject(IVseed); // add the IVseed for AES encrypt/decrypt
 //			message.addObject(sealedObject);
 			message.addObject(outCipher);
 			output.writeObject(message);

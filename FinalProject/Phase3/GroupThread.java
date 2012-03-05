@@ -49,6 +49,7 @@ public class GroupThread extends Thread
 						keyArray[i] = kcg[i + 4];
 					}
 					Key sharedKey = new SecretKeySpec(keyArray, "AES");
+					System.out.println(sharedKey.getEncoded());
 					// second obj is a byte array w/ challenge and shared key
 //					SealedObject sealedObj = (SealedObject)message.getObjContents().get(1);
 					
