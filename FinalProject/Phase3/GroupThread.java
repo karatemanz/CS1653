@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 import java.security.*;
 import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class GroupThread extends Thread 
@@ -39,24 +40,39 @@ public class GroupThread extends Thread
 				
 				if (message.getMessage().equals("KCG")) { // Client wants a session key
 					// first obj is a byte[] IVseed
-					byte IVseed[] = (byte[])message.getObjContents().get(0);
+					byte kcg[] = (byte[])message.getObjContents().get(0);
+					byte IVseed[] = {kcg[0], kcg[1], kcg[2], kcg[3]};
 					SecureRandom IV = new SecureRandom(IVseed);
-					// second obj is a SealedObject w/ challenge and shared key
-					SealedObject sealedObj = (SealedObject)message.getObjContents().get(1);
+					byte keyArray[] = new byte[16];
+					for (int i = 0; i < 16; i++) {
+						keyArray[i] = kcg[i + 4];
+					}
+					Key sharedKey = new SecretKeySpec(keyArray, "AES");
+					// second obj is a byte array w/ challenge and shared key
+//					SealedObject sealedObj = (SealedObject)message.getObjContents().get(1);
+					
 					
 					// decrypt SealedObject
-					String algoName = sealedObj.getAlgorithm();
-					Cipher cipher = Cipher.getInstance(algoName);
-					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
-					Envelope pack = (Envelope)sealedObj.getObject(cipher);
+//					String algoName = sealedObj.getAlgorithm();
+//					Cipher cipher = Cipher.getInstance(algoName);
+//					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
+//					Envelope pack = (Envelope)sealedObj.getObject(cipher);
 					
 					// first obj is the numerical challenge
-					int challenge = (Integer)pack.getObjContents().get(0);
+//					int challenge = (Integer)pack.getObjContents().get(0);
 					// second obj is the shared AES key
-					Key sharedKey = (Key)pack.getObjContents().get(1);
+//					Key sharedKey = (Key)pack.getObjContents().get(1);
 					
 					// encrypt challenge + 1 and send it back
-					System.out.println(challenge + 1);
+					int l = 0;
+					l |= kcg[0] & 0xFF;
+					l <<= 8;
+					l |= kcg[1] & 0xFF;
+					l <<= 8;
+					l |= kcg[2] & 0xFF;
+					l <<= 8;
+					l |= kcg[3] & 0xFF;
+					System.out.println(l + 1);
 					
 					// set shared key to global
 					
