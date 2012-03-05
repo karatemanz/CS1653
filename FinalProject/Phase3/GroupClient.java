@@ -10,6 +10,7 @@ import java.math.BigInteger;
 
 public class GroupClient extends Client implements GroupClientInterface {
 	public Key getSharedKey() {
+		Security.addProvider(new BouncyCastleProvider());
 		try {
 			// create symmetric shared key
 			Cipher sharedCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
