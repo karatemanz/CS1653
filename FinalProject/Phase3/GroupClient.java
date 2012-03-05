@@ -52,7 +52,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			response = (Envelope)input.readObject();
 
 			// decrypt and verify challenge value + 1 was returned
-			if(response.getMessage().equals("ACK")) {
+			if(response.getMessage().equals("OK")) {
 				ArrayList<Object> temp = null;
 				byte[] challResp = null;
 				temp = response.getObjContents();
