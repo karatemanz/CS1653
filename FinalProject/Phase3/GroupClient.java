@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.security.*;
 import javax.crypto.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import java.math.BigInteger;
 
 public class GroupClient extends Client implements GroupClientInterface {
 	public Key getSharedKey() {
@@ -13,17 +14,20 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// create symmetric shared key
 			Cipher sharedCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			KeyGenerator keyGenAES = KeyGenerator.getInstance("AES", "BC");
-			SecureRandom keyGenRandom = new SecureRandom();
-			byte keyBytes[] = new byte[20];
-			keyGenRandom.nextBytes(keyBytes);
-			keyGenAES.init(128, keyGenRandom);
+			SecureRandom rand = new SecureRandom();
+			byte b[] = new byte[20];
+			rand.nextBytes(b);
+			keyGenAES.init(128, rand);
 			Key sharedKey = keyGenAES.generateKey();
-			int challenge = keyGenRandom.nextInt();
-			Envelope message = null, ciphertext = null, response = null;	
+			int challenge = (Integer)rand.nextInt();
+			SecureRandom IV = new SecureRandom();
+			byte[] IVbytes = new byte[20];
+			IV.nextBytes(IVbytes);
 			PublicKey groupPubKey = getPubKey();
 			
 			// encrypt key and challenge with Group Client's public key
-			ciphertext = new Envelope("challenge");
+			Envelope message = null, ciphertext = null, response = null;
+			ciphertext = new Envelope("CHAL");
 			message.addObject(challenge);
 			message.addObject(sharedKey);
 			Cipher envCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
@@ -32,15 +36,37 @@ public class GroupClient extends Client implements GroupClientInterface {
 			
 			// send it to the server
 			message = new Envelope("KCG");
+			message.addObject(IV); // add the IV for AES encrypt
 			message.addObject(sealedObject);
 			output.writeObject(message);
 
-			// verify challenge value + 1 was returned
-			
-			return sharedKey;
+			// Get the response from the server
+			response = (Envelope)input.readObject();
+
+			// decrypt and verify challenge value + 1 was returned
+			if(response.getMessage().equals("OK")) {
+				ArrayList<Object> temp = null;
+				byte[] challResp = null;
+				temp = response.getObjContents();
+				if (temp.size() == 1) {
+					challResp = (byte[])temp.get(0);
+				}
+				// decrypt challenge
+				AlgorithmParameters algoPara = sharedCipher.getParameters();
+				sharedCipher.init(Cipher.DECRYPT_MODE, sharedKey, algoPara, IV);
+				byte[] plainText = sharedCipher.doFinal(challResp);
+				if (new BigInteger(plainText).intValue() == challenge + 1) {
+					return sharedKey;
+				}
+				else {
+					System.out.println(challenge);
+					System.out.println(new BigInteger(plainText).intValue());
+				}
+			}
+			return null;
 		}
 		catch(Exception e) {
-			System.out.println("Error performing AES encryption/decryption tests.");
+			System.out.println("Error: " + e);
 			e.printStackTrace();
 		}
 		
