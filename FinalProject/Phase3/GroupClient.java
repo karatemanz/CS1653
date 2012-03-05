@@ -20,8 +20,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			byte b[] = new byte[20];
 			rand.nextBytes(b);
 			keyGenAES.init(128, rand);
-			Key sharedKey = new SecretKeySpec(keyGenAES.generateKey().getEncoded(), "AES");
-//			Key sharedKey = keyGenAES.generateKey();
+			Key sharedKey = keyGenAES.generateKey();
 			System.out.println(sharedKey.getEncoded());
 			
 			// get challenge from same generator as key - may want to change
@@ -43,21 +42,37 @@ public class GroupClient extends Client implements GroupClientInterface {
 //			envCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
 //			SealedObject sealedObject = new SealedObject(ciphertext, envCipher);
 			
-			byte ct[] = new byte[20];
+			byte ka[] = sharedKey.getEncoded();
+			System.out.println(ka.length);
+			byte ct[] = new byte[4 + ka.length];
 			// generate challenge (stub)
 			ct[0] = 13;
 			ct[1] = 67;
 			ct[2] = 59;
 			ct[3] = 3;
 			// add key to byte array
-			byte ka[] = sharedKey.getEncoded();
-			for (int i = 4; i < 16; i++) {
+			for (int i = 4; i < ka.length; i++) {
 				ct[i] = ka[i - 4];
+				System.out.print(ct[i] + ":");
 			}
+			System.out.println();
+			
+			for (int i = 0; i < ct.length; i++) {
+				System.out.print(ct[i] + ":");
+			}
+			System.out.println();
+			
+			Key skey = new SecretKeySpec(ka, "AES");
+			System.out.println(skey.getEncoded());
+
 			// encrypt byte array
+//			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+//			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);			
+//			byte[] outCipher = msgCipher.doFinal(ct);
 			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
-			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);			
-			byte[] outCipher = msgCipher.doFinal(ct);
+			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
+			SealedObject outCipher = new SealedObject(ct, msgCipher);
+
 			
 			// send it to the server
 			message = new Envelope("KCG");

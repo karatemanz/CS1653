@@ -39,8 +39,13 @@ public class GroupThread extends Thread
 				Envelope response;
 				
 				if (message.getMessage().equals("KCG")) { // Client wants a session key
-					// first obj is a byte[] IVseed
-					byte kcg[] = (byte[])message.getObjContents().get(0);
+					SealedObject sealedObject = (SealedObject)message.getObjContents().get(0);
+					String algorithmName = sealedObject.getAlgorithm();
+					Cipher cipher = Cipher.getInstance(algorithmName);
+					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
+					byte kcg[] = (byte[])sealedObject.getObject(cipher);
+
+//					byte kcg[] = (byte[])message.getObjContents().get(0);
 					System.out.println(kcg.length);
 					byte IVseed[] = {kcg[0], kcg[1], kcg[2], kcg[3]};
 					SecureRandom IV = new SecureRandom(IVseed);
@@ -48,9 +53,14 @@ public class GroupThread extends Thread
 					for (int i = 0; i < 16; i++) {
 						keyArray[i] = kcg[i + 4];
 					}
+					for (int i = 0; i < 20; i++) {
+						System.out.print(kcg[i] + ":");
+					}
+					System.out.println();
+					
 					
 					Key sharedKey = new SecretKeySpec(keyArray, "AES");
-					System.out.println(sharedKey.getEncoded() + " " + encryptionKey.getAlgorithm());
+					System.out.println(sharedKey.getEncoded());
 					// second obj is a byte array w/ challenge and shared key
 //					SealedObject sealedObj = (SealedObject)message.getObjContents().get(1);
 					
