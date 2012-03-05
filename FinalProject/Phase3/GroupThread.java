@@ -41,6 +41,7 @@ public class GroupThread extends Thread
 				if (message.getMessage().equals("KCG")) { // Client wants a session key
 					// first obj is a byte[] IVseed
 					byte kcg[] = (byte[])message.getObjContents().get(0);
+					System.out.println(kcg.length);
 					byte IVseed[] = {kcg[0], kcg[1], kcg[2], kcg[3]};
 					SecureRandom IV = new SecureRandom(IVseed);
 					byte keyArray[] = new byte[16];
