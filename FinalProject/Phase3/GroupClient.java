@@ -38,29 +38,6 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// encrypt key and challenge with Group Client's public key
 			Envelope message = null, ciphertext = null, response = null;
 			
-			byte ka[] = sharedKey.getEncoded();
-			System.out.println(ka.length);
-			byte ct[] = new byte[4 + ka.length];
-			// generate challenge (stub)
-			ct[0] = 13;
-			ct[1] = 67;
-			ct[2] = 59;
-			ct[3] = 3;
-			// add key to byte array
-			for (int i = 4; i < ka.length; i++) {
-				ct[i] = ka[i - 4];
-				System.out.print(ct[i] + ":");
-			}
-			System.out.println();
-			
-			for (int i = 0; i < ct.length; i++) {
-				System.out.print(ct[i] + ":");
-			}
-			System.out.println();
-			
-			Key skey = new SecretKeySpec(ka, "AES");
-			System.out.println(skey.getEncoded());
-
 			// encrypt
 			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
 			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
