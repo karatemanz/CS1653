@@ -26,6 +26,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// get challenge from same generator as key - may want to change
 			int challenge = (Integer)rand.nextInt();
 			
+			KeyPack kp = new KeyPack(challenge, sharedKey);
+			
 			// create an object for use as IV
 			byte IVseed[] = {13, 91, 101, 37};
 			SecureRandom IV = new SecureRandom(IVseed);
@@ -71,8 +73,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 //			byte[] outCipher = msgCipher.doFinal(ct);
 			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
 			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
-			SealedObject outCipher = new SealedObject(ct, msgCipher);
-
+//			SealedObject outCipher = new SealedObject(ct, msgCipher);
+			SealedObject outCipher = new SealedObject(kp, msgCipher);
 			
 			// send it to the server
 			message = new Envelope("KCG");
