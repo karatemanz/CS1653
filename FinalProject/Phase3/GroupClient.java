@@ -19,10 +19,15 @@ public class GroupClient extends Client implements GroupClientInterface {
 			rand.nextBytes(b);
 			keyGenAES.init(128, rand);
 			Key sharedKey = keyGenAES.generateKey();
+			
+			// get challenge from same generator as key - may want to change
 			int challenge = (Integer)rand.nextInt();
-			SecureRandom IV = new SecureRandom();
-			byte[] IVbytes = new byte[20];
-			IV.nextBytes(IVbytes);
+			
+			// create an object for use as IV
+			byte IVseed[] = {13, 91, 101, 37};
+			SecureRandom IV = new SecureRandom(IVseed);
+
+			// get Group Server's public key
 			PublicKey groupPubKey = getPubKey();
 			
 			// encrypt key and challenge with Group Client's public key
@@ -36,7 +41,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			
 			// send it to the server
 			message = new Envelope("KCG");
-			message.addObject(IV); // add the IV for AES encrypt
+			message.addObject(IVseed); // add the IVseed for AES encrypt/decrypt
 			message.addObject(sealedObject);
 			output.writeObject(message);
 
