@@ -38,9 +38,16 @@ public class GroupThread extends Thread
 				Envelope response;
 				
 				if (message.getMessage().equals("KCG")) { // Client wants a session key
-					// first obj is an IV
-					
+					// first obj is a byte[] IVseed
+					byte IVseed[] = (byte[])message.getObjContents().get(0);					
 					// second obj is a SealedObject w/ challenge and shared key
+					SealedObject sealedObj = (SealedObject)message.getObjContents().get(1);
+					
+					// decrypt SealedObject
+					String algoName = sealedObj.getAlgorithm();
+					Cipher cipher = Cipher.getInstance(algoName);
+					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
+					Envelope pack = (Envelope)sealedObj.getObject(cipher);
 				}
 				else if (message.getMessage().equals("GET"))//Client wants a token
 				{
