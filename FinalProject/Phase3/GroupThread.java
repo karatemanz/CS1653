@@ -59,6 +59,11 @@ public class GroupThread extends Thread
 					System.out.println(challenge + 1);
 					
 					// set shared key to global
+					
+					// Respond to the client
+					response = new Envelope("OK");
+					output.writeObject(response);
+
 				}
 				else if (message.getMessage().equals("GET"))//Client wants a token
 				{
