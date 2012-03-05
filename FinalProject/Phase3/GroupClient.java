@@ -48,12 +48,12 @@ public class GroupClient extends Client implements GroupClientInterface {
 			ct[3] = 3;
 			// add key to byte array
 			byte ka[] = sharedKey.getEncoded();
-			for (int i = 4; i < ct.length; i++) {
+			for (int i = 4; i < 16; i++) {
 				ct[i] = ka[i - 4];
 			}
 			// encrypt byte array
 			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
-			msgCipher.init(Cipher.DECRYPT_MODE, groupPubKey);			
+			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);			
 			byte[] outCipher = msgCipher.doFinal(ct);
 			
 			// send it to the server
