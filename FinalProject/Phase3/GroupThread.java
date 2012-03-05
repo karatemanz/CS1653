@@ -39,7 +39,8 @@ public class GroupThread extends Thread
 				
 				if (message.getMessage().equals("KCG")) { // Client wants a session key
 					// first obj is a byte[] IVseed
-					byte IVseed[] = (byte[])message.getObjContents().get(0);					
+					byte IVseed[] = (byte[])message.getObjContents().get(0);
+					SecureRandom IV = new SecureRandom(IVseed);
 					// second obj is a SealedObject w/ challenge and shared key
 					SealedObject sealedObj = (SealedObject)message.getObjContents().get(1);
 					
@@ -48,6 +49,16 @@ public class GroupThread extends Thread
 					Cipher cipher = Cipher.getInstance(algoName);
 					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
 					Envelope pack = (Envelope)sealedObj.getObject(cipher);
+					
+					// first obj is the numerical challenge
+					int challenge = (Integer)pack.getObjContents().get(0);
+					// second obj is the shared AES key
+					Key sharedKey = (Key)pack.getObjContents().get(1);
+					
+					// encrypt challenge + 1 and send it back
+					System.out.println(challenge + 1);
+					
+					// set shared key to global
 				}
 				else if (message.getMessage().equals("GET"))//Client wants a token
 				{
