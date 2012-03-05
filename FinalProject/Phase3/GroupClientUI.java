@@ -2,6 +2,9 @@ import java.util.Scanner; // Scanner class required for user input
 import java.io.Console;
 import java.util.List;
 import java.util.Arrays;
+import java.security.*;
+import javax.crypto.*;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class GroupClientUI
 {
@@ -20,6 +23,9 @@ public class GroupClientUI
 			List<String> aList;
 			final int MAXUSERLENGTH = 32;
 			final int MAXGROUPLENGTH = 32;
+			
+			// get shared key
+			Key sharedKey = gc.getSharedKey();
 			
 			while (!exitKey)
 			{
