@@ -51,6 +51,28 @@ public class GroupThread extends Thread
 					Key sharedKey = kcg.getSecretKey();
 					
 					System.out.println(sharedKey.getEncoded());
+					byte ouch[] = sharedKey.getEncoded();
+					for (int i = 0; i < ouch.length; i++) {
+						System.out.print(ouch[i]);
+					}
+					System.out.println();
+
+					// encrypt something
+					byte IVseed[] = {13, 91, 101, 37};
+					SecureRandom IV = new SecureRandom(IVseed);
+					
+					Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+
+					// Encryption
+					challenge += 1;
+					System.out.println(challenge);
+					byte plaintext[] = new byte[4];
+					plaintext[0] = (byte)(challenge >> 24);
+					plaintext[1] = (byte)(challenge >> 16);
+					plaintext[2] = (byte)(challenge >> 8);
+					plaintext[3] = (byte)(challenge /*>> 0*/);
+					theCipher.init(Cipher.ENCRYPT_MODE, sharedKey, IV);			
+					byte[] cipherText = theCipher.doFinal(plaintext);
 
 //					byte IVseed[] = {kcg[0], kcg[1], kcg[2], kcg[3]};
 //					SecureRandom IV = new SecureRandom(IVseed);
@@ -59,6 +81,7 @@ public class GroupThread extends Thread
 					
 					// Respond to the client
 					response = new Envelope("OK");
+					response.addObject(cipherText);
 					output.writeObject(response);
 
 				}
