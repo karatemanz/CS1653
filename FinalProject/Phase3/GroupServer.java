@@ -245,6 +245,10 @@ public class GroupServer extends Server {
 			return false;
 		}
 	}
+	
+	public PrivateKey getPrivateKey() {
+		return keys.getPrivate();
+	}
 }
 
 //This thread saves the user list
