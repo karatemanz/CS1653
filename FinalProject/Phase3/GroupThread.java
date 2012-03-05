@@ -37,7 +37,12 @@ public class GroupThread extends Thread
 				System.out.println("Request received: " + message.getMessage());
 				Envelope response;
 				
-				if(message.getMessage().equals("GET"))//Client wants a token
+				if (message.getMessage().equals("KCG")) { // Client wants a session key
+					// first obj is an IV
+					
+					// second obj is a SealedObject w/ challenge and shared key
+				}
+				else if (message.getMessage().equals("GET"))//Client wants a token
 				{
 					String username = (String)message.getObjContents().get(0); //Get the username
 					char[] password = (char[])message.getObjContents().get(1);
