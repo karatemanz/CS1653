@@ -8,6 +8,7 @@ import java.util.*;
 import java.security.*;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class GroupThread extends Thread 
@@ -58,9 +59,11 @@ public class GroupThread extends Thread
 					System.out.println();
 
 					// encrypt something
-					byte IVseed[] = {13, 91, 101, 37};
-					SecureRandom IV = new SecureRandom(IVseed);
-					
+					byte IVseed[] = {13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37};
+					SecureRandom IV = new SecureRandom();
+					IV.setSeed(IVseed);
+					System.out.println("IV: " + IV.toString());
+
 					Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 
 					// Encryption
@@ -71,7 +74,9 @@ public class GroupThread extends Thread
 					plaintext[1] = (byte)(challenge >> 16);
 					plaintext[2] = (byte)(challenge >> 8);
 					plaintext[3] = (byte)(challenge /*>> 0*/);
-					theCipher.init(Cipher.ENCRYPT_MODE, sharedKey, IV);			
+					theCipher.init(Cipher.ENCRYPT_MODE, sharedKey, new IvParameterSpec(IVseed));
+//					theCipher.init(Cipher.ENCRYPT_MODE, sharedKey, IV);
+//					theCipher.init(Cipher.ENCRYPT_MODE, sharedKey);
 					byte[] cipherText = theCipher.doFinal(plaintext);
 					
 //					System.out.println("getIV(): " + theCipher.getIV());
@@ -84,7 +89,7 @@ public class GroupThread extends Thread
 					// Respond to the client
 					response = new Envelope("OK");
 					response.addObject(cipherText);
-					response.addObject(theCipher.getIV());
+//					response.addObject(theCipher.getIV());
 					output.writeObject(response);
 
 				}

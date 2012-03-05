@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.security.*;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.math.BigInteger;
 
@@ -35,8 +36,10 @@ public class GroupClient extends Client implements GroupClientInterface {
 			KeyPack kp = new KeyPack(challenge, sharedKey);
 			
 			// create an object for use as IV
-			byte IVseed[] = {13, 91, 101, 37};
-			SecureRandom IV = new SecureRandom(IVseed);
+			byte IVseed[] = {13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37};
+			SecureRandom IV = new SecureRandom();
+			IV.setSeed(IVseed);
+			System.out.println("IV: " + IV.toString());
 
 			// get Group Server's public key
 			PublicKey groupPubKey = getPubKey();
@@ -66,23 +69,26 @@ public class GroupClient extends Client implements GroupClientInterface {
 //					challResp = (byte[])temp.get(0);
 //				}
 				byte challResp[] = (byte[])response.getObjContents().get(0);
+//				byte respIV[] = (byte[])response.getObjContents().get(1);
 				
 				// decrypt challenge
 				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-				AlgorithmParameters algoPara = sc.getParameters();
-				if (algoPara == null) {
-					System.out.println("NULL");
-				}
-				IV = new SecureRandom(IVseed);
-				sc.init(Cipher.DECRYPT_MODE, sharedKey, IV);
-
-//				sharedCipher.init(Cipher.DECRYPT_MODE, sharedKey, algoPara, IV);
+//				AlgorithmParameters algoPara = sc.getParameters();
+//				if (algoPara == null) {
+//					System.out.println("NULL");
+//				}
+//				IV = new SecureRandom(IVseed);
+//				sc.init(Cipher.DECRYPT_MODE, sharedKey);
+				sc.init(Cipher.DECRYPT_MODE, sharedKey, new IvParameterSpec(IVseed));
+//				sc.init(Cipher.DECRYPT_MODE, sharedKey, IV);
+//				sc.init(Cipher.DECRYPT_MODE, sharedKey, algoPara, IV);
 				byte[] plainText = sc.doFinal(challResp);
 				if (new BigInteger(plainText).intValue() == challenge + 1) {
+					System.out.println("Hooray");
 					return sharedKey;
 				}
 				else {
-					System.out.println(challenge);
+					System.out.println("Boo: " + challenge);
 					System.out.println(new BigInteger(plainText).intValue());
 				}
 			}
