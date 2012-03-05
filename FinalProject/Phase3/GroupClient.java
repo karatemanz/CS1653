@@ -34,8 +34,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// encrypt key and challenge with Group Client's public key
 			Envelope message = null, ciphertext = null, response = null;
 			ciphertext = new Envelope("CHAL");
-			message.addObject(challenge);
-			message.addObject(sharedKey);
+			ciphertext.addObject(challenge);
+			ciphertext.addObject(sharedKey);
 			Cipher envCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
 			envCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
 			SealedObject sealedObject = new SealedObject(ciphertext, envCipher);			
