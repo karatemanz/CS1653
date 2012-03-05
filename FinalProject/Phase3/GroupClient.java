@@ -21,10 +21,16 @@ public class GroupClient extends Client implements GroupClientInterface {
 			rand.nextBytes(b);
 			keyGenAES.init(128, rand);
 			Key sharedKey = keyGenAES.generateKey();
-			System.out.println(sharedKey.getEncoded());
+//			System.out.println(sharedKey.getEncoded());
+//			byte ouch[] = sharedKey.getEncoded();
+//			for (int i = 0; i < ouch.length; i++) {
+//				System.out.print(ouch[i]);
+//			}
+//			System.out.println();
 			
 			// get challenge from same generator as key - may want to change
 			int challenge = (Integer)rand.nextInt();
+			System.out.println(challenge);
 			
 			KeyPack kp = new KeyPack(challenge, sharedKey);
 			
@@ -54,15 +60,24 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// decrypt and verify challenge value + 1 was returned
 			if(response.getMessage().equals("OK")) {
 				ArrayList<Object> temp = null;
-				byte[] challResp = null;
-				temp = response.getObjContents();
-				if (temp.size() == 1) {
-					challResp = (byte[])temp.get(0);
-				}
+//				byte[] challResp = null;
+//				temp = response.getObjContents();
+//				if (temp.size() == 1) {
+//					challResp = (byte[])temp.get(0);
+//				}
+				byte challResp[] = (byte[])response.getObjContents().get(0);
+				
 				// decrypt challenge
-				AlgorithmParameters algoPara = sharedCipher.getParameters();
-				sharedCipher.init(Cipher.DECRYPT_MODE, sharedKey, algoPara, IV);
-				byte[] plainText = sharedCipher.doFinal(challResp);
+				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+				AlgorithmParameters algoPara = sc.getParameters();
+				if (algoPara == null) {
+					System.out.println("NULL");
+				}
+				IV = new SecureRandom(IVseed);
+				sc.init(Cipher.DECRYPT_MODE, sharedKey, IV);
+
+//				sharedCipher.init(Cipher.DECRYPT_MODE, sharedKey, algoPara, IV);
+				byte[] plainText = sc.doFinal(challResp);
 				if (new BigInteger(plainText).intValue() == challenge + 1) {
 					return sharedKey;
 				}
