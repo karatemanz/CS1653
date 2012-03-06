@@ -48,7 +48,6 @@ public class GroupThread extends Thread
 					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
 					// Get KeyPack challenge/key combo from sealedObject
 					KeyPack kcg = (KeyPack)sealedObject.getObject(cipher);
-					
 					int challenge = kcg.getChallenge();
 					sessionKey = kcg.getSecretKey();
 					
