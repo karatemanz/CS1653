@@ -623,11 +623,18 @@ public class GroupThread extends Thread
 		return null;
 	}
 	
-	private SealedObject encryptEnv(Envelope env, byte[]IVarray) {
+	private Envelope encryptEnv(Envelope msg) {
 		try {
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			SecureRandom IV = new SecureRandom();
+			byte IVarray[] = new byte[16];
+			IV.nextBytes(IVarray);
 			cipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
-			return new SealedObject(env, cipher);
+			SealedObject so = new SealedObject(msg, cipher);
+			Envelope encryptedMsg = new Envelope("ENV");
+			encryptedMsg.addObject(so);
+			encryptedMsg.addObject(IVarray);
+			return encryptedMsg;
 		}
 		catch (Exception e) {
 			System.out.println("Error: " + e);
