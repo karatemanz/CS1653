@@ -66,7 +66,7 @@ public class MainUI
 						System.out.println("Session key obtained. Connection to server encrypted.");
 					}
 					else {
-						System.out.println("Error while obtaining session key with Group Server. Exiting.");
+						System.out.println("Error while obtaining session key from Group Server. Exiting.");
 						break;
 					}
 
