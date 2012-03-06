@@ -23,17 +23,16 @@ public class GroupClient extends Client implements GroupClientInterface {
 			keyGenAES.init(128, rand);
 			Key sessionKey = keyGenAES.generateKey();
 			
-			// get challenge from same generator as key - may want to change
+			// get challenge from same generator as key
 			int challenge = (Integer)rand.nextInt();
 			System.out.println(challenge);
 			
 			KeyPack keyPack = new KeyPack(challenge, sessionKey);
 			
 			// create an object for use as IV
-			byte IVseed[] = {13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37};
+			byte IVarray[] = new byte[16];
 			SecureRandom IV = new SecureRandom();
-			IV.setSeed(IVseed);
-			System.out.println("IV: " + IV.toString());
+			IV.nextBytes(IVarray);
 
 			// get Group Server's public key
 			PublicKey groupPubKey = getPubKey();
@@ -44,9 +43,10 @@ public class GroupClient extends Client implements GroupClientInterface {
 			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
 			SealedObject outCipher = new SealedObject(keyPack, msgCipher);
 			
-			// send it to the server
+			// send it to the server with IV array
 			message = new Envelope("KCG");
 			message.addObject(outCipher);
+			message.addObject(IVarray);
 			output.writeObject(message);
 			// get the response from the server
 			response = (Envelope)input.readObject();
@@ -58,7 +58,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 				
 				// decrypt challenge
 				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-				sc.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVseed));
+				sc.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
 				byte[] plainText = sc.doFinal(challResp);
 				if (new BigInteger(plainText).intValue() == challenge + 1) {
 					return sessionKey;
