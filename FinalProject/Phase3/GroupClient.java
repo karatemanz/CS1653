@@ -25,7 +25,6 @@ public class GroupClient extends Client implements GroupClientInterface {
 			
 			// get challenge from same generator as key
 			int challenge = (Integer)rand.nextInt();
-			System.out.println(challenge);
 			
 			KeyPack keyPack = new KeyPack(challenge, sessionKey);
 			
