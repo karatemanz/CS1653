@@ -46,7 +46,7 @@ public class GroupThread extends Thread
 					response.addObject(my_gs.getServerPublicKey());
 					output.writeObject(response);
 				}
-				if (message.getMessage().equals("KCG")) { // Client wants a session key
+				else if (message.getMessage().equals("KCG")) { // Client wants a session key
 					// Decrypt sealed object with private key
 					SealedObject sealedObject = (SealedObject)message.getObjContents().get(0);
 					String algo = sealedObject.getAlgorithm();
