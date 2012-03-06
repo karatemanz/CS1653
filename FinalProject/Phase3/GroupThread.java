@@ -15,6 +15,7 @@ public class GroupThread extends Thread
 {
 	private final Socket socket;
 	private GroupServer my_gs;
+	private Key sessionKey;
 	
 	public GroupThread(Socket _socket, GroupServer _gs)
 	{
@@ -40,56 +41,32 @@ public class GroupThread extends Thread
 				Envelope response;
 				
 				if (message.getMessage().equals("KCG")) { // Client wants a session key
-					// decrypt sealed object with private key
+					// Decrypt sealed object with private key
 					SealedObject sealedObject = (SealedObject)message.getObjContents().get(0);
 					String algo = sealedObject.getAlgorithm();
 					Cipher cipher = Cipher.getInstance(algo);
 					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
-					// get KeyPack
+					// Get KeyPack challenge/key combo from sealedObject
 					KeyPack kcg = (KeyPack)sealedObject.getObject(cipher);
 					
 					int challenge = kcg.getChallenge();
-					Key sharedKey = kcg.getSecretKey();
+					sessionKey = kcg.getSecretKey();
 					
-					System.out.println(sharedKey.getEncoded());
-					byte ouch[] = sharedKey.getEncoded();
-					for (int i = 0; i < ouch.length; i++) {
-						System.out.print(ouch[i]);
-					}
-					System.out.println();
-
-					// encrypt something
-					byte IVseed[] = {13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37};
-					SecureRandom IV = new SecureRandom();
-					IV.setSeed(IVseed);
-					System.out.println("IV: " + IV.toString());
-
+					// Encryption of challenge response
 					Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-
-					// Encryption
 					challenge += 1;
-					System.out.println(challenge);
 					byte plaintext[] = new byte[4];
 					plaintext[0] = (byte)(challenge >> 24);
 					plaintext[1] = (byte)(challenge >> 16);
 					plaintext[2] = (byte)(challenge >> 8);
 					plaintext[3] = (byte)(challenge /*>> 0*/);
-					theCipher.init(Cipher.ENCRYPT_MODE, sharedKey, new IvParameterSpec(IVseed));
-//					theCipher.init(Cipher.ENCRYPT_MODE, sharedKey, IV);
-//					theCipher.init(Cipher.ENCRYPT_MODE, sharedKey);
+					byte IVseed[] = {13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37};
+					theCipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVseed));
 					byte[] cipherText = theCipher.doFinal(plaintext);
-					
-//					System.out.println("getIV(): " + theCipher.getIV());
 
-//					byte IVseed[] = {kcg[0], kcg[1], kcg[2], kcg[3]};
-//					SecureRandom IV = new SecureRandom(IVseed);
-					
-					// set shared key to global
-					
 					// Respond to the client
 					response = new Envelope("OK");
 					response.addObject(cipherText);
-//					response.addObject(theCipher.getIV());
 					output.writeObject(response);
 
 				}
