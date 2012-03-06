@@ -343,6 +343,11 @@ public class GroupClient extends Client implements GroupClientInterface {
 	public Envelope secureMsg (Envelope message) {
 		Security.addProvider(new BouncyCastleProvider());
 		try {
+			// If sessionKey does not exist (e.g. at login), create one
+			if (!getSessionKey()) {
+				// error retrieving session key
+				return null;
+			}
 			// Encrypt original Envelope
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			SecureRandom IV = new SecureRandom();
