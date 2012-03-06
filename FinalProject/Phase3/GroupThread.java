@@ -40,6 +40,12 @@ public class GroupThread extends Thread
 				System.out.println("Request received: " + message.getMessage());
 				Envelope response;
 				
+				// parse through publicly accessible messages
+				if (message.getMessage().equals("GETPUBKEY")) { // Client wants the public key
+					response = new Envelope("OK");
+					response.addObject(my_gs.getServerPublicKey());
+					output.writeObject(response);
+				}
 				if (message.getMessage().equals("KCG")) { // Client wants a session key
 					// Decrypt sealed object with private key
 					SealedObject sealedObject = (SealedObject)message.getObjContents().get(0);
@@ -74,14 +80,18 @@ public class GroupThread extends Thread
 					message = decryptEnv(message);
 					System.out.println("ENV: " + message.getMessage());
 				}
-				else { // do not allow instructions
-					response = new Envelope("FAIL"); //Server does not understand client request
+				else if (message.getMessage().equals("DISCONNECT")) { // Client wants to disconnect
+					socket.close(); // Close the socket
+					proceed = false; // End this communication loop
+				}
+				else {  // Server does not understand client request
+					response = new Envelope("FAIL");
 					output.writeObject(response);
 					proceed = false;
 				}
 				
 				if (!proceed) {
-					// do not do anything else
+					// do nothing, skip rest of else statements and exit
 				}
 				else if (message.getMessage().equals("GET"))//Client wants a token
 				{
