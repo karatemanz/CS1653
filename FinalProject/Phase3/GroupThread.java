@@ -619,4 +619,17 @@ public class GroupThread extends Thread
 		}
 		return null;
 	}
+	
+	private SealedObject encryptEnv(Envelope env, byte[]IVarray) {
+		try {
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			cipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+			return new SealedObject(env, cipher);
+		}
+		catch (Exception e) {
+			System.out.println("Error: " + e);
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
