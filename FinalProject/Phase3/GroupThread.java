@@ -68,7 +68,18 @@ public class GroupThread extends Thread
 					response = new Envelope("OK");
 					response.addObject(cipherText);
 					output.writeObject(response);
-
+				}
+				else if (message.getMessage().equals("ENV")) { // encrypted Envelope
+					// decrypt contents of encrypted Envelope and pass to branches below
+				}
+				else { // do not allow instructions
+					response = new Envelope("FAIL"); //Server does not understand client request
+					output.writeObject(response);
+					proceed = false;
+				}
+				
+				if (!proceed) {
+					// do not do anything else
 				}
 				else if (message.getMessage().equals("GET"))//Client wants a token
 				{
