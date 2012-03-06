@@ -606,12 +606,15 @@ public class GroupThread extends Thread
 		}
 	}
 	
-	private Envelope decryptEnv(SealedObject so, byte[] IVarray) {
+	private Envelope decryptEnv(Envelope msg) {
+		// Remove objects of envelope
+		SealedObject so = (SealedObject)msg.getObjContents().get(0);
+		byte[] IVarray = (byte[])msg.getObjContents().get(1);
 		try {
 			String algo = so.getAlgorithm();
 			Cipher envCipher = Cipher.getInstance(algo);
 			envCipher.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
-			return (Envelope)so.getObject(envCipher);
+			return (Envelope)so.getObject(envCipher); // return decrypted envelope
 		}
 		catch (Exception e) {
 			System.out.println("Error: " + e);
