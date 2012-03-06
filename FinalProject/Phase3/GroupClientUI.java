@@ -9,6 +9,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 public class GroupClientUI
 {
 	GroupClient gc = new GroupClient();
+	private Key sessionKey;
 	
 	public boolean launchUI(UserToken token, String serverName, int portNumber)
 	{
@@ -24,8 +25,15 @@ public class GroupClientUI
 			final int MAXUSERLENGTH = 32;
 			final int MAXGROUPLENGTH = 32;
 			
-			// get shared key
-			Key sharedKey = gc.getSharedKey();
+			// get session key
+			sessionKey = gc.getSessionKey();
+			if (sessionKey == null) {
+				System.out.println("Error while obtaining session key. Exiting.");
+				exitKey = true;
+			}
+			else {
+				System.out.println("Session key obtained. Connection to server encrypted.");
+			}
 			
 			while (!exitKey)
 			{
