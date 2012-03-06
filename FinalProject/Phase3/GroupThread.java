@@ -71,6 +71,8 @@ public class GroupThread extends Thread
 				}
 				else if (message.getMessage().equals("ENV")) { // encrypted Envelope
 					// decrypt contents of encrypted Envelope and pass to branches below
+					message = decryptEnv(message);
+					System.out.println("ENV: " + message.getMessage());
 				}
 				else { // do not allow instructions
 					response = new Envelope("FAIL"); //Server does not understand client request
