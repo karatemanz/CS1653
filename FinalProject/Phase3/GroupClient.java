@@ -111,6 +111,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// Get the response from the server
 			response = secureMsg(message);
 			
+			System.out.println(response.getMessage());
 			// Successful response
 			if (response.getMessage().equals("OK")) {
 				// If there is a token in the Envelope, return it 
@@ -335,13 +336,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 	 }
 
 	public Envelope secureMsg (Envelope message) {
-		Security.addProvider(new BouncyCastleProvider());
 		try {
-			// If sessionKey does not exist (e.g. at login), create one
-			if (!getSessionKey()) {
-				// error retrieving session key
-				return null;
-			}
 			// Encrypt original Envelope
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			SecureRandom IV = new SecureRandom();
