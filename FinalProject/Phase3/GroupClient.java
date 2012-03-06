@@ -14,26 +14,20 @@ public class GroupClient extends Client implements GroupClientInterface {
 	public Key getSharedKey() {
 		Security.addProvider(new BouncyCastleProvider());
 		try {
-			// create symmetric shared key
+			// create symmetric shared key for this session
 			Cipher sharedCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			KeyGenerator keyGenAES = KeyGenerator.getInstance("AES", "BC");
 			SecureRandom rand = new SecureRandom();
 			byte b[] = new byte[20];
 			rand.nextBytes(b);
 			keyGenAES.init(128, rand);
-			Key sharedKey = keyGenAES.generateKey();
-//			System.out.println(sharedKey.getEncoded());
-//			byte ouch[] = sharedKey.getEncoded();
-//			for (int i = 0; i < ouch.length; i++) {
-//				System.out.print(ouch[i]);
-//			}
-//			System.out.println();
+			Key sessionKey = keyGenAES.generateKey();
 			
 			// get challenge from same generator as key - may want to change
 			int challenge = (Integer)rand.nextInt();
 			System.out.println(challenge);
 			
-			KeyPack kp = new KeyPack(challenge, sharedKey);
+			KeyPack keyPack = new KeyPack(challenge, sessionKey);
 			
 			// create an object for use as IV
 			byte IVseed[] = {13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37};
@@ -46,50 +40,31 @@ public class GroupClient extends Client implements GroupClientInterface {
 			
 			// encrypt key and challenge with Group Client's public key
 			Envelope message = null, ciphertext = null, response = null;
-			
-			// encrypt
 			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
 			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
-			SealedObject outCipher = new SealedObject(kp, msgCipher);
+			SealedObject outCipher = new SealedObject(keyPack, msgCipher);
 			
 			// send it to the server
 			message = new Envelope("KCG");
 			message.addObject(outCipher);
 			output.writeObject(message);
-
-			// Get the response from the server
+			// get the response from the server
 			response = (Envelope)input.readObject();
 
 			// decrypt and verify challenge value + 1 was returned
 			if(response.getMessage().equals("OK")) {
 				ArrayList<Object> temp = null;
-//				byte[] challResp = null;
-//				temp = response.getObjContents();
-//				if (temp.size() == 1) {
-//					challResp = (byte[])temp.get(0);
-//				}
 				byte challResp[] = (byte[])response.getObjContents().get(0);
-//				byte respIV[] = (byte[])response.getObjContents().get(1);
 				
 				// decrypt challenge
 				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-//				AlgorithmParameters algoPara = sc.getParameters();
-//				if (algoPara == null) {
-//					System.out.println("NULL");
-//				}
-//				IV = new SecureRandom(IVseed);
-//				sc.init(Cipher.DECRYPT_MODE, sharedKey);
-				sc.init(Cipher.DECRYPT_MODE, sharedKey, new IvParameterSpec(IVseed));
-//				sc.init(Cipher.DECRYPT_MODE, sharedKey, IV);
-//				sc.init(Cipher.DECRYPT_MODE, sharedKey, algoPara, IV);
+				sc.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVseed));
 				byte[] plainText = sc.doFinal(challResp);
 				if (new BigInteger(plainText).intValue() == challenge + 1) {
-					System.out.println("Hooray");
-					return sharedKey;
+					return sessionKey;
 				}
 				else {
-					System.out.println("Boo: " + challenge);
-					System.out.println(new BigInteger(plainText).intValue());
+					System.out.println("Session Key challenge response failed.");
 				}
 			}
 			return null;
