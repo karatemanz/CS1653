@@ -5,7 +5,8 @@ T1: Unauthorized Token Issuance
 -- prompt for password when logging in ***DONE
 -- will need to change User/UserList class to store hashed password ***DONE
 -- will need to store hashed password, part of User class? ***DONE
--- set up secure exchange between client and Group Server
+-- set up secure exchange between client and Group Server ***DONE - need to
+   check for correctness
 -- save Group Server's public key for client (local to them), store also
    for Group Server ***DONE
 -- should we limit the number of characters possible for a password, or
@@ -17,10 +18,13 @@ T2: Token Modification/Forgery
 - set up File Server to decrypt signature (how will it get Group Server public
   key?) ***DONE
 - set up client to accept ACK, continue on with transaction
-- authorize token at every transaction ***DONE
+- authorize token at every transaction
+-- on File Server ***DONE
+-- on Group Server
 
 T3: Unauthorized File Servers
 - have client get and store public key from File Server when first contacting
+  ***DONE
 - set up secure exchange between client and File Server to pass information
 - if File Server can decrypt message encrypted with the public key, then use
   the shared secret key to access File Server operations
