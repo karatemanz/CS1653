@@ -71,12 +71,9 @@ public class GroupThread extends Thread
 					byte[] cipherText = theCipher.doFinal(plaintext);
 
 					// Respond to the client
-					System.out.println("1");
 					response = new Envelope("OK");
 					response.addObject(cipherText);
-					System.out.println("2");
 					output.writeObject(response);
-					System.out.println("3");
 				}
 				else if (message.getMessage().equals("ENV")) { // encrypted Envelope
 					// decrypt contents of encrypted Envelope and pass to branches below
@@ -301,11 +298,6 @@ public class GroupThread extends Thread
 						}
 					}
 					
-					output.writeObject(response);
-				}
-				else if (message.getMessage().equals("GETPUBKEY")) { // Client wants the public key
-					response = new Envelope("OK");
-					response.addObject(my_gs.getServerPublicKey());
 					output.writeObject(response);
 				}
 				else if(message.getMessage().equals("DISCONNECT")) //Client wants to disconnect
