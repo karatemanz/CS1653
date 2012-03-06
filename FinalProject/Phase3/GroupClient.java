@@ -341,6 +341,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 	 }
 
 	public Envelope secureMsg (Envelope message) {
+		Security.addProvider(new BouncyCastleProvider());
 		try {
 			// Encrypt original Envelope
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
