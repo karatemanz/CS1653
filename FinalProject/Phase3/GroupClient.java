@@ -141,9 +141,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 			message.addObject(username); //Add user name string
 			message.addObject(password); //Add user password
 			message.addObject(token); //Add the requester's token
-			output.writeObject(message);
-		
-			response = (Envelope)input.readObject();
+			 
+			 response = secureMsg(message);
 			
 			//If server indicates success, return true
 			if(response.getMessage().equals("OK")) {
@@ -169,9 +168,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 				message = new Envelope("DUSER");
 				message.addObject(username); //Add user name
 				message.addObject(token);  //Add requester's token
-				output.writeObject(message);
-			
-				response = (Envelope)input.readObject();
+				
+				response = secureMsg(message);
 				
 				//If server indicates success, return true
 				if(response.getMessage().equals("OK"))
@@ -198,9 +196,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 				message = new Envelope("CGROUP");
 				message.addObject(groupname); //Add the group name string
 				message.addObject(token); //Add the requester's token
-				output.writeObject(message); 
-			
-				response = (Envelope)input.readObject();
+				
+				response = secureMsg(message);
 				
 				//If server indicates success, return true
 				if(response.getMessage().equals("OK"))
@@ -227,9 +224,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 				message = new Envelope("DGROUP");
 				message.addObject(groupname); //Add group name string
 				message.addObject(token); //Add requester's token
-				output.writeObject(message); 
-			
-				response = (Envelope)input.readObject();
+				
+				response = secureMsg(message);
 				//If server indicates success, return true
 				if(response.getMessage().equals("OK"))
 				{
@@ -256,9 +252,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 			 message = new Envelope("LMEMBERS");
 			 message.addObject(group); //Add group name string
 			 message.addObject(token); //Add requester's token
-			 output.writeObject(message); 
-			 
-			 response = (Envelope)input.readObject();
+
+			 response = secureMsg(message);
 			 
 			 //If server indicates success, return the member list
 			 if(response.getMessage().equals("OK"))
@@ -287,9 +282,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 				message.addObject(username); //Add user name string
 				message.addObject(groupname); //Add group name string
 				message.addObject(token); //Add requester's token
-				output.writeObject(message); 
-			
-				response = (Envelope)input.readObject();
+				
+				response = secureMsg(message);
 				//If server indicates success, return true
 				if(response.getMessage().equals("OK"))
 				{
@@ -316,9 +310,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 				message.addObject(username); //Add user name string
 				message.addObject(groupname); //Add group name string
 				message.addObject(token); //Add requester's token
-				output.writeObject(message);
-			
-				response = (Envelope)input.readObject();
+				
+				response = secureMsg(message);
 				//If server indicates success, return true
 				if(response.getMessage().equals("OK"))
 				{
