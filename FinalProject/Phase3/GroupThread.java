@@ -71,9 +71,12 @@ public class GroupThread extends Thread
 					byte[] cipherText = theCipher.doFinal(plaintext);
 
 					// Respond to the client
+					System.out.println("1");
 					response = new Envelope("OK");
 					response.addObject(cipherText);
+					System.out.println("2");
 					output.writeObject(response);
+					System.out.println("3");
 				}
 				else if (message.getMessage().equals("ENV")) { // encrypted Envelope
 					// decrypt contents of encrypted Envelope and pass to branches below

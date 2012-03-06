@@ -34,14 +34,11 @@ public class GroupClient extends Client implements GroupClientInterface {
 			byte IVarray[] = new byte[16];
 			SecureRandom IV = new SecureRandom();
 			IV.nextBytes(IVarray);
-
-			// get Group Server's public key
-			PublicKey groupPubKey = getPubKey();
 			
 			// encrypt key and challenge with Group Client's public key
 			Envelope message = null, ciphertext = null, response = null;
 			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
-			msgCipher.init(Cipher.ENCRYPT_MODE, groupPubKey);
+			msgCipher.init(Cipher.ENCRYPT_MODE, getPubKey());
 			SealedObject outCipher = new SealedObject(keyPack, msgCipher);
 			
 			// send it to the server with IV array
@@ -54,9 +51,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 
 			// decrypt and verify challenge value + 1 was returned
 			if(response.getMessage().equals("OK")) {
-				ArrayList<Object> temp = null;
 				byte challResp[] = (byte[])response.getObjContents().get(0);
-				
 				// decrypt challenge
 				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 				sc.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
