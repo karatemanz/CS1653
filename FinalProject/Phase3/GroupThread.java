@@ -450,8 +450,9 @@ public class GroupThread extends Thread
 					}
 				}
 				
-				// remove this group from owner's list
+				// remove this group from owner's lists
 				my_gs.userList.removeGroup(requester, groupname);
+				my_gs.userList.removeOwnership(requester, groupname);
 				
 				return true;
 			}
