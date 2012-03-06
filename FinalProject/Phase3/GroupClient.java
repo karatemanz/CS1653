@@ -48,10 +48,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// get the response from the server
 			response = (Envelope)input.readObject();
 
-			System.out.println(response.getMessage());
 			// decrypt and verify challenge value + 1 was returned
-			if(response.getMessage().equals("OK")) {
-				System.out.println("here");
+			if (response.getMessage().equals("OK")) {
 				byte challResp[] = (byte[])response.getObjContents().get(0);
 				// decrypt challenge
 				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
