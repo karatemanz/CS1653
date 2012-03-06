@@ -136,7 +136,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			e.printStackTrace(System.err);
 			return null;
 		}
-	 }
+	}
 	 
 	 public boolean createUser(String username, char[] password, UserToken token) {
 		 try {
