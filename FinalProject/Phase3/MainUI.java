@@ -3,8 +3,7 @@ import java.util.List; // to create test UserToken
 import java.util.Arrays; // to create test UserToken
 import java.io.Console;
 
-public class MainUI
-{
+public class MainUI {
     public static void main(String[] args) {
 		if (args.length == 2) {
 			try {
@@ -22,8 +21,7 @@ public class MainUI
 		}
 	}
 	
-	public static void loginMenu(String groupServerAddress, int groupServerPort)
-	{
+	public static void loginMenu(String groupServerAddress, int groupServerPort) {
 		FileClient fc = new FileClient();
 		GroupClient gc = new GroupClient();
 		Scanner scan = new Scanner(System.in); // Scanner object for input
@@ -38,22 +36,18 @@ public class MainUI
 		String serverAddress;
 		int portNumber;
 		
-		while (!exitKey)
-		{
+		while (!exitKey) {
 			System.out.print("Enter 1 to login,\nenter 2 to exit...\n> ");
 			inputString = scan.nextLine();
 			
-			try
-			{
+			try {
 				menuChoice = Integer.parseInt(inputString);
 			}
-			catch(Exception e)
-			{
+			catch(Exception e) {
 				menuChoice = -1;
 			}
 			
-			if (menuChoice == 1)
-			{
+			if (menuChoice == 1) {
 				System.out.print("Enter your username to login...\n> ");
 				userName = scan.nextLine();
 				char pwArray[] = console.readPassword("Enter your password...\n> ");
@@ -72,11 +66,12 @@ public class MainUI
 
 					userToken = gc.getToken(userName, pwArray);
 					if (userToken == null) { // no login for that name
-						System.out.println("Username not recognized. Contact Admin.");
+						System.out.println("Username/password combination not recognized.");
 						gc.disconnect();
 					}
 					else { // has a valid token, can disconnect from gc
 						hasToken = true;
+						System.out.println("Password accepted. Welcome, " + userName);
 						gc.disconnect();
 					}
 				}
@@ -84,18 +79,15 @@ public class MainUI
 					System.out.println("Error - Group Server not reached at given address.");
 				}
 			}
-			else if (menuChoice == 2)
-			{
+			else if (menuChoice == 2) {
 				System.out.println("Exiting...");
 				exitKey = true;
 			}
-			else
-			{
+			else {
 				System.out.println("Unknown command. Please try again.");
 			}
 			
-			while (hasToken)
-			{
+			while (hasToken) {
 				System.out.print("Main menu:\n" +
 								 "Enter 1 to connect to the File Server,\n" +
 								 "enter 2 to connect to the Group Server,\n" +
@@ -103,17 +95,14 @@ public class MainUI
 								 userName + "> ");
 				inputString = scan.nextLine();
 				
-				try
-				{
+				try {
 					menuChoice = Integer.parseInt(inputString);
 				}
-				catch(Exception e)
-				{
+				catch(Exception e) {
 					menuChoice = -1;
 				}
 
-				switch (menuChoice)
-				{
+				switch (menuChoice) {
 					case 1:
 						// prompt user for server address, port
 						System.out.print("Please enter the IP address of the File Server...\n" +
