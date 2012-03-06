@@ -50,6 +50,8 @@ public class GroupThread extends Thread
 					KeyPack kcg = (KeyPack)sealedObject.getObject(cipher);
 					int challenge = kcg.getChallenge();
 					sessionKey = kcg.getSecretKey();
+					// Get IV from message
+					byte IVarray[] = (byte[])message.getObjContents().get(1);
 					
 					// Encryption of challenge response
 					Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
@@ -59,8 +61,7 @@ public class GroupThread extends Thread
 					plaintext[1] = (byte)(challenge >> 16);
 					plaintext[2] = (byte)(challenge >> 8);
 					plaintext[3] = (byte)(challenge /*>> 0*/);
-					byte IVseed[] = {13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37, 13, 91, 101, 37};
-					theCipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVseed));
+					theCipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
 					byte[] cipherText = theCipher.doFinal(plaintext);
 
 					// Respond to the client
