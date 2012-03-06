@@ -360,6 +360,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			if (encResponse.getMessage().equals("ENV")) {
 				// Decrypt Envelope contents
 				SealedObject inCipher = (SealedObject)encResponse.getObjContents().get(0);
+				IVarray = (byte[])encResponse.getObjContents().get(1);
 				String algo = inCipher.getAlgorithm();
 				Cipher envCipher = Cipher.getInstance(algo);
 				envCipher.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
