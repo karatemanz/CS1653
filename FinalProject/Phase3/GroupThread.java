@@ -605,4 +605,18 @@ public class GroupThread extends Thread
 			return false; //requester does not exist
 		}
 	}
+	
+	private Envelope decryptEnv(SealedObject so, byte[] IVarray) {
+		try {
+			String algo = so.getAlgorithm();
+			Cipher envCipher = Cipher.getInstance(algo);
+			envCipher.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+			return (Envelope)so.getObject(envCipher);
+		}
+		catch (Exception e) {
+			System.out.println("Error: " + e);
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
