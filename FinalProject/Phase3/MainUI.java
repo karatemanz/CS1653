@@ -60,22 +60,27 @@ public class MainUI
 				
 				// connect to group server and get token
 				gc.connect(groupServerAddress, groupServerPort);
-				if (gc.isConnected()) // check that server is running
-				{
+				if (gc.isConnected()) { // check that server is running
+					// get session key
+					if (gc.getSessionKey()) {
+						System.out.println("Session key obtained. Connection to server encrypted.");
+					}
+					else {
+						System.out.println("Error while obtaining session key with Group Server. Exiting.");
+						break;
+					}
+
 					userToken = gc.getToken(userName, pwArray);
-					if (userToken == null) // no login for that name
-					{
+					if (userToken == null) { // no login for that name
 						System.out.println("Username not recognized. Contact Admin.");
 						gc.disconnect();
 					}
-					else // has a valid token, can disconnect from gc
-					{
+					else { // has a valid token, can disconnect from gc
 						hasToken = true;
 						gc.disconnect();
 					}
 				}
-				else
-				{
+				else {
 					System.out.println("Error - Group Server not reached at given address.");
 				}
 			}
