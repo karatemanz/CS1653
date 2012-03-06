@@ -345,4 +345,32 @@ public class GroupClient extends Client implements GroupClientInterface {
 			}
 	 }
 
+	public Envelope secureMsg (Envelope message) {
+		// Encrypt original Envelope
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+		SecureRandom IV = new SecureRandom();
+		byte IVarray[] = new byte[16];
+		IV.nextBytes(IVarray);
+		cipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+		SealedObject outCipher = new SealedObject(message, cipher);
+		// Create new Envelope with encrypted data and IV
+		Envelope cipherMsg = new Envelope("ENV");
+		Envelope encResponse = null;
+		cipherMsg.addObject(outCipher);
+		cipherMsg.addObject(IVarray);
+		output.writeObject(cipherMsg);
+		// Get and decrypt response
+		encResponse = (Envelope)input.readObject();
+		if (encResponse.getMessage().equals("ENV")) {
+			// Decrypt Envelope contents
+			SealedObject inCipher = (SealedObject)encResponse.getObjContents().get(0);
+			String algo = inCipher.getAlgorithm();
+			Cipher envCipher = Cipher.getInstance(algo);
+			envCipher.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+			return (Envelope)inCipher.getObject(envCipher);
+		}
+		else {
+			return null;
+		}
+	}
 }
