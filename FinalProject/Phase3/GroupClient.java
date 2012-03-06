@@ -11,7 +11,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.math.BigInteger;
 
 public class GroupClient extends Client implements GroupClientInterface {
-	public Key getSharedKey() {
+	public Key getSessionKey() {
 		Security.addProvider(new BouncyCastleProvider());
 		try {
 			// create symmetric shared key for this session
