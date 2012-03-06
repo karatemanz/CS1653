@@ -11,7 +11,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.math.BigInteger;
 
 public class GroupClient extends Client implements GroupClientInterface {
-	public Key getSessionKey() {
+	private Key sessionKey;
+	
+	public boolean getSessionKey() {
 		Security.addProvider(new BouncyCastleProvider());
 		try {
 			// create symmetric shared key for this session
@@ -21,7 +23,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			byte b[] = new byte[20];
 			rand.nextBytes(b);
 			keyGenAES.init(128, rand);
-			Key sessionKey = keyGenAES.generateKey();
+			sessionKey = keyGenAES.generateKey();
 			
 			// get challenge from same generator as key
 			int challenge = (Integer)rand.nextInt();
@@ -60,20 +62,18 @@ public class GroupClient extends Client implements GroupClientInterface {
 				sc.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
 				byte[] plainText = sc.doFinal(challResp);
 				if (new BigInteger(plainText).intValue() == challenge + 1) {
-					return sessionKey;
+					return true;
 				}
 				else {
 					System.out.println("Session Key challenge response failed.");
 				}
 			}
-			return null;
 		}
 		catch(Exception e) {
 			System.out.println("Error: " + e);
 			e.printStackTrace();
 		}
-		
-		return null;
+		return false;
 	}
 	
 	public PublicKey getPubKey() {
