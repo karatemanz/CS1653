@@ -604,4 +604,26 @@ public class GroupThread extends Thread
 		}
 		return null;
 	}
+	
+	public boolean authToken(Token aToken) {
+		try {
+			// Signature verification
+			Signature signed = Signature.getInstance("SHA1WithRSA", "BC");
+			signed.initVerify(my_gs.getServerPublicKey());
+			signed.update(aToken.getContents().getBytes());
+			if (signed.verify(aToken.getSignature())) {
+				// RSA Signature verified
+				return true;
+			}
+			else {
+				// RSA Signature bad
+				return false;
+			}
+		}
+		catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+		}
+		return false;
+	}
 }
