@@ -176,19 +176,40 @@ public class FileClient extends Client implements FileClientInterface {
 				env = secureMsg(env);
 								
 				while (env.getMessage().compareTo("CHUNK")==0) { 
-						fos.write((byte[])env.getObjContents().get(0), 0, (Integer)env.getObjContents().get(1));
-						System.out.printf(".");
-						env = new Envelope("DOWNLOADF"); // Success
-						output.writeObject(env);
-						env = (Envelope)input.readObject();									
+					fos.write((byte[])env.getObjContents().get(0), 0, (Integer)env.getObjContents().get(1));
+					System.out.printf(".");
+					env = new Envelope("DOWNLOADF"); // Success
+					
+					env = secureMsg(env);
 				}										
 				fos.close();
 				
 				if (env.getMessage().compareTo("EOF")==0) {
-					 fos.close();
-						System.out.printf("\nTransfer successful file %s\n", sourceFile);
-						env = new Envelope("OK"); //Success
-						output.writeObject(env);
+					fos.close();
+					System.out.printf("\nTransfer successful file %s\n", sourceFile);
+					env = new Envelope("OK"); //Success
+
+					// send envelope, don't need response so don't use secureMsg
+					try {
+						// Encrypt original Envelope
+						Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+						SecureRandom IV = new SecureRandom();
+						byte IVarray[] = new byte[16];
+						IV.nextBytes(IVarray);
+						cipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+						SealedObject outCipher = new SealedObject(env, cipher);
+						// Create new Envelope with encrypted data and IV
+						Envelope cipherMsg = new Envelope("ENV");
+						Envelope encResponse = null;
+						cipherMsg.addObject(outCipher);
+						cipherMsg.addObject(IVarray);
+						output.writeObject(cipherMsg);
+					}
+					catch(Exception e) {
+						System.out.println("Error: " + e);
+						e.printStackTrace();
+					}
+
 				}
 				else {
 						System.out.printf("Error reading file %s (%s)\n", sourceFile, env.getMessage());
@@ -207,7 +228,7 @@ public class FileClient extends Client implements FileClientInterface {
 			System.out.printf("Error couldn't create file %s\n", destFile);
 			return false;
 		}
-		catch (ClassNotFoundException e1) {
+		catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		return true;
