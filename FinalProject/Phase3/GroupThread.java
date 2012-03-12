@@ -16,11 +16,13 @@ public class GroupThread extends Thread
 	private final Socket socket;
 	private GroupServer my_gs;
 	private Key sessionKey;
+	private PrivateKey privateKey;
 	
-	public GroupThread(Socket _socket, GroupServer _gs)
+	public GroupThread(Socket _socket, GroupServer _gs, PrivateKey _pk)
 	{
 		socket = _socket;
 		my_gs = _gs;
+		privateKey = _pk;
 	}
 	
 	public void run()
@@ -51,7 +53,7 @@ public class GroupThread extends Thread
 					SealedObject sealedObject = (SealedObject)message.getObjContents().get(0);
 					String algo = sealedObject.getAlgorithm();
 					Cipher cipher = Cipher.getInstance(algo);
-					cipher.init(Cipher.DECRYPT_MODE, my_gs.getPrivateKey());
+					cipher.init(Cipher.DECRYPT_MODE, privateKey);
 					// Get KeyPack challenge/key combo from sealedObject
 					KeyPack kcg = (KeyPack)sealedObject.getObject(cipher);
 					int challenge = kcg.getChallenge();
