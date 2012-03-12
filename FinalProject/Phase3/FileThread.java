@@ -205,19 +205,19 @@ public class FileThread extends Thread {
 										file.createNewFile();
 										FileOutputStream fos = new FileOutputStream(file);
 										System.out.printf("Successfully created file %s\n", remotePath.replace('/', '_'));
-
 										response = new Envelope("READY"); // Success
 										output.writeObject(encryptEnv(response));
 
-										e = (Envelope)input.readObject();
-										while (e.getMessage().compareTo("CHUNK")==0) {
+										e = decryptEnv((Envelope)input.readObject());
+
+										while (e.getMessage().compareTo("CHUNK") == 0) {
 											fos.write((byte[])e.getObjContents().get(0), 0, (Integer)e.getObjContents().get(1));
 											response = new Envelope("READY"); // Success
 											output.writeObject(encryptEnv(response));
-											e = (Envelope)input.readObject();
+											e = decryptEnv((Envelope)input.readObject());
 										}
 
-										if (e.getMessage().compareTo("EOF")==0) {
+										if (e.getMessage().compareTo("EOF") == 0) {
 											System.out.printf("Transfer successful file %s\n", remotePath);
 											FileServer.fileList.addFile(yourToken.getSubject(), group, remotePath);
 											response = new Envelope("OK"); // Success
@@ -283,7 +283,7 @@ public class FileThread extends Thread {
 											e.addObject(buf);
 											e.addObject(new Integer(n));
 											output.writeObject(encryptEnv(e));
-											e = (Envelope)input.readObject();
+											e = decryptEnv((Envelope)input.readObject());
 										} while (fis.available() > 0);
 
 										// If server indicates success, return the member list
@@ -293,7 +293,7 @@ public class FileThread extends Thread {
 											e = new Envelope("EOF");
 											output.writeObject(encryptEnv(e));
 
-											e = (Envelope)input.readObject();
+											e = decryptEnv((Envelope)input.readObject());
 											if (e.getMessage().compareTo("OK") == 0) {
 												System.out.printf("File data upload successful\n");
 											}
