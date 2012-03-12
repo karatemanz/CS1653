@@ -116,6 +116,7 @@ public class MainUI {
 										   portNumber + "...");
 						FileClientUI fcu = new FileClientUI();
 						fcu.launchUI(userToken, serverAddress, portNumber);
+						hasToken = false;
 						break;
 					case 2:
 						System.out.println("Connecting to Group Server...");
