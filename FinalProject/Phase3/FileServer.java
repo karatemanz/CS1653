@@ -40,7 +40,7 @@ public class FileServer extends Server {
 		String keyFile = "FS" + port + "KeyList.bin";
 		ObjectInputStream fileStream;
 		Security.addProvider(new BouncyCastleProvider());
-		final int RSAKEYSIZE = 1024;
+		final int RSAKEYSIZE = 2048;
 		
 		//This runs a thread that saves the lists on program exit
 		Runtime runtime = Runtime.getRuntime();
