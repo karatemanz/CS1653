@@ -91,7 +91,7 @@ public class GroupThread extends Thread
 							output.writeObject(encryptEnv(response));
 						}
 						else {
-							UserToken yourToken = createToken(username, password); // Create a token
+							Token yourToken = createToken(username, password); // Create a token
 							// Respond to the client. On error, the client will receive a null token
 							response = new Envelope("OK");
 							response.addObject(yourToken);
@@ -112,10 +112,13 @@ public class GroupThread extends Thread
 								
 								String username = (String)message.getObjContents().get(0); // Extract the username
 								char[] password = (char[])message.getObjContents().get(1); // Extract the password
-								UserToken yourToken = (UserToken)message.getObjContents().get(2); // Extract the token
+								Token yourToken = (Token)message.getObjContents().get(2); // Extract the token
 								
-								if (createUser(username, password, yourToken)) {
-									response = new Envelope("OK"); // Success
+								// Check token's authenticity
+								if (authToken(yourToken)) {
+									if (createUser(username, password, yourToken)) {
+										response = new Envelope("OK"); // Success
+									}
 								}
 							}
 						}
@@ -133,10 +136,13 @@ public class GroupThread extends Thread
 							{
 								if (message.getObjContents().get(1) != null) {
 									String username = (String)message.getObjContents().get(0); // Extract the username
-									UserToken yourToken = (UserToken)message.getObjContents().get(1); // Extract the token
+									Token yourToken = (Token)message.getObjContents().get(1); // Extract the token
 									
-									if( deleteUser(username, yourToken)) {
-										response = new Envelope("OK"); //Success
+									// Check token's authenticity
+									if (authToken(yourToken)) {
+										if(deleteUser(username, yourToken)) {
+											response = new Envelope("OK"); //Success
+										}
 									}
 								}
 							}
@@ -153,10 +159,13 @@ public class GroupThread extends Thread
 							if (message.getObjContents().get(0) != null) {
 								if (message.getObjContents().get(1) != null) {
 									String groupname = (String)message.getObjContents().get(0); // Extract the group name
-									UserToken yourToken = (UserToken)message.getObjContents().get(1); // Extract the token
+									Token yourToken = (Token)message.getObjContents().get(1); // Extract the token
 									
-									if (createGroup(groupname, yourToken)) {
-										response = new Envelope("OK"); // Success
+									// Check token's authenticity
+									if (authToken(yourToken)) {
+										if (createGroup(groupname, yourToken)) {
+											response = new Envelope("OK"); // Success
+										}
 									}
 								}
 							}
@@ -173,10 +182,13 @@ public class GroupThread extends Thread
 							if (message.getObjContents().get(0) != null) {
 								if (message.getObjContents().get(1) != null) {
 									String groupname = (String)message.getObjContents().get(0); // Extract the group name
-									UserToken yourToken = (UserToken)message.getObjContents().get(1); // Extract the token
+									Token yourToken = (Token)message.getObjContents().get(1); // Extract the token
 									
-									if (deleteGroup(groupname, yourToken)) {
-										response = new Envelope("OK"); // Success
+									// Check token's authenticity
+									if (authToken(yourToken)) {
+										if (deleteGroup(groupname, yourToken)) {
+											response = new Envelope("OK"); // Success
+										}
 									}
 								}
 							}
@@ -185,7 +197,7 @@ public class GroupThread extends Thread
 					}
 					else if (message.getMessage().equals("LMEMBERS")) { //Client wants a list of members in a group
 						String groupName = (String)message.getObjContents().get(0); //Get the groupName
-						UserToken yourToken = (UserToken)message.getObjContents().get(1); //Extract the token
+						Token yourToken = (Token)message.getObjContents().get(1); //Extract the token
 						
 						if (groupName == null) {
 							response = new Envelope("FAIL");
@@ -193,11 +205,14 @@ public class GroupThread extends Thread
 							output.writeObject(encryptEnv(response));
 						}
 						else {
-							List<String> memberList = listMembers(groupName, yourToken); // Create a token
-							// Respond to the client. On error, the client will receive a null List
-							response = new Envelope("OK");
-							response.addObject(memberList);
-							output.writeObject(encryptEnv(response));
+							// Check token's authenticity
+							if (authToken(yourToken)) {
+								List<String> memberList = listMembers(groupName, yourToken);
+								// Respond to the client. On error, the client will receive a null List
+								response = new Envelope("OK");
+								response.addObject(memberList);
+								output.writeObject(encryptEnv(response));
+							}
 						}
 					}
 					else if(message.getMessage().equals("AUSERTOGROUP")) { // Client wants to add user to a group
@@ -212,10 +227,13 @@ public class GroupThread extends Thread
 									if (message.getObjContents().get(1) != null) {
 										String username = (String)message.getObjContents().get(0); // Extract the username
 										String groupname = (String)message.getObjContents().get(1); // Extract the group name
-										UserToken yourToken = (UserToken)message.getObjContents().get(2); // Extract the token
+										Token yourToken = (Token)message.getObjContents().get(2); // Extract the token
 										
-										if (addUserToGroup(username, groupname, yourToken)) {
-											response = new Envelope("OK"); // Success
+										// Check token's authenticity
+										if (authToken(yourToken)) {
+											if (addUserToGroup(username, groupname, yourToken)) {
+												response = new Envelope("OK"); // Success
+											}
 										}
 									}
 								}
@@ -235,10 +253,13 @@ public class GroupThread extends Thread
 									if (message.getObjContents().get(1) != null) {
 										String username = (String)message.getObjContents().get(0); // Extract the username
 										String groupname = (String)message.getObjContents().get(1); // Extract the group name
-										UserToken yourToken = (UserToken)message.getObjContents().get(2); // Extract the token
+										Token yourToken = (Token)message.getObjContents().get(2); // Extract the token
 										
-										if (deleteUserFromGroup(username, groupname, yourToken)) {
-											response = new Envelope("OK"); // Success
+										// Check token's authenticity
+										if (authToken(yourToken)) {
+											if (deleteUserFromGroup(username, groupname, yourToken)) {
+												response = new Envelope("OK"); // Success
+											}
 										}
 									}
 								}
