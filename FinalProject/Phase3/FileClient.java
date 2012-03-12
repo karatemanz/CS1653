@@ -7,8 +7,92 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.security.*;
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import java.math.BigInteger;
 
 public class FileClient extends Client implements FileClientInterface {
+	private Key sessionKey;
+	
+	public boolean getSessionKey() {
+		Security.addProvider(new BouncyCastleProvider());
+		try {
+			// create symmetric shared key for this session
+			Cipher sharedCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			KeyGenerator keyGenAES = KeyGenerator.getInstance("AES", "BC");
+			SecureRandom rand = new SecureRandom();
+			byte b[] = new byte[20];
+			rand.nextBytes(b);
+			keyGenAES.init(128, rand);
+			sessionKey = keyGenAES.generateKey();
+			// get challenge from same generator as key
+			int challenge = (Integer)rand.nextInt();
+			
+			KeyPack keyPack = new KeyPack(challenge, sessionKey);
+			
+			// create an object for use as IV
+			byte IVarray[] = new byte[16];
+			SecureRandom IV = new SecureRandom();
+			IV.nextBytes(IVarray);
+			
+			// encrypt key and challenge with Group Client's public key
+			Envelope message = null, ciphertext = null, response = null;
+			Cipher msgCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+			msgCipher.init(Cipher.ENCRYPT_MODE, getPubKey());
+			SealedObject outCipher = new SealedObject(keyPack, msgCipher);
+			
+			// send it to the server with IV array
+			message = new Envelope("KCF");
+			message.addObject(outCipher);
+			message.addObject(IVarray);
+			output.writeObject(message);
+			// get the response from the server
+			response = (Envelope)input.readObject();
+			
+			// decrypt and verify challenge value + 1 was returned
+			if (response.getMessage().equals("OK")) {
+				byte challResp[] = (byte[])response.getObjContents().get(0);
+				// decrypt challenge
+				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+				sc.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+				byte[] plainText = sc.doFinal(challResp);
+				if (new BigInteger(plainText).intValue() == challenge + 1) {
+					return true;
+				}
+				else {
+					System.out.println("Session Key challenge response failed.");
+				}
+			}
+		}
+		catch(Exception e) {
+			System.out.println("Error: " + e);
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public PublicKey getPubKey() {
+		try {
+			Envelope message = null, response = null;			
+			// Tell the server to return its public key.
+			message = new Envelope("GETPUBKEY");
+			output.writeObject(message);
+			// Get the response from the server
+			response = (Envelope)input.readObject();
+			// If successful response, return public key
+			if(response.getMessage().equals("OK")) {
+				return (PublicKey)response.getObjContents().get(0);
+			}
+			return null;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+
 	public PublicKey getKey() {
 		try {
 			Envelope message = null, e = null;
