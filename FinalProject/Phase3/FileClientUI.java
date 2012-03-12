@@ -106,6 +106,15 @@ public class FileClientUI
 				System.exit(-1);
 			}
 			
+			// get session key
+			if (gc.getSessionKey()) {
+				System.out.println("Session key obtained. Connection to server encrypted.");
+			}
+			else {
+				System.out.println("Error while obtaining session key. Exiting.");
+				exitKey = true;
+			}
+			
 			while (!exitKey) {
 				if (currentGroup.length() > 0)
 				{
