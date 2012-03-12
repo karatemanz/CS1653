@@ -50,7 +50,7 @@ public class FileThread extends Thread {
 				}
 				else if (e.getMessage().equals("KCF")) { // Client wants a session key
 					// Decrypt sealed object with private key
-					SealedObject sealedObject = (SealedObject)message.getObjContents().get(0);
+					SealedObject sealedObject = (SealedObject)e.getObjContents().get(0);
 					String algo = sealedObject.getAlgorithm();
 					Cipher cipher = Cipher.getInstance(algo);
 					cipher.init(Cipher.DECRYPT_MODE, fsPrivKey);
