@@ -42,12 +42,12 @@ public class FileThread extends Thread {
 				System.out.println("Request received: " + e.getMessage());
 
 				// First parse through publicly accessible messages
-				if (message.getMessage().equals("GETPUBKEY")) { // Client wants the public key
+				if (e.getMessage().equals("GETPUBKEY")) { // Client wants the public key
 					response = new Envelope("OK");
 					response.addObject(my_fs.getServerPublicKey());
 					output.writeObject(response);
 				}
-				else if (message.getMessage().equals("KCF")) { // Client wants a session key
+				else if (e.getMessage().equals("KCF")) { // Client wants a session key
 					// Decrypt sealed object with private key
 					SealedObject sealedObject = (SealedObject)message.getObjContents().get(0);
 					String algo = sealedObject.getAlgorithm();
@@ -58,7 +58,7 @@ public class FileThread extends Thread {
 					int challenge = kcf.getChallenge();
 					sessionKey = kcf.getSecretKey();
 					// Get IV from message
-					byte IVarray[] = (byte[])message.getObjContents().get(1);
+					byte IVarray[] = (byte[])e.getObjContents().get(1);
 					
 					// Encryption of challenge response
 					Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
@@ -76,9 +76,9 @@ public class FileThread extends Thread {
 					response.addObject(cipherText);
 					output.writeObject(response);
 				}
-				else if (message.getMessage().equals("ENV")) { // encrypted Envelope
+				else if (e.getMessage().equals("ENV")) { // encrypted Envelope
 					// decrypt contents of encrypted Envelope and pass to branches below
-					message = decryptEnv(message);
+					Envelope message = decryptEnv(e);
 					System.out.println("ENV: " + message.getMessage());
 				
 					if (e.getMessage().equals("LGROUPS")) {
