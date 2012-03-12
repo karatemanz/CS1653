@@ -172,10 +172,9 @@ public class FileClient extends Client implements FileClientInterface {
 				env.addObject(sourceFile);
 				env.addObject(group);
 				env.addObject(token);
-				output.writeObject(env); 
-			
-				env = (Envelope)input.readObject();
-				
+
+				env = secureMsg(env);
+								
 				while (env.getMessage().compareTo("CHUNK")==0) { 
 						fos.write((byte[])env.getObjContents().get(0), 0, (Integer)env.getObjContents().get(1));
 						System.out.printf(".");
@@ -217,17 +216,14 @@ public class FileClient extends Client implements FileClientInterface {
 	@SuppressWarnings("unchecked")
 	public List<String> listFiles(UserToken token) {
 		try {
-			Envelope message = null, e = null;
+			Envelope message = null, env = null;
 			message = new Envelope("LFILES");
 			message.addObject(token); // Add requester's token
-			output.writeObject(message); 
+
+			env = secureMsg(message);
 			
-			e = (Envelope)input.readObject();
-			
-			// If server indicates success, return the member list
-			if(e.getMessage().equals("OK"))
-			{ 
-				return (List<String>)e.getObjContents().get(0); // This cast creates compiler warnings. Sorry.
+			if (env.getMessage().equals("OK")) { 
+				return (List<String>)env.getObjContents().get(0); // This cast creates compiler warnings. Sorry.
 			}
 			
 			return null;
@@ -242,18 +238,16 @@ public class FileClient extends Client implements FileClientInterface {
 	@SuppressWarnings("unchecked")
 	public List<String> listGroups(UserToken token) {
 		try {
-			Envelope message = null, e = null;
+			Envelope message = null, env = null;
 			// Tell the server to return the group list
 			message = new Envelope("LGROUPS");
 			message.addObject(token); // Add requester's token
-			output.writeObject(message); 
 			
-			e = (Envelope)input.readObject();
+			env = secureMsg(message);
 			
 			// If server indicates success, return the member list
-			if(e.getMessage().equals("OK"))
-			{ 
-				return (List<String>)e.getObjContents().get(0); // This cast creates compiler warnings. Sorry.
+			if (env.getMessage().equals("OK")) { 
+				return (List<String>)env.getObjContents().get(0); // This cast creates compiler warnings. Sorry.
 			}
 			
 			return null;
@@ -268,19 +262,17 @@ public class FileClient extends Client implements FileClientInterface {
 	@SuppressWarnings("unchecked")
 	public List<String> changeGroup(String group, UserToken token) {
 		try {
-			Envelope message = null, e = null;
+			Envelope message = null, env = null;
 			message = new Envelope("CGROUP");
 			message.addObject(group); // Add requester's group
 			message.addObject(token); // Add requester's token
-			output.writeObject(message); 
-
-			e = (Envelope)input.readObject();
+			
+			env = secureMsg(message);
 
 			// If server indicates success, return the group that it was changed to
-			if(e.getMessage().equals("OK")) { 
-				return (List<String>)e.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
+			if (env.getMessage().equals("OK")) { 
+				return (List<String>)env.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
 			}
-
 			return null;			 
 		}
 		catch(Exception e) {
@@ -301,11 +293,10 @@ public class FileClient extends Client implements FileClientInterface {
 			message.addObject(destFile);
 			message.addObject(group);
 			message.addObject(token); // Add requester's token
-			output.writeObject(message);
 
 			FileInputStream fis = new FileInputStream(sourceFile);
 
-			env = (Envelope)input.readObject();
+			env = secureMsg(message);
 
 			// If server indicates success, return the member list
 			if (env.getMessage().equals("READY")) { 
@@ -335,18 +326,15 @@ public class FileClient extends Client implements FileClientInterface {
 				message.addObject(buf);
 				message.addObject(new Integer(n));
 
-				output.writeObject(message);
-
-				env = (Envelope)input.readObject();
+				env = secureMsg(message);
 			}
 			while (fis.available() > 0);		 
 					 
 			if (env.getMessage().compareTo("READY") == 0) { 
-				
 				message = new Envelope("EOF");
-				output.writeObject(message);
 				
-				env = (Envelope)input.readObject();
+				env = secureMsg(message);
+				
 				if (env.getMessage().compareTo("OK") == 0) {
 					System.out.printf("\nFile data upload successful\n");
 				}
