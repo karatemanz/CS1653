@@ -13,36 +13,32 @@ import java.security.*;
 import javax.crypto.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class FileThread extends Thread
-{
+public class FileThread extends Thread {
 	private final Socket socket;
 	public final PublicKey fsKey;
 	public final PublicKey gsKey;
 
-	public FileThread(Socket _socket, PublicKey _fsKey, PublicKey _gsKey)
-	{
+	public FileThread(Socket _socket, PublicKey _fsKey, PublicKey _gsKey) {
 		socket = _socket;
 		fsKey = _fsKey;
 		gsKey = _gsKey;
 	}
 
-	public void run()
-	{
+	public void run() {
 		boolean proceed = true;
 		Security.addProvider(new BouncyCastleProvider());
 
-		try
-		{
+		try {
 			System.out.println("*** New connection from " + socket.getInetAddress() + ":" + socket.getPort() + "***");
 			final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 			final ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 			Envelope response;
 
-			do
-			{
+			do {
 				Envelope e = (Envelope)input.readObject();
 				System.out.println("Request received: " + e.getMessage());
 
+				// First parse through publicly accessible messages
 				if(e.getMessage().equals("LGROUPS"))
 				{
 					if(e.getObjContents().size() < 1)
