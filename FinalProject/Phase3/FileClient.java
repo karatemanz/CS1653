@@ -93,27 +93,38 @@ public class FileClient extends Client implements FileClientInterface {
 		}
 	}
 
-	public PublicKey getKey() {
+	public Envelope secureMsg (Envelope message) {
 		try {
-			Envelope message = null, e = null;
-			message = new Envelope("GETPUBKEY");
-			output.writeObject(message); 
-			
-			e = (Envelope)input.readObject();
-			
-			//If server indicates success, return the member list
-			if(e.getMessage().equals("OK"))
-			{ 
-				return (PublicKey)e.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
+			// Encrypt original Envelope
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			SecureRandom IV = new SecureRandom();
+			byte IVarray[] = new byte[16];
+			IV.nextBytes(IVarray);
+			cipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+			SealedObject outCipher = new SealedObject(message, cipher);
+			// Create new Envelope with encrypted data and IV
+			Envelope cipherMsg = new Envelope("ENV");
+			Envelope encResponse = null;
+			cipherMsg.addObject(outCipher);
+			cipherMsg.addObject(IVarray);
+			output.writeObject(cipherMsg);
+			// Get and decrypt response
+			encResponse = (Envelope)input.readObject();
+			if (encResponse.getMessage().equals("ENV")) {
+				// Decrypt Envelope contents
+				SealedObject inCipher = (SealedObject)encResponse.getObjContents().get(0);
+				IVarray = (byte[])encResponse.getObjContents().get(1);
+				String algo = inCipher.getAlgorithm();
+				Cipher envCipher = Cipher.getInstance(algo);
+				envCipher.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+				return (Envelope)inCipher.getObject(envCipher);
 			}
-			
-			return null;
 		}
 		catch(Exception e) {
-			System.err.println("Error: " + e.getMessage());
-			e.printStackTrace(System.err);
-			return null;
+			System.out.println("Error: " + e);
+			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	public boolean delete(String filename, String group, UserToken token) {
