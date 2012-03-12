@@ -1,5 +1,5 @@
 T1: Unauthorized Token Issuance
-- require password creation/confirmation
+- require password creation/confirmation ***DONE
 -- Group Server, when first launched without a UserList.bin file, needs to
    prompt for password when creating first user/admin ***DONE
 -- prompt for password when logging in ***DONE
@@ -15,24 +15,27 @@ T1: Unauthorized Token Issuance
 T2: Token Modification/Forgery
 - change Token class to store signature, provide tokenized stringv ***DONE
 - set up secure exchange between client and File Server to pass information
+  ***DONE
 - set up File Server to decrypt signature (how will it get Group Server public
   key?) ***DONE
-- set up client to accept ACK, continue on with transaction
-- authorize token at every transaction
+- set up client to accept ACK, continue on with transaction ***DONE (?)
+- authorize token at every transaction ***DONE
 -- on File Server ***DONE
--- on Group Server
+-- on Group Server ***DONE
 
 T3: Unauthorized File Servers
 - have client get and store public key from File Server when first contacting
   ***DONE
 - set up secure exchange between client and File Server to pass information
+  ***DONE
 - if File Server can decrypt message encrypted with the public key, then use
-  the shared secret key to access File Server operations
+  the shared secret key to access File Server operations ***DONE
 - will need to encrypt the file transfer process - CHUNK appears to be defined
-  in FileThread (download) / FileClient (upload) - 4096 bytes?
+  in FileThread (download) / FileClient (upload) - 4096 bytes? ***DONE
 
 T4: Information Leakage via Passive Monitoring
 - use the same methods as we used in T1 - T3 to encrypt communication, ya dummy
+  ***DONE
 
 Notes:
-- maybe to do later - add PW change to GroupClientUI - no time right now (?)
+- maybe to do later - add PW change to GroupClientUI
