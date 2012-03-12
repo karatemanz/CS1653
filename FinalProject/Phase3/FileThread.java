@@ -39,18 +39,18 @@ public class FileThread extends Thread {
 			Envelope response;
 
 			do {
-				Envelope e = (Envelope)input.readObject();
-				System.out.println("Request received: " + e.getMessage());
+				Envelope env = (Envelope)input.readObject();
+				System.out.println("Request received: " + env.getMessage());
 
 				// First parse through publicly accessible messages
-				if (e.getMessage().equals("GETPUBKEY")) { // Client wants the public key
+				if (env.getMessage().equals("GETPUBKEY")) { // Client wants the public key
 					response = new Envelope("OK");
 					response.addObject(my_fs.getServerPublicKey());
 					output.writeObject(response);
 				}
-				else if (e.getMessage().equals("KCF")) { // Client wants a session key
+				else if (env.getMessage().equals("KCF")) { // Client wants a session key
 					// Decrypt sealed object with private key
-					SealedObject sealedObject = (SealedObject)e.getObjContents().get(0);
+					SealedObject sealedObject = (SealedObject)env.getObjContents().get(0);
 					String algo = sealedObject.getAlgorithm();
 					Cipher cipher = Cipher.getInstance(algo);
 					cipher.init(Cipher.DECRYPT_MODE, fsPrivKey);
@@ -59,7 +59,7 @@ public class FileThread extends Thread {
 					int challenge = kcf.getChallenge();
 					sessionKey = kcf.getSecretKey();
 					// Get IV from message
-					byte IVarray[] = (byte[])e.getObjContents().get(1);
+					byte IVarray[] = (byte[])env.getObjContents().get(1);
 					
 					// Encryption of challenge response
 					Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
@@ -77,10 +77,10 @@ public class FileThread extends Thread {
 					response.addObject(cipherText);
 					output.writeObject(response);
 				}
-				else if (e.getMessage().equals("ENV")) { // encrypted Envelope
+				else if (env.getMessage().equals("ENV")) { // encrypted Envelope
 					// decrypt contents of encrypted Envelope and pass to branches below
-					Envelope message = decryptEnv(e);
-					System.out.println("ENV: " + message.getMessage());
+					Envelope e = decryptEnv(env);
+					System.out.println("ENV: " + e.getMessage());
 				
 					if (e.getMessage().equals("LGROUPS")) {
 						if (e.getObjContents().size() < 1) {
@@ -364,7 +364,7 @@ public class FileThread extends Thread {
 						}
 					}
 				}
-				else if (e.getMessage().equals("DISCONNECT")) {
+				else if (env.getMessage().equals("DISCONNECT")) {
 					socket.close();
 					proceed = false;
 				}
