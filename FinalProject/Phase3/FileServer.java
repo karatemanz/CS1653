@@ -168,7 +168,7 @@ public class FileServer extends Server {
 			while(running)
 			{
 				sock = serverSock.accept();
-				thread = new FileThread(sock, keys.getPublic(), gsPublicKey);
+				thread = new FileThread(sock, this, keys.getPrivate(), gsPublicKey);
 				thread.start();
 			}
 			
