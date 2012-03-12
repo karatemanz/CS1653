@@ -27,7 +27,7 @@ public class FileClientUI
 			String destFileName;
 			String fsFile = "FileServerList.bin";
 			ObjectInputStream ois;
-			PublicKey thisFSKey = fc.getKey();
+			PublicKey thisFSKey = fc.getPubKey();
 			FileServerID thisFS = new FileServerID(serverAddress, portNumber, thisFSKey);
 
 			// determine whether or not this server has been used before
