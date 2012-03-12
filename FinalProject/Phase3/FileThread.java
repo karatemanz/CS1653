@@ -102,7 +102,7 @@ public class FileThread extends Thread {
 								}
 							}
 						}
-						output.writeObject(response);
+						output.writeObject(encryptEnv(response));
 					}
 					else if (e.getMessage().equals("CGROUP")) {
 						if (e.getObjContents().size() < 2) {
@@ -136,7 +136,7 @@ public class FileThread extends Thread {
 								}
 							}
 						}
-						output.writeObject(response);
+						output.writeObject(encryptEnv(response));
 					}
 					// Handler to list files that this user is allowed to see
 					else if (e.getMessage().equals("LFILES")) {
@@ -170,7 +170,7 @@ public class FileThread extends Thread {
 								}
 							}
 						}
-						output.writeObject(response);
+						output.writeObject(encryptEnv(response));
 					}
 					else if (e.getMessage().equals("UPLOADF")) {
 
@@ -207,13 +207,13 @@ public class FileThread extends Thread {
 										System.out.printf("Successfully created file %s\n", remotePath.replace('/', '_'));
 
 										response = new Envelope("READY"); // Success
-										output.writeObject(response);
+										output.writeObject(encryptEnv(response));
 
 										e = (Envelope)input.readObject();
 										while (e.getMessage().compareTo("CHUNK")==0) {
 											fos.write((byte[])e.getObjContents().get(0), 0, (Integer)e.getObjContents().get(1));
 											response = new Envelope("READY"); // Success
-											output.writeObject(response);
+											output.writeObject(encryptEnv(response));
 											e = (Envelope)input.readObject();
 										}
 
@@ -235,7 +235,7 @@ public class FileThread extends Thread {
 							}
 						}
 
-						output.writeObject(response);
+						output.writeObject(encryptEnv(response));
 					}
 					else if (e.getMessage().compareTo("DOWNLOADF") == 0) {
 						String remotePath = (String)e.getObjContents().get(0);
@@ -246,12 +246,12 @@ public class FileThread extends Thread {
 							if (sf == null) {
 								System.out.printf("Error: File %s doesn't exist\n", remotePath);
 								e = new Envelope("ERROR_FILEMISSING");
-								output.writeObject(e);
+								output.writeObject(encryptEnv(e));
 							}
 							else if (!sf.getGroup().equals(group)){
 								System.out.printf("Error user %s doesn't have permission\n", t.getSubject());
 								e = new Envelope("ERROR_GROUP_PERMISSION");
-								output.writeObject(e);
+								output.writeObject(encryptEnv(e));
 							}
 							else {
 								try {
@@ -259,7 +259,7 @@ public class FileThread extends Thread {
 									if (!f.exists()) {
 										System.out.printf("Error file %s missing from disk\n", "_"+remotePath.replace('/', '_'));
 										e = new Envelope("ERROR_NOTONDISK");
-										output.writeObject(e);
+										output.writeObject(encryptEnv(e));
 
 									}
 									else {
@@ -282,7 +282,7 @@ public class FileThread extends Thread {
 
 											e.addObject(buf);
 											e.addObject(new Integer(n));
-											output.writeObject(e);
+											output.writeObject(encryptEnv(e));
 											e = (Envelope)input.readObject();
 										} while (fis.available() > 0);
 
@@ -291,7 +291,7 @@ public class FileThread extends Thread {
 										{
 
 											e = new Envelope("EOF");
-											output.writeObject(e);
+											output.writeObject(encryptEnv(e));
 
 											e = (Envelope)input.readObject();
 											if (e.getMessage().compareTo("OK") == 0) {
@@ -314,7 +314,7 @@ public class FileThread extends Thread {
 						}
 						else {
 							e = new Envelope("FAIL-BADTOKENAUTH");
-							output.writeObject(e);
+							output.writeObject(encryptEnv(e));
 						}
 					}
 					else if (e.getMessage().compareTo("DELETEF") == 0) {
@@ -356,11 +356,11 @@ public class FileThread extends Thread {
 									e = new Envelope(e1.getMessage());
 								}
 							}
-						output.writeObject(e);
+						output.writeObject(encryptEnv(e));
 						}
 						else {
 							e = new Envelope("FAIL-BADTOKENAUTH");
-							output.writeObject(e);
+							output.writeObject(encryptEnv(e));
 						}
 					}
 				}
@@ -373,7 +373,7 @@ public class FileThread extends Thread {
 					output.writeObject(encryptEnv(response));
 					proceed = false;
 				}
-			} while(proceed);
+			} while (proceed);
 		}
 		catch(Exception e)
 		{
