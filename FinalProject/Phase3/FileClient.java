@@ -140,9 +140,8 @@ public class FileClient extends Client implements FileClientInterface {
 	    env.addObject(group);
 	    env.addObject(token);
 	    try {
-			output.writeObject(env);
-		    env = (Envelope)input.readObject();
-		    
+			env = secureMsg(env);
+
 			if (env.getMessage().compareTo("OK")==0) {
 				System.out.printf("File %s deleted successfully\n", filename);				
 			}
@@ -151,13 +150,10 @@ public class FileClient extends Client implements FileClientInterface {
 				return false;
 			}			
 		}
-		catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		}
-	    	
+		catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+		}	    	
 		return true;
 	}
 
