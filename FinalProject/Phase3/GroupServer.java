@@ -146,7 +146,7 @@ public class GroupServer extends Server {
 			while(true)
 			{
 				sock = serverSock.accept();
-				thread = new GroupThread(sock, this);
+				thread = new GroupThread(sock, this, keys.getPrivate());
 				thread.start();
 			}
 		}
@@ -244,10 +244,6 @@ public class GroupServer extends Server {
 			e.printStackTrace(System.err);
 			return false;
 		}
-	}
-	
-	public PrivateKey getPrivateKey() {
-		return keys.getPrivate();
 	}
 }
 
