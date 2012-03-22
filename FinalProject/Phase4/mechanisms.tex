@@ -25,13 +25,16 @@
 \subsection{Threat Description}
 Begin by describing the threat treated in this section. This may include describing examples of the threat being exploited by an adversary, a short discussion of why this threat is problematic and needs to be addressed, and/or diagrams showing how the threat might manifest in your group’s current implementation.
 \subsection{Mechanism Description}
-Next, provide a short description of the mechanism that you chose to implement to protect against this threat. For interactive protocols, it would be helpful to provide a diagram explaining the messages exchanged between participating principals. (See the notes from Lecture 10 for example diagrams.) Be sure to explain any cryptographic choices that your group makes: What types of algorithms, modes of operation, and/or key lengths did you chose? Why? If shared keys are needed, how are they exchanged?
-as an active connection to the Group Server.
+The mechanism builds upon the protocols used in Threats 1-4 that establish a secure session key between a client and a server. Though messages passed in the session are secure from eavesdropping, they are not secure from reorder, replay, or modification. We use two methods to eliminate these new threats: sequence numbers and message authentication.
+
+Sequence numbers are a simple yet effective tool that would alert either end of channel that a message has ben reordered or replayed. We modify our message format so that it includes an integer field to store the sequence number. Then, after receiving a message, the receiving party increments the sequence number by 1 and uses that value in their response. Replays and reordering of messages are easily detectable by either party, as the sequence number will reveal an inconsistency.
+
+Message authentication is a cryptographic principal that is used to verify that a message has not been tampered with.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics{threat5.eps}
 \caption{Threat 5 Mechanism}
-\label{threat1}
+\label{threat5}
 \end{center}
 \end{figure}
 \subsection{Correctness and Security of Mechanism}
@@ -39,18 +42,18 @@ Lastly, provide a short argument addressing why your proposed mechanism sufficie
 % Threat 6
 \section{Threat 6: File Leakage}
 \subsection{Threat Description}
-stub
+Begin by describing the threat treated in this section. This may include describing examples of the threat being exploited by an adversary, a short discussion of why this threat is problematic and needs to be addressed, and/or diagrams showing how the threat might manifest in your group’s current implementation.
 \subsection{Mechanism Description}
-stub
+Next, provide a short description of the mechanism that you chose to implement to protect against this threat. For interactive protocols, it would be helpful to provide a diagram explaining the messages exchanged between participating principals. (See the notes from Lecture 10 for example diagrams.) Be sure to explain any cryptographic choices that your group makes: What types of algorithms, modes of operation, and/or key lengths did you chose? Why? If shared keys are needed, how are they exchanged?
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics{threat6.eps}
 \caption{Threat 6 Mechanism}
-\label{threat2}
+\label{threat6}
 \end{center}
 \end{figure}
 \subsection{Correctness and Security of Mechanism}
-stub
+Lastly, provide a short argument addressing why your proposed mechanism sufficiently addresses this particular threat. This argument should address the correctness of your approach, as well as its overall security. For example, if your mechanism involves a key agreement or key exchange protocol, you should argue that both parties agree on the same key (correctness) and that no other party can figure out the key (security).
 % Threat 7
 \section{Threat 7: Token Theft}
 \subsection{Threat Description}
@@ -61,7 +64,7 @@ stub
 \begin{center}
 \includegraphics{threat7.eps}
 \caption{Threat 7 Mechanism}
-\label{threat3}
+\label{threat7}
 \end{center}
 \end{figure}
 \subsection{Correctness and Security of Mechanism}
