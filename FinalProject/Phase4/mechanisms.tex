@@ -47,18 +47,25 @@ Begin by describing the threat treated in this section. This may include describ
 Next, provide a short description of the mechanism that you chose to implement to protect against this threat. For interactive protocols, it would be helpful to provide a diagram explaining the messages exchanged between participating principals. (See the notes from Lecture 10 for example diagrams.) Be sure to explain any cryptographic choices that your group makes: What types of algorithms, modes of operation, and/or key lengths did you chose? Why? If shared keys are needed, how are they exchanged?
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics{threat6a.eps}
+\includegraphics{threat6.eps}
 \caption{Threat 6 Mechanism: Hashtable and Operations}
+\label{threat6}
+\end{center}
+\end{figure}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics{threat6a.eps}
+\caption{Threat 6 Mechanism: Upload Diagram}
 \label{threat6a}
 \end{center}
 \end{figure}
-%\begin{figure}[htbp]
-%\begin{center}
-%\includegraphics{threat6b.eps}
-%\caption{Threat 6 Mechanism: Diagram}
-%\label{threat6b}
-%\end{center}
-%\end{figure}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics{threat6c.eps}
+\caption{Threat 6 Mechanism: Download Diagram}
+\label{threat6c}
+\end{center}
+\end{figure}
 \subsection{Correctness and Security of Mechanism}
 Lastly, provide a short argument addressing why your proposed mechanism sufficiently addresses this particular threat. This argument should address the correctness of your approach, as well as its overall security. For example, if your mechanism involves a key agreement or key exchange protocol, you should argue that both parties agree on the same key (correctness) and that no other party can figure out the key (security).
 % Threat 7
