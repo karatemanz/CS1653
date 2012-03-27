@@ -61,7 +61,7 @@ We start with a master version integer V$_\text{M}$, which represents the curren
 \end{figure}
 The Group Server handles the creation of the symmetric key as well. When the key is needed, the Group Server creates an array of bytes consisting of the unique file properties, concatenates the version number of the file onto that array (either V$_\text{M}$ for a new or modified file, V for an existing file), and then encrypts that array with its private key k$_\text{G}^{-1}$ using RSA. To prevent possible excessive exposure of private key encryptions, the encrypted data is then subjected to a 256-bit SHA hash to provide the final key that will be used for final encryption. The use of 256-bit SHA instead of the 160-bit SHA1 hash is twofold: the extra bits provide increased confidentiality and a 256-bit value is easily usable for 256-bit AES encryption.
 
-Once the key is created, the Group Server can send it over a secure channel to the Client, whose software need not expose it to him/her but simply use it to encrypt the data that is being sent to the File Server (see Figure \ref{threat6a}) or decrypt data being received from the File Server (see Figure \ref{threat6c}). Thus, the Client and Group Server are the only parties who have any access to the key, leaving a malicious or leaky File Server with encrypted files that are of little use to anyone but authenticated group members.
+Once the key is created, the Group Server can send it over a secure channel to the Client, whose software need not expose it to him/her but simply use it to encrypt the data that is being sent to the File Server (see Figure \ref{threat6a}) or decrypt data being received from the File Server (see Figure \ref{threat6c}). Thus, the client application and Group Server are the only parties who have any access to the key, leaving a malicious or leaky File Server with encrypted files that are of little use to anyone but authenticated group members.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics{threat6a.eps}
@@ -77,13 +77,21 @@ Once the key is created, the Group Server can send it over a secure channel to t
 \end{center}
 \end{figure}
 \subsection{Correctness and Security of Mechanism}
-To illustrate the security of the mechanism, we need to fully explain the handling of version numbers and how it affects forward and backward secrecy as group membership changes. As shown in Figure \ref{threat6}, the typical event that changes the master version number V$_\text{M}$ is when a member is removed from a group.
+To illustrate the security of the mechanism, we need to fully explain the handling of version numbers and how it affects forward and backward secrecy as group membership changes. As shown in Figure \ref{threat6}, the primary event that changes the master version number V$_\text{M}$ is when a member is removed from a group. When that occurs, V$_\text{M}$ is incremented by 1, and all subsequent file uploads are encrypted with keys that are generated with version numbers higher than the last version number used by the expelled group member, which we'll refer to as V$^\prime$.
+
+If the expelled group member was generally unmalicious, then when he or she tries to access files from their former group, the Group Server would see that the user was no longer in the group and deny access to the file's key. Any previous downloads of unencrypted group files cannot be prevented, but future attempts at downloads by a user playing by the rules are thwarted. If the user was more malicious, he or she may have been able to, while still a group member, intercept the key sent from the Group Server to the client application. With this key, he or she could decrypt leaked encrypted files from the File Server, but \emph{only} if the key's version number was the same as the leaked file.
+
+This property illustrates the backward secrecy of the mechanism -- without group privilege, the user is no longer able to intercept keys created after version V$^\prime$. Thus, any file uploaded after the user was expelled from the group is undecipherable by key version V$^\prime$ or any keys of a previous version number.
+
+Forward secrecy is not guaranteed by this mechanism, but can be eventually built if any of the files encrypted with key versions V$^\prime$ or earlier are modified, as any upload is encrypted with V$_\text{M}$.
+%%%%%%%%%%%%%%% DO CORRECTNESS
 % Threat 7
 \section{Threat 7: Token Theft}
 \subsection{Threat Description}
 stub
 \subsection{Mechanism Description}
 (see Figure \ref{threat7})
+%%%%% show assumption of legit File Server playing by the rules and checking File Server ID
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics{threat7.eps}
