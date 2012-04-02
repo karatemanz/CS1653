@@ -318,6 +318,14 @@ public class GroupThread extends Thread
 		}
 	}
 	
+	// Method to create a signed token with the File Server ID set
+	private Token createFileServerToken(Token aToken, String address, String port) {
+		Token fsToken = new Token(aToken.getIssuer(),
+								  aToken.getSubject(),
+								  aToken.getGroups(),
+								  address, port);
+		return my_gs.getSignedToken(fsToken);								  
+	}
 	
 	//Method to create a user
 	private boolean createUser(String username, char[] password, UserToken yourToken)
