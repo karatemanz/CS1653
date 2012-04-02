@@ -100,6 +100,24 @@ public class GroupThread extends Thread
 							output.writeObject(encryptEnv(response));
 						}
 					}
+					else if (message.getMessage().equals("GETFST")) // Client wants a token for the File Server
+					{
+						Token token = (Token)message.getObjContents().get(0);
+						String address = (String)message.getObjContents().get(1);
+						String port = (String)message.getObjContents().get(2);
+						
+						if (token == null) {
+							response = new Envelope("FAIL");
+							response.addObject(null);
+							output.writeObject(encryptEnv(response));
+						}
+						else {
+							Token yourToken = createFileServerToken(token, address, port);
+							response = new Envelope("OK");
+							response.addObject(yourToken);
+							output.writeObject(encryptEnv(response));
+						}
+					}
 					else if (message.getMessage().equals("CUSER")) //Client wants to create a user
 					{
 						if (message.getObjContents().size() < 3) {
