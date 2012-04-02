@@ -7,6 +7,8 @@ public class Token implements UserToken, java.io.Serializable
 	private String issuer;
 	private String subject;
 	private List<String> groups;
+	private String fileServerAddress;
+	private String fileServerPort;
 	private byte[] signature;
 
 	public Token(String anIssuer, String aSubject, List<String> theGroups) {
@@ -19,6 +21,15 @@ public class Token implements UserToken, java.io.Serializable
 		issuer = new String(anIssuer);
 		subject = new String(aSubject);
 		groups = theGroups;
+		signature = theSignature;
+	}
+	
+	public Token(String anIssuer, String aSubject, List<String> theGroups, String address, String port, byte[] theSignature) {
+		issuer = new String(anIssuer);
+		subject = new String(aSubject);
+		groups = theGroups;
+		fileServerAddress = address;
+		fileServerPort = port;
 		signature = theSignature;
 	}
 
@@ -61,6 +72,14 @@ public class Token implements UserToken, java.io.Serializable
     public List<String> getGroups() {
 		return groups;
     }
+
+	public String getFileServerAddress () {
+		return fileServerAddress;
+	}
+	
+	public String getFileServerPort () {
+		return fileServerPort;
+	}
 	
 	public byte[] getSignature() {
 		return signature;
@@ -76,6 +95,8 @@ public class Token implements UserToken, java.io.Serializable
 		for (int i = 0; i < groups.size(); i++) {
 			contents.append(groups.get(i));
 		}
+		contents.append(fileServerAddress);
+		contents.append(fileServerPort);
 		return contents.toString();
 	}
 }
