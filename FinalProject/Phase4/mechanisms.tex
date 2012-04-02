@@ -55,27 +55,27 @@ We start with a master version integer V$_\text{M}$, which represents the curren
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics{threat6.eps}
-\caption{Threat 6 Mechanism: Hashtable and Operations}
+\caption{Threat 6 Mechanism}
 \label{threat6}
 \end{center}
 \end{figure}
 The Group Server handles the creation of the symmetric key as well. When the key is needed, the Group Server creates an array of bytes consisting of the unique file properties, concatenates the version number of the file onto that array (either V$_\text{M}$ for a new or modified file, V for an existing file), and then encrypts that array with its private key k$_\text{G}^{-1}$ using RSA. To prevent possible excessive exposure of private key encryptions, the encrypted data is then subjected to a 256-bit SHA hash to provide the final key that will be used for final encryption. The use of 256-bit SHA instead of the 160-bit SHA1 hash is twofold: the extra bits provide increased confidentiality and a 256-bit value is easily usable for 256-bit AES encryption.
 
 Once the key is created, the Group Server can send it over a secure channel to the Client, whose software need not expose it to him/her but simply use it to encrypt the data that is being sent to the File Server (see Figure \ref{threat6a}) or decrypt data being received from the File Server (see Figure \ref{threat6c}). Thus, the client application and Group Server are the only parties who have any access to the key, leaving a malicious or leaky File Server with encrypted files that are of little use to anyone but authenticated group members.
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics{threat6a.eps}
-\caption{Threat 6 Mechanism: Upload Diagram}
-\label{threat6a}
-\end{center}
-\end{figure}
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics{threat6c.eps}
-\caption{Threat 6 Mechanism: Download Diagram}
-\label{threat6c}
-\end{center}
-\end{figure}
+%\begin{figure}[htbp]
+%\begin{center}
+%\includegraphics{threat6a.eps}
+%\caption{Threat 6 Mechanism: Upload Diagram}
+%\label{threat6a}
+%\end{center}
+%\end{figure}
+%\begin{figure}[htbp]
+%\begin{center}
+%\includegraphics{threat6c.eps}
+%\caption{Threat 6 Mechanism: Download Diagram}
+%\label{threat6c}
+%\end{center}
+%\end{figure}
 \subsection{Correctness and Security of Mechanism}
 To illustrate the security of the mechanism, we need to fully explain the handling of version numbers and how it affects forward and backward secrecy as group membership changes. As shown in Figure \ref{threat6}, the primary event that changes the master version number V$_\text{M}$ is when a member is removed from a group. When that occurs, V$_\text{M}$ is incremented by 1, and all subsequent file uploads are encrypted with keys that are generated with version numbers higher than the last version number used by the expelled group member, which we'll refer to as V$^\prime$.
 
