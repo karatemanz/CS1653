@@ -139,7 +139,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			
 			System.out.println(response.getMessage());
 			// Successful response
-			if (response.getMessage().equals("OK")) {
+			if (checkResponse(response.getMessage())) {
 				// If there is a token in the Envelope, return it 
 				ArrayList<Object> temp = null;
 				temp = response.getObjContents();
@@ -175,7 +175,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			
 			System.out.println(response.getMessage());
 			// Successful response
-			if (response.getMessage().equals("OK")) {
+			if (checkResponse(response.getMessage())) {
 				// If there is a token in the Envelope, return it 
 				ArrayList<Object> temp = null;
 				temp = response.getObjContents();
@@ -207,7 +207,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			 response = secureMsg(message);
 			
 			//If server indicates success, return true
-			if(response.getMessage().equals("OK")) {
+			if (checkResponse(response.getMessage())) {
 				return true;
 			}
 			
@@ -220,33 +220,30 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 	}
 	 
-	 public boolean deleteUser(String username, UserToken token)
-	 {
-		 try
-			{
-				Envelope message = null, response = null;
-			 
-				//Tell the server to delete a user
-				message = new Envelope("DUSER");
-				message.addObject(username); //Add user name
-				message.addObject(token);  //Add requester's token
-				
-				response = secureMsg(message);
-				
-				//If server indicates success, return true
-				if(response.getMessage().equals("OK"))
-				{
-					return true;
-				}
-				
-				return false;
+	public boolean deleteUser(String username, UserToken token)
+	{
+		try {
+			Envelope message = null, response = null;
+		 
+			//Tell the server to delete a user
+			message = new Envelope("DUSER");
+			message.addObject(username); //Add user name
+			message.addObject(token);  //Add requester's token
+			
+			response = secureMsg(message);
+			
+			//If server indicates success, return true
+			if (checkResponse(response.getMessage())) {
+				return true;
 			}
-			catch(Exception e)
-			{
-				System.err.println("Error: " + e.getMessage());
-				e.printStackTrace(System.err);
-				return false;
-			}
+			
+			return false;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return false;
+		}
 	 }
 	 
 	 public boolean createGroup(String groupname, UserToken token)
@@ -262,8 +259,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 				response = secureMsg(message);
 				
 				//If server indicates success, return true
-				if(response.getMessage().equals("OK"))
-				{
+				if (checkResponse(response.getMessage())) {
 					return true;
 				}
 				
@@ -289,8 +285,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 				
 				response = secureMsg(message);
 				//If server indicates success, return true
-				if(response.getMessage().equals("OK"))
-				{
+				if (checkResponse(response.getMessage())) {
 					return true;
 				}
 				
@@ -318,8 +313,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			 response = secureMsg(message);
 			 
 			 //If server indicates success, return the member list
-			 if(response.getMessage().equals("OK"))
-			 { 
+			 if (checkResponse(response.getMessage())) {
 				return (List<String>)response.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
 			 }
 				
@@ -347,8 +341,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 				
 				response = secureMsg(message);
 				//If server indicates success, return true
-				if(response.getMessage().equals("OK"))
-				{
+				if (checkResponse(response.getMessage())) {
 					return true;
 				}
 				
@@ -362,33 +355,30 @@ public class GroupClient extends Client implements GroupClientInterface {
 			}
 	 }
 	 
-	 public boolean deleteUserFromGroup(String username, String groupname, UserToken token)
-	 {
-		 try
-			{
-				Envelope message = null, response = null;
-				//Tell the server to remove a user from the group
-				message = new Envelope("RUSERFROMGROUP");
-				message.addObject(username); //Add user name string
-				message.addObject(groupname); //Add group name string
-				message.addObject(token); //Add requester's token
-				
-				response = secureMsg(message);
-				//If server indicates success, return true
-				if(response.getMessage().equals("OK"))
-				{
-					return true;
-				}
-				
-				return false;
+	public boolean deleteUserFromGroup(String username, String groupname, UserToken token)
+	{
+		try {
+			Envelope message = null, response = null;
+			//Tell the server to remove a user from the group
+			message = new Envelope("RUSERFROMGROUP");
+			message.addObject(username); //Add user name string
+			message.addObject(groupname); //Add group name string
+			message.addObject(token); //Add requester's token
+			
+			response = secureMsg(message);
+			//If server indicates success, return true
+			if (checkResponse(response.getMessage())) {
+				return true;
 			}
-			catch(Exception e)
-			{
-				System.err.println("Error: " + e.getMessage());
-				e.printStackTrace(System.err);
-				return false;
-			}
-	 }
+			
+			return false;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return false;
+		}
+	}
 
 	public Envelope secureMsg(Envelope message) {
 		try {
@@ -458,4 +448,20 @@ public class GroupClient extends Client implements GroupClientInterface {
 		return bos.toByteArray();
 	}
 
+	public boolean checkResponse(String resp) {
+		if (resp.equals("OK")) {
+			return true;
+		}
+		else if (resp.equals("HMACFAIL")) {
+			System.out.println("Secure Message HMAC FAIL");
+			return false;
+		}
+		else if (resp.equals("SEQFAIL")) {
+			System.out.println("Secure Message sequence FAIL.");
+			return false;
+		}
+		else {
+			return false;
+		}
+	}
 }
