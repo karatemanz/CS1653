@@ -104,7 +104,7 @@ public class GroupThread extends Thread
 					{
 						Token token = (Token)message.getObjContents().get(0);
 						String address = (String)message.getObjContents().get(1);
-						String port = (String)message.getObjContents().get(2);
+						int port = (Integer)message.getObjContents().get(2);
 						
 						if (token == null) {
 							response = new Envelope("FAIL");
@@ -337,7 +337,7 @@ public class GroupThread extends Thread
 	}
 	
 	// Method to create a signed token with the File Server ID set
-	private Token createFileServerToken(Token aToken, String address, String port) {
+	private Token createFileServerToken(Token aToken, String address, int port) {
 		Token fsToken = new Token(aToken.getIssuer(),
 								  aToken.getSubject(),
 								  aToken.getGroups(),
