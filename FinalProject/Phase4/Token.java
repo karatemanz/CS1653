@@ -24,7 +24,7 @@ public class Token implements UserToken, java.io.Serializable
 		signature = theSignature;
 	}
 	
-	public Token(String anIssuer, String aSubject, List<String> theGroups, String address, String port) {
+	public Token(String anIssuer, String aSubject, List<String> theGroups, String address, int port) {
 		issuer = new String(anIssuer);
 		subject = new String(aSubject);
 		groups = theGroups;
