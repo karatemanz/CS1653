@@ -70,7 +70,6 @@ public class GroupThread extends Thread
 					// Respond to the client
 					response = new Envelope("OK");
 					response.addObject(challenge);
-					response.addObject(sequence);
 					output.writeObject(encryptEnv(response));
 				}
 				else if (message.getMessage().equals("ENV")) { // encrypted Envelope
@@ -624,16 +623,6 @@ public class GroupThread extends Thread
 				return new Envelope("SEQFAIL");
 			}
 		}
-//		
-//		// Remove objects of envelope
-//		SealedObject so = (SealedObject)msg.getObjContents().get(0);
-//		byte[] IVarray = (byte[])msg.getObjContents().get(1);
-//		try {
-//			String algo = so.getAlgorithm();
-//			Cipher envCipher = Cipher.getInstance(algo);
-//			envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-//			return (Envelope)so.getObject(envCipher); // return decrypted envelope
-//		}
 		catch (Exception e) {
 			System.out.println("Error: " + e);
 			e.printStackTrace();

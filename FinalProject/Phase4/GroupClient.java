@@ -62,26 +62,29 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// decrypt and verify challenge + 1, sequence, HMAC
 			if (response.getMessage().equals("ENV")) {
 				// so, iv array, hmac
-				SealedObject inCipher = (SealedObject)response.getObjContents().get(0);
+				SealedObject env = (SealedObject)response.getObjContents().get(0);
 				IVarray = (byte[])response.getObjContents().get(1);
 				byte[] hmac = (byte[])response.getObjContents().get(2);
-				String algo = inCipher.getAlgorithm();
+				String algo = env.getAlgorithm();
 				Cipher envCipher = Cipher.getInstance(algo);
 				envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-				Envelope reply = (Envelope)inCipher.getObject(envCipher);
+				Envelope seqMsg = (Envelope)env.getObject(envCipher);
+				Envelope reply = (Envelope)seqMsg.getObjContents().get(1);
 				
 				// check HMAC
 				Mac mac = Mac.getInstance("HmacSHA1", "BC");
 				mac.init(sessionKeyAuth);
-				mac.update(getBytes(inCipher));
+				mac.update(getBytes(env));
 				if (!Arrays.equals(mac.doFinal(), hmac)) {
 					System.out.println("Session Key creation HMAC inequality");
 					return false;
 				}
 
+				System.out.println((Integer)reply.getObjContents().get(0));
+				System.out.println(challenge + 1);
 				// check challenge, set sequence
 				if ((Integer)reply.getObjContents().get(0) == challenge + 1) {
-					sequence = (Integer)reply.getObjContents().get(1) + 1;
+					sequence = (Integer)seqMsg.getObjContents().get(0) + 1;
 					return true;
 				}
 				else {
