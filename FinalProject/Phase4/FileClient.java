@@ -9,7 +9,7 @@ import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.math.BigInteger;
-
+/* TODO: where secureMsg isn't used, send HMAC anyway since decrypt() needs it */
 public class FileClient extends Client implements FileClientInterface {
 	private Key sessionKeyEnc;
 	private Key sessionKeyAuth;

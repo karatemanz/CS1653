@@ -282,7 +282,7 @@ public class FileThread extends Thread {
 											e = decryptEnv((Envelope)input.readObject());
 										} while (fis.available() > 0);
 
-										// If server indicates success, return the member list
+										// If server indicates success
 										if (e.getMessage().compareTo("DOWNLOADF") == 0)
 										{
 
