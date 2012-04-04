@@ -95,6 +95,7 @@ public class FileThread extends Thread {
 								if (authToken(yourToken)) {
 									List<String> groupList = yourToken.getGroups(); // get groups
 									response = new Envelope("OK"); //Success
+									System.out.println("OK");
 									response.addObject(groupList);
 								}
 								else {
@@ -430,6 +431,7 @@ public class FileThread extends Thread {
 			}
 			else {
 				 // RSA Signature bad
+				System.out.println("SIG");
 				return false;
 			}
 		}
@@ -439,10 +441,11 @@ public class FileThread extends Thread {
 		}
 		
 		// verify File Server ID in token is correct for this server
-		if (aToken.getFileServerAddress().equals(socket.getLocalAddress().toString())) {
+		if (aToken.getFileServerAddress().equals(socket.getLocalAddress().getHostAddress())) {
 			// Addresses match
 		}
 		else {
+			System.out.println("ADDR");
 			return false;
 		}
 		
@@ -450,6 +453,7 @@ public class FileThread extends Thread {
 			// Ports match
 		}
 		else {
+			System.out.println("PORT");
 			return false;
 		}
 		
