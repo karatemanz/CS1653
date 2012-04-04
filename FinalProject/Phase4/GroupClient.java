@@ -80,28 +80,17 @@ public class GroupClient extends Client implements GroupClientInterface {
 				}
 
 				// check challenge, set sequence
-				if ((Integer)reply.getObjContents().get(1) == challenge + 1) {
-					sequence = (Integer)reply.getObjContents().get(2);
+				if ((Integer)reply.getObjContents().get(0) == challenge + 1) {
+					sequence = (Integer)reply.getObjContents().get(1);
 					return true;
 				}
 				else {
+					System.out.println((Integer)reply.getObjContents().get(0));
+					System.out.println(challenge + 1);
+					System.out.println(hmac);
 					System.out.println("Session Key challenge response failed.");
 				}
 			}
-//			
-//			if (response.getMessage().equals("OK")) {
-//				byte challResp[] = (byte[])response.getObjContents().get(0);
-//				// decrypt challenge
-//				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-//				sc.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-//				byte[] plainText = sc.doFinal(challResp);
-//				if (new BigInteger(plainText).intValue() == challenge + 1) {
-//					return true;
-//				}
-//				else {
-//					System.out.println("Session Key challenge response failed.");
-//				}
-//			}
 		}
 		catch(Exception e) {
 			System.out.println("Error: " + e);
