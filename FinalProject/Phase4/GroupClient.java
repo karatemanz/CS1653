@@ -37,7 +37,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// get challenge from same generator as key
 			int challenge = (Integer)rand.nextInt();
 			
-			KeyPack keyPack = new KeyPack(challenge, sessionKeyEnc);
+			KeyPack keyPack = new KeyPack(challenge, sessionKeyEnc, sessionKeyAuth);
 			
 			// create an object for use as IV
 			byte IVarray[] = new byte[16];
