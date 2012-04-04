@@ -48,8 +48,10 @@ public class MainUI {
 			}
 			
 			// connect to group client for tokens
-			gc.connect(groupServerAddress, groupServerPort);
-
+			if (!gc.isConnected()) {
+				gc.connect(groupServerAddress, groupServerPort);
+			}
+			
 			if (menuChoice == 1) {
 				System.out.print("Enter your username to login...\n> ");
 				userName = scan.nextLine();
