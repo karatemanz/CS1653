@@ -41,7 +41,7 @@ public class GroupServer extends Server {
 		ObjectInputStream userStream;
 		ObjectInputStream groupStream;
 		Security.addProvider(new BouncyCastleProvider());
-		final int RSAKEYSIZE = 2048;
+		final int RSAKEYSIZE = 4096;
 		
 		//This runs a thread that saves the lists on program exit
 		Runtime runtime = Runtime.getRuntime();
