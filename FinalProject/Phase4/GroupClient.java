@@ -388,6 +388,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			Envelope seqMsg = new Envelope("SEQMSG");
 			seqMsg.addObject(sequence);
 			seqMsg.addObject(message);
+			
 			// Encrypt original Envelope
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			SecureRandom IV = new SecureRandom();
@@ -395,12 +396,20 @@ public class GroupClient extends Client implements GroupClientInterface {
 			IV.nextBytes(IVarray);
 			cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 			SealedObject outCipher = new SealedObject(seqMsg, cipher);
-			// Create new Envelope with encrypted data and IV
+			
+			// Do the HMAC
+			Mac mac = Mac.getInstance("HmacSHA1", "BC");
+			mac.init(sessionKeyAuth);
+			mac.update(getBytes(outCipher));
+
+			// Create new Envelope with encrypted data, IV, and HMAC
 			Envelope cipherMsg = new Envelope("ENV");
 			Envelope encResponse = null;
 			cipherMsg.addObject(outCipher);
 			cipherMsg.addObject(IVarray);
+			cipherMsg.addObject(mac.doFinal());
 			output.writeObject(cipherMsg);
+			
 			// Get and decrypt response
 			encResponse = (Envelope)input.readObject();
 			if (encResponse.getMessage().equals("ENV")) {
@@ -413,7 +422,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 				envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 				
 				// check HMAC
-				Mac mac = Mac.getInstance("HmacSHA1", "BC");
+				mac = Mac.getInstance("HmacSHA1", "BC");
 				mac.init(sessionKeyAuth);
 				mac.update(getBytes(inCipher));
 				if (!Arrays.equals(mac.doFinal(), hmac)) {
