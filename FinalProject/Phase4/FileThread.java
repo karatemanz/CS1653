@@ -439,7 +439,20 @@ public class FileThread extends Thread {
 		}
 		
 		// verify File Server ID in token is correct for this server
-		if (
+		if (aToken.getFileServerAddress().equals(socket.getLocalAddress().toString())) {
+			// Addresses match
+		}
+		else {
+			return false;
+		}
+		
+		if (aToken.getFileServerPort() == socket.getLocalPort()) {
+			// Ports match
+		}
+		else {
+			return false;
+		}
+		
 		return true;
 	}
 }

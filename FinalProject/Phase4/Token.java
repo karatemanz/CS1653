@@ -72,11 +72,11 @@ public class Token implements UserToken, java.io.Serializable
 		return groups;
     }
 
-	public String getFileServerAddress () {
+	public String getFileServerAddress() {
 		return fileServerAddress;
 	}
 	
-	public int getFileServerPort () {
+	public int getFileServerPort() {
 		return fileServerPort;
 	}
 	
