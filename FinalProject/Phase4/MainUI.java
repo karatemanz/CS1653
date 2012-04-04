@@ -110,7 +110,7 @@ public class MainUI {
 						System.out.print("Please enter the port number of the File Server...\n" +
 										 userName + "> ");
 						portNumber = Integer.parseInt(scan.nextLine());
-						userToken = gc.getFileServerToken(userToken, serverAddress, Integer.toString(portNumber));
+						userToken = gc.getFileServerToken(userToken, serverAddress, portNumber);
 						System.out.println("Connecting to File Server at " +
 										   serverAddress + " port " +
 										   portNumber + "...");

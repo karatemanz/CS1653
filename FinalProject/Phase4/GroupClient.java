@@ -133,7 +133,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 	}
 
-	public UserToken getFileServerToken(UserToken aToken, String address, String port) {
+	public UserToken getFileServerToken(UserToken aToken, String address, int port) {
 		try {
 			UserToken token = null;
 			Envelope message = null, response = null;
