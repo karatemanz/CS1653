@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.io.*;
 import java.security.*;
 import javax.crypto.*;
-import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.math.BigInteger;
