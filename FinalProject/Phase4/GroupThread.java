@@ -27,19 +27,16 @@ public class GroupThread extends Thread
 		privateKey = _pk;
 	}
 	
-	public void run()
-	{
+	public void run() {
 		boolean proceed = true;
 
-		try
-		{
+		try {
 			//Announces connection and opens object streams
 			System.out.println("*** New connection from " + socket.getInetAddress() + ":" + socket.getPort() + "***");
 			final ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 			final ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 			
-			do
-			{
+			do {
 				Envelope message = (Envelope)input.readObject();
 				System.out.println("Request received: " + message.getMessage());
 				Envelope response;
@@ -69,23 +66,6 @@ public class GroupThread extends Thread
 					challenge += 1;
 					SecureRandom seqRand = new SecureRandom();
 					sequence = seqRand.nextInt(Integer.MAX_VALUE / 2);
-//					
-//					
-//					byte plaintext[] = new byte[4];
-//					plaintext[0] = (byte)(challenge >> 24);
-//					plaintext[1] = (byte)(challenge >> 16);
-//					plaintext[2] = (byte)(challenge >> 8);
-//					plaintext[3] = (byte)(challenge /*>> 0*/);
-//					
-//					
-//					theCipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-//					byte[] cipherText = theCipher.doFinal(plaintext);
-//
-//					// Do the HMAC
-//					Mac mac = Mac.getInstance("HmacSHA1", "BC");
-//					mac.init(sessionKeyAuth);
-//					mac.update(plainText);
-//					
 					
 					// Respond to the client
 					response = new Envelope("OK");
@@ -331,8 +311,7 @@ public class GroupThread extends Thread
 	}
 	
 	//Method to create tokens
-	private Token createToken(String username, char[] password) 
-	{
+	private Token createToken(String username, char[] password) {
 		//Check that user exists
 		if (my_gs.userList.checkUser(username)) {
 			// verify password
@@ -346,8 +325,7 @@ public class GroupThread extends Thread
 				return null;
 			}
 		}
-		else
-		{
+		else {
 			return null;
 		}
 	}
@@ -367,8 +345,7 @@ public class GroupThread extends Thread
 		String requester = yourToken.getSubject();
 		
 		//Check if requester exists
-		if(my_gs.userList.checkUser(requester))
-		{
+		if(my_gs.userList.checkUser(requester)) {
 			//Get the user's groups
 			ArrayList<String> temp = my_gs.userList.getUserGroups(requester);
 			//requester needs to be an administrator
@@ -383,20 +360,17 @@ public class GroupThread extends Thread
 					return true;
 				}
 			}
-			else
-			{
+			else {
 				return false; //requester not an administrator
 			}
 		}
-		else
-		{
+		else {
 			return false; //requester does not exist
 		}
 	}
 	
 	//Method to delete a user
-	private boolean deleteUser(String username, UserToken yourToken)
-	{
+	private boolean deleteUser(String username, UserToken yourToken) {
 		String requester = yourToken.getSubject();
 		String aUser;
 		ArrayList<String> groupList = new ArrayList<String>();
@@ -432,18 +406,15 @@ public class GroupThread extends Thread
 					
 					return true;	
 				}
-				else
-				{
+				else {
 					return false; //User does not exist
 				}
 			}
-			else
-			{
+			else {
 				return false; //requester is not an administer
 			}
 		}
-		else
-		{
+		else {
 			return false; //requester does not exist
 		}
 	}
@@ -475,11 +446,9 @@ public class GroupThread extends Thread
 			
 			return true;
 		}
-		else
-		{
+		else {
 			return false; //requester does not exist
 		}
-
 	}
 	
 	private boolean deleteGroup(String groupname, UserToken yourToken)
@@ -521,13 +490,11 @@ public class GroupThread extends Thread
 				
 				return true;
 			}
-			else
-			{
+			else {
 				return false; // requester does not own this group
 			}
 		}		
-		else
-		{
+		else {
 			return false; //requester does not exist
 		}
 	}
@@ -555,13 +522,11 @@ public class GroupThread extends Thread
 				}
 				return aList;
 			}
-			else
-			{
+			else {
 				return null; // requester does not own this group
 			}
 		}
-		else
-		{
+		else {
 			return null; //requester does not exist
 		}
 	}
@@ -585,13 +550,11 @@ public class GroupThread extends Thread
 				
 				return false;
 			}
-			else
-			{
+			else {
 				return false; //requester does not have ownership
 			}
 		}
-		else
-		{
+		else {
 			return false; //requester does not exist
 		}
 	}
@@ -622,13 +585,11 @@ public class GroupThread extends Thread
 					return false; // can't delete nonexistent user
 				}
 			}
-			else
-			{
+			else {
 				return false; //requester does not have ownership
 			}
 		}
-		else
-		{
+		else {
 			return false; //requester does not exist
 		}
 	}
