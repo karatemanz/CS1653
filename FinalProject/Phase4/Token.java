@@ -8,7 +8,7 @@ public class Token implements UserToken, java.io.Serializable
 	private String subject;
 	private List<String> groups;
 	private String fileServerAddress;
-	private String fileServerPort;
+	private int fileServerPort;
 	private byte[] signature;
 
 	public Token(String anIssuer, String aSubject, List<String> theGroups) {
@@ -76,7 +76,7 @@ public class Token implements UserToken, java.io.Serializable
 		return fileServerAddress;
 	}
 	
-	public String getFileServerPort () {
+	public int getFileServerPort () {
 		return fileServerPort;
 	}
 	
