@@ -634,15 +634,45 @@ public class GroupThread extends Thread
 	}
 	
 	private Envelope decryptEnv(Envelope msg) {
-		// Remove objects of envelope
-		SealedObject so = (SealedObject)msg.getObjContents().get(0);
-		byte[] IVarray = (byte[])msg.getObjContents().get(1);
 		try {
-			String algo = so.getAlgorithm();
+			// Decrypt Envelope contents
+			SealedObject inCipher = (SealedObject)msg.getObjContents().get(0);
+			byte[] IVarray = (byte[])msg.getObjContents().get(1);
+			byte[] hmac = (byte[])msg.getObjContents().get(2);
+			String algo = inCipher.getAlgorithm();
 			Cipher envCipher = Cipher.getInstance(algo);
 			envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-			return (Envelope)so.getObject(envCipher); // return decrypted envelope
+			
+			// check HMAC
+			Mac mac = Mac.getInstance("HmacSHA1", "BC");
+			mac.init(sessionKeyAuth);
+			mac.update(getBytes(inCipher));
+			if (!Arrays.equals(mac.doFinal(), hmac)) {
+				System.out.println("Secure Message HMAC FAIL");
+				return new Envelope("HMACFAIL");
+			}
+			
+			Envelope reply = (Envelope)inCipher.getObject(envCipher);
+			// check sequence
+			if ((Integer)reply.getObjContents().get(0) == sequence + 1) {
+				sequence += 2;
+				return (Envelope)reply.getObjContents().get(1);
+			}
+			else {
+				System.out.println("Secure Message sequence FAIL.");
+				return new Envelope("SEQFAIL");
+			}
 		}
+//		
+//		// Remove objects of envelope
+//		SealedObject so = (SealedObject)msg.getObjContents().get(0);
+//		byte[] IVarray = (byte[])msg.getObjContents().get(1);
+//		try {
+//			String algo = so.getAlgorithm();
+//			Cipher envCipher = Cipher.getInstance(algo);
+//			envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
+//			return (Envelope)so.getObject(envCipher); // return decrypted envelope
+//		}
 		catch (Exception e) {
 			System.out.println("Error: " + e);
 			e.printStackTrace();
@@ -652,12 +682,16 @@ public class GroupThread extends Thread
 	
 	private Envelope encryptEnv(Envelope msg) {
 		try {
+			Envelope seqMsg = new Envelope("SEQMSG");
+			seqMsg.addObject(sequence);
+			seqMsg.addObject(msg);
+
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			SecureRandom IV = new SecureRandom();
 			byte IVarray[] = new byte[16];
 			IV.nextBytes(IVarray);
 			cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-			SealedObject so = new SealedObject(msg, cipher);
+			SealedObject so = new SealedObject(seqMsg, cipher);
 			
 			// Do the HMAC
 			Mac mac = Mac.getInstance("HmacSHA1", "BC");
