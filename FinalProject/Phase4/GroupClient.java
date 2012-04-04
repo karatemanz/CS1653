@@ -132,7 +132,43 @@ public class GroupClient extends Client implements GroupClientInterface {
 			return null;
 		}
 	}
-	 
+
+	public UserToken getFileServerToken(Token aToken, String address, String port) {
+		try {
+			UserToken token = null;
+			Envelope message = null, response = null;
+			
+			// Tell the server to return a token for use in a File Server
+			message = new Envelope("GETFST");
+			message.addObject(aToken);
+			message.addObject(address);
+			message.addObject(port);
+			
+			// Get the response from the server
+			response = secureMsg(message);
+			
+			System.out.println(response.getMessage());
+			// Successful response
+			if (response.getMessage().equals("OK")) {
+				// If there is a token in the Envelope, return it 
+				ArrayList<Object> temp = null;
+				temp = response.getObjContents();
+				
+				if(temp.size() == 1) {
+					token = (UserToken)temp.get(0);
+					return token;
+				}
+			}
+			
+			return null;
+		}
+		catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+
 	 public boolean createUser(String username, char[] password, UserToken token) {
 		 try {
 			Envelope message = null, response = null;
