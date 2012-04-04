@@ -121,29 +121,61 @@ public class FileClient extends Client implements FileClientInterface {
 
 	public Envelope secureMsg (Envelope message) {
 		try {
+			Envelope seqMsg = new Envelope("SEQMSG");
+			seqMsg.addObject(sequence);
+			seqMsg.addObject(message);
+			
 			// Encrypt original Envelope
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			SecureRandom IV = new SecureRandom();
 			byte IVarray[] = new byte[16];
 			IV.nextBytes(IVarray);
 			cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-			SealedObject outCipher = new SealedObject(message, cipher);
-			// Create new Envelope with encrypted data and IV
+			SealedObject outCipher = new SealedObject(seqMsg, cipher);
+			
+			// Do the HMAC
+			Mac mac = Mac.getInstance("HmacSHA1", "BC");
+			mac.init(sessionKeyAuth);
+			mac.update(getBytes(outCipher));
+			
+			// Create new Envelope with encrypted data, IV, and HMAC
 			Envelope cipherMsg = new Envelope("ENV");
 			Envelope encResponse = null;
 			cipherMsg.addObject(outCipher);
 			cipherMsg.addObject(IVarray);
+			cipherMsg.addObject(mac.doFinal());
 			output.writeObject(cipherMsg);
+			
 			// Get and decrypt response
 			encResponse = (Envelope)input.readObject();
 			if (encResponse.getMessage().equals("ENV")) {
 				// Decrypt Envelope contents
 				SealedObject inCipher = (SealedObject)encResponse.getObjContents().get(0);
 				IVarray = (byte[])encResponse.getObjContents().get(1);
+				byte[] hmac = (byte[])encResponse.getObjContents().get(2);
 				String algo = inCipher.getAlgorithm();
 				Cipher envCipher = Cipher.getInstance(algo);
 				envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-				return (Envelope)inCipher.getObject(envCipher);
+				
+				// check HMAC
+				mac = Mac.getInstance("HmacSHA1", "BC");
+				mac.init(sessionKeyAuth);
+				mac.update(getBytes(inCipher));
+				if (!Arrays.equals(mac.doFinal(), hmac)) {
+					System.out.println("Secure Message HMAC FAIL");
+					return new Envelope("HMACFAIL");
+				}
+				
+				Envelope reply = (Envelope)inCipher.getObject(envCipher);
+				// check sequence
+				if ((Integer)reply.getObjContents().get(0) == sequence + 1) {
+					sequence += 2;
+					return (Envelope)reply.getObjContents().get(1);
+				}
+				else {
+					System.out.println("Secure Message sequence FAIL.");
+					return new Envelope("SEQFAIL");
+				}
 			}
 		}
 		catch(Exception e) {
