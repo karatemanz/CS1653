@@ -4,11 +4,8 @@ import java.lang.Thread;
 import java.net.Socket;
 import java.util.List;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.util.Arrays;
+import java.io.*;
 import java.security.*;
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -19,7 +16,9 @@ public class FileThread extends Thread {
 	private FileServer my_fs;
 	private final PrivateKey fsPrivKey;
 	private final PublicKey gsKey;
-	private Key sessionKey;
+	private Key sessionKeyEnc;
+	private Key sessionKeyAuth;
+	private int sequence;
 
 	public FileThread(Socket _socket, FileServer _fs, PrivateKey _fsPrivKey, PublicKey _gsKey) {
 		socket = _socket;
@@ -55,27 +54,23 @@ public class FileThread extends Thread {
 					Cipher cipher = Cipher.getInstance(algo);
 					cipher.init(Cipher.DECRYPT_MODE, fsPrivKey);
 					// Get KeyPack challenge/key combo from sealedObject
-					KeyPack kcf = (KeyPack)sealedObject.getObject(cipher);
-					int challenge = kcf.getChallenge();
-					sessionKey = kcf.getSecretKey();
+					KeyPack kcg = (KeyPack)sealedObject.getObject(cipher);
+					int challenge = kcg.getChallenge();
+					sessionKeyEnc = kcg.getSecretKey();
+					sessionKeyAuth = kcg.getHmacKey();
 					// Get IV from message
 					byte IVarray[] = (byte[])env.getObjContents().get(1);
 					
-					// Encryption of challenge response
+					// Encryption of challenge response and sequence number
 					Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 					challenge += 1;
-					byte plaintext[] = new byte[4];
-					plaintext[0] = (byte)(challenge >> 24);
-					plaintext[1] = (byte)(challenge >> 16);
-					plaintext[2] = (byte)(challenge >> 8);
-					plaintext[3] = (byte)(challenge /*>> 0*/);
-					theCipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
-					byte[] cipherText = theCipher.doFinal(plaintext);
+					SecureRandom seqRand = new SecureRandom();
+					sequence = seqRand.nextInt(Integer.MAX_VALUE / 2);
 					
 					// Respond to the client
 					response = new Envelope("OK");
-					response.addObject(cipherText);
-					output.writeObject(response);
+					response.addObject(challenge);
+					output.writeObject(encryptEnv(response));
 				}
 				else if (env.getMessage().equals("ENV")) { // encrypted Envelope
 					// decrypt contents of encrypted Envelope and pass to branches below
@@ -384,14 +379,34 @@ public class FileThread extends Thread {
 	}
 	
 	private Envelope decryptEnv(Envelope msg) {
-		// Remove objects of envelope
-		SealedObject so = (SealedObject)msg.getObjContents().get(0);
-		byte[] IVarray = (byte[])msg.getObjContents().get(1);
 		try {
-			String algo = so.getAlgorithm();
+			// Decrypt Envelope contents
+			SealedObject inCipher = (SealedObject)msg.getObjContents().get(0);
+			byte[] IVarray = (byte[])msg.getObjContents().get(1);
+			byte[] hmac = (byte[])msg.getObjContents().get(2);
+			String algo = inCipher.getAlgorithm();
 			Cipher envCipher = Cipher.getInstance(algo);
-			envCipher.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
-			return (Envelope)so.getObject(envCipher); // return decrypted envelope
+			envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
+			
+			// check HMAC
+			Mac mac = Mac.getInstance("HmacSHA1", "BC");
+			mac.init(sessionKeyAuth);
+			mac.update(getBytes(inCipher));
+			if (!Arrays.equals(mac.doFinal(), hmac)) {
+				System.out.println("Secure Message HMAC FAIL");
+				return new Envelope("HMACFAIL");
+			}
+			
+			Envelope reply = (Envelope)inCipher.getObject(envCipher);
+			// check sequence
+			if ((Integer)reply.getObjContents().get(0) == sequence + 1) {
+				sequence += 2;
+				return (Envelope)reply.getObjContents().get(1);
+			}
+			else {
+				System.out.println("Secure Message sequence FAIL.");
+				return new Envelope("SEQFAIL");
+			}
 		}
 		catch (Exception e) {
 			System.out.println("Error: " + e);
@@ -402,15 +417,27 @@ public class FileThread extends Thread {
 	
 	private Envelope encryptEnv(Envelope msg) {
 		try {
+			Envelope seqMsg = new Envelope("SEQMSG");
+			seqMsg.addObject(sequence);
+			seqMsg.addObject(msg);
+			
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			SecureRandom IV = new SecureRandom();
 			byte IVarray[] = new byte[16];
 			IV.nextBytes(IVarray);
-			cipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
-			SealedObject so = new SealedObject(msg, cipher);
+			cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
+			SealedObject so = new SealedObject(seqMsg, cipher);
+			
+			// Do the HMAC
+			Mac mac = Mac.getInstance("HmacSHA1", "BC");
+			mac.init(sessionKeyAuth);
+			mac.update(getBytes(so));
+			
+			// Put together the envelope
 			Envelope encryptedMsg = new Envelope("ENV");
 			encryptedMsg.addObject(so);
 			encryptedMsg.addObject(IVarray);
+			encryptedMsg.addObject(mac.doFinal());
 			return encryptedMsg;
 		}
 		catch (Exception e) {
@@ -458,5 +485,16 @@ public class FileThread extends Thread {
 		}
 		
 		return true;
+	}
+	
+	// found at http://www.javafaq.nu/java-article236.html
+	public byte[] getBytes(Object obj) throws java.io.IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(); 
+		ObjectOutputStream oos = new ObjectOutputStream(bos); 
+		oos.writeObject(obj);
+		oos.flush(); 
+		oos.close(); 
+		bos.close();
+		return bos.toByteArray();
 	}
 }
