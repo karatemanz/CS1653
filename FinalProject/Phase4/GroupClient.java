@@ -13,18 +13,27 @@ import java.math.BigInteger;
 public class GroupClient extends Client implements GroupClientInterface {
 	private Key sessionKeyEnc;
 	private Key sessionKeyAuth;
+	private int sequence;
 	
 	public boolean getSessionKeys() {
 		Security.addProvider(new BouncyCastleProvider());
 		try {
 			// create symmetric shared key for this session
 			Cipher sharedCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-			KeyGenerator keyGenAES = KeyGenerator.getInstance("AES", "BC");
+			KeyGenerator keyGen = KeyGenerator.getInstance("AES", "BC");
 			SecureRandom rand = new SecureRandom();
 			byte b[] = new byte[20];
 			rand.nextBytes(b);
-			keyGenAES.init(128, rand);
-			sessionKeyEnc = keyGenAES.generateKey();
+			keyGen.init(128, rand);
+			sessionKeyEnc = keyGen.generateKey();
+			
+			// create authentication key for HMAC
+			keyGen = KeyGenerator.getInstance("HmacSHA1", "BC");
+			b = new byte[20];
+			rand.nextBytes(b);
+			keyGen.init(128, rand);
+			sessionKeyAuth = keyGen.generateKey();
+
 			// get challenge from same generator as key
 			int challenge = (Integer)rand.nextInt();
 			
