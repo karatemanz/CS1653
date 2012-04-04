@@ -47,13 +47,14 @@ public class MainUI {
 				menuChoice = -1;
 			}
 			
+			// connect to group client for tokens
+			gc.connect(groupServerAddress, groupServerPort);
+
 			if (menuChoice == 1) {
 				System.out.print("Enter your username to login...\n> ");
 				userName = scan.nextLine();
 				char pwArray[] = console.readPassword("Enter your password...\n> ");
 				
-				// connect to group server and get token
-				gc.connect(groupServerAddress, groupServerPort);
 				if (gc.isConnected()) { // check that server is running
 					// get session key
 					if (gc.getSessionKey()) {
@@ -67,12 +68,10 @@ public class MainUI {
 					userToken = gc.getToken(userName, pwArray);
 					if (userToken == null) { // no login for that name
 						System.out.println("Username/password combination not recognized.");
-						gc.disconnect();
 					}
-					else { // has a valid token, can disconnect from gc
+					else { // has a valid token
 						hasToken = true;
 						System.out.println("Password accepted. Welcome, " + userName);
-						gc.disconnect();
 					}
 				}
 				else {
@@ -111,6 +110,8 @@ public class MainUI {
 						System.out.print("Please enter the port number of the File Server...\n" +
 										 userName + "> ");
 						portNumber = Integer.parseInt(scan.nextLine());
+						userToken = gc.getFileServerToken(userToken, serverAddress, Integer.toString(portNumber));
+						gc.disconnect();
 						System.out.println("Connecting to File Server at " +
 										   serverAddress + " port " +
 										   portNumber + "...");
@@ -119,12 +120,14 @@ public class MainUI {
 						hasToken = false;
 						break;
 					case 2:
+						gc.disconnect();
 						System.out.println("Connecting to Group Server...");
 						GroupClientUI gcu = new GroupClientUI();
 						gcu.launchUI(userToken, groupServerAddress, groupServerPort);
 						hasToken = false;
 						break;
 					case 3:
+						gc.disconnect();
 						System.out.println("Logging out...");
 						hasToken = false;
 						userToken = null;
