@@ -15,7 +15,8 @@ public class GroupThread extends Thread
 {
 	private final Socket socket;
 	private GroupServer my_gs;
-	private Key sessionKey;
+	private Key sessionKeyEnc;
+	private Key sessionKeyAuth;
 	private PrivateKey privateKey;
 	
 	public GroupThread(Socket _socket, GroupServer _gs, PrivateKey _pk)
@@ -57,7 +58,8 @@ public class GroupThread extends Thread
 					// Get KeyPack challenge/key combo from sealedObject
 					KeyPack kcg = (KeyPack)sealedObject.getObject(cipher);
 					int challenge = kcg.getChallenge();
-					sessionKey = kcg.getSecretKey();
+					sessionKeyEnc = kcg.getSecretKey();
+					sessionKeyAuth = kcg.getHmacKey();
 					// Get IV from message
 					byte IVarray[] = (byte[])message.getObjContents().get(1);
 					
@@ -69,7 +71,7 @@ public class GroupThread extends Thread
 					plaintext[1] = (byte)(challenge >> 16);
 					plaintext[2] = (byte)(challenge >> 8);
 					plaintext[3] = (byte)(challenge /*>> 0*/);
-					theCipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+					theCipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 					byte[] cipherText = theCipher.doFinal(plaintext);
 
 					// Respond to the client
@@ -624,7 +626,7 @@ public class GroupThread extends Thread
 		try {
 			String algo = so.getAlgorithm();
 			Cipher envCipher = Cipher.getInstance(algo);
-			envCipher.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+			envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 			return (Envelope)so.getObject(envCipher); // return decrypted envelope
 		}
 		catch (Exception e) {
@@ -640,7 +642,7 @@ public class GroupThread extends Thread
 			SecureRandom IV = new SecureRandom();
 			byte IVarray[] = new byte[16];
 			IV.nextBytes(IVarray);
-			cipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+			cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 			SealedObject so = new SealedObject(msg, cipher);
 			Envelope encryptedMsg = new Envelope("ENV");
 			encryptedMsg.addObject(so);
