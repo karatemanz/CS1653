@@ -200,7 +200,7 @@ public class FileClient extends Client implements FileClientInterface {
 	    try {
 			env = secureMsg(env);
 
-			if (env.getMessage().compareTo("OK")==0) {
+			if (checkResponse(env.getMessage())) {
 				System.out.printf("File %s deleted successfully\n", filename);				
 			}
 			else {
@@ -301,7 +301,7 @@ public class FileClient extends Client implements FileClientInterface {
 
 			env = secureMsg(message);
 			
-			if (env.getMessage().equals("OK")) { 
+			if (checkResponse(env.getMessage())) {
 				return (List<String>)env.getObjContents().get(0); // This cast creates compiler warnings. Sorry.
 			}
 			
@@ -325,7 +325,7 @@ public class FileClient extends Client implements FileClientInterface {
 			env = secureMsg(message);
 			
 			// If server indicates success, return the member list
-			if (env.getMessage().equals("OK")) { 
+			if (checkResponse(env.getMessage())) {
 				return (List<String>)env.getObjContents().get(0); // This cast creates compiler warnings. Sorry.
 			}
 			
@@ -349,7 +349,7 @@ public class FileClient extends Client implements FileClientInterface {
 			env = secureMsg(message);
 
 			// If server indicates success, return the group that it was changed to
-			if (env.getMessage().equals("OK")) { 
+			if (checkResponse(env.getMessage())) {
 				return (List<String>)env.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
 			}
 			return null;			 
@@ -414,7 +414,7 @@ public class FileClient extends Client implements FileClientInterface {
 				
 				env = secureMsg(message);
 				
-				if (env.getMessage().compareTo("OK") == 0) {
+				if (checkResponse(env.getMessage())) {
 					System.out.printf("\nFile data upload successful\n");
 				}
 				else {
@@ -444,5 +444,22 @@ public class FileClient extends Client implements FileClientInterface {
 		oos.close(); 
 		bos.close();
 		return bos.toByteArray();
+	}
+	
+	public boolean checkResponse(String resp) {
+		if (resp.equals("OK")) {
+			return true;
+		}
+		else if (resp.equals("HMACFAIL")) {
+			System.out.println("Secure Message HMAC FAIL");
+			return false;
+		}
+		else if (resp.equals("SEQFAIL")) {
+			System.out.println("Secure Message sequence FAIL.");
+			return false;
+		}
+		else {
+			return false;
+		}
 	}
 }
