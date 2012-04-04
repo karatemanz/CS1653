@@ -18,6 +18,7 @@ public class GroupThread extends Thread
 	private Key sessionKeyEnc;
 	private Key sessionKeyAuth;
 	private PrivateKey privateKey;
+	private int sequence;
 	
 	public GroupThread(Socket _socket, GroupServer _gs, PrivateKey _pk)
 	{
@@ -63,21 +64,34 @@ public class GroupThread extends Thread
 					// Get IV from message
 					byte IVarray[] = (byte[])message.getObjContents().get(1);
 					
-					// Encryption of challenge response
+					// Encryption of challenge response and sequence number
 					Cipher theCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 					challenge += 1;
-					byte plaintext[] = new byte[4];
-					plaintext[0] = (byte)(challenge >> 24);
-					plaintext[1] = (byte)(challenge >> 16);
-					plaintext[2] = (byte)(challenge >> 8);
-					plaintext[3] = (byte)(challenge /*>> 0*/);
-					theCipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-					byte[] cipherText = theCipher.doFinal(plaintext);
-
+					SecureRandom seqRand = new SecureRandom();
+					sequence = seqRand.nextInt(Integer.MAX_VALUE / 2);
+//					
+//					
+//					byte plaintext[] = new byte[4];
+//					plaintext[0] = (byte)(challenge >> 24);
+//					plaintext[1] = (byte)(challenge >> 16);
+//					plaintext[2] = (byte)(challenge >> 8);
+//					plaintext[3] = (byte)(challenge /*>> 0*/);
+//					
+//					
+//					theCipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
+//					byte[] cipherText = theCipher.doFinal(plaintext);
+//
+//					// Do the HMAC
+//					Mac mac = Mac.getInstance("HmacSHA1", "BC");
+//					mac.init(sessionKeyAuth);
+//					mac.update(plainText);
+//					
+					
 					// Respond to the client
 					response = new Envelope("OK");
-					response.addObject(cipherText);
-					output.writeObject(response);
+					response.addObject(challenge);
+					response.addObject(sequence);
+					output.writeObject(encryptEnv(response));
 				}
 				else if (message.getMessage().equals("ENV")) { // encrypted Envelope
 					// decrypt contents of encrypted Envelope and pass to branches below
@@ -644,9 +658,17 @@ public class GroupThread extends Thread
 			IV.nextBytes(IVarray);
 			cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 			SealedObject so = new SealedObject(msg, cipher);
+			
+			// Do the HMAC
+			Mac mac = Mac.getInstance("HmacSHA1", "BC");
+			mac.init(sessionKeyAuth);
+			mac.update(getBytes(so));
+
+			// Put together the envelope
 			Envelope encryptedMsg = new Envelope("ENV");
 			encryptedMsg.addObject(so);
 			encryptedMsg.addObject(IVarray);
+			encryptedMsg.addObject(mac.doFinal());
 			return encryptedMsg;
 		}
 		catch (Exception e) {
@@ -654,6 +676,17 @@ public class GroupThread extends Thread
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	// found at http://www.javafaq.nu/java-article236.html
+	public byte[] getBytes(Object obj) throws java.io.IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(); 
+		ObjectOutputStream oos = new ObjectOutputStream(bos); 
+		oos.writeObject(obj);
+		oos.flush(); 
+		oos.close(); 
+		bos.close();
+		return bos.toByteArray();
 	}
 	
 	public boolean authToken(Token aToken) {

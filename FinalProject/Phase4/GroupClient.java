@@ -2,7 +2,8 @@
 
 import java.util.ArrayList;
 import java.util.List;
-import java.io.ObjectInputStream;
+import java.util.Arrays;
+import java.io.*;
 import java.security.*;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
@@ -58,20 +59,49 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// get the response from the server
 			response = (Envelope)input.readObject();
 
-			// decrypt and verify challenge value + 1 was returned
-			if (response.getMessage().equals("OK")) {
-				byte challResp[] = (byte[])response.getObjContents().get(0);
-				// decrypt challenge
-				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-				sc.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-				byte[] plainText = sc.doFinal(challResp);
-				if (new BigInteger(plainText).intValue() == challenge + 1) {
+			// decrypt and verify challenge + 1, sequence, HMAC
+			if (response.getMessage().equals("ENV")) {
+				// so, iv array, hmac
+				SealedObject inCipher = (SealedObject)response.getObjContents().get(0);
+				IVarray = (byte[])response.getObjContents().get(1);
+				byte[] hmac = (byte[])response.getObjContents().get(2);
+				String algo = inCipher.getAlgorithm();
+				Cipher envCipher = Cipher.getInstance(algo);
+				envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
+				Envelope reply = (Envelope)inCipher.getObject(envCipher);
+				
+				// check HMAC
+				Mac mac = Mac.getInstance("HmacSHA1", "BC");
+				mac.init(sessionKeyAuth);
+				mac.update(getBytes(inCipher));
+				if (!Arrays.equals(mac.doFinal(), hmac)) {
+					System.out.println("Session Key creation HMAC inequality");
+					return false;
+				}
+
+				// check challenge, set sequence
+				if ((Integer)reply.getObjContents().get(1) == challenge + 1) {
+					sequence = (Integer)reply.getObjContents().get(2);
 					return true;
 				}
 				else {
 					System.out.println("Session Key challenge response failed.");
 				}
 			}
+//			
+//			if (response.getMessage().equals("OK")) {
+//				byte challResp[] = (byte[])response.getObjContents().get(0);
+//				// decrypt challenge
+//				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+//				sc.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
+//				byte[] plainText = sc.doFinal(challResp);
+//				if (new BigInteger(plainText).intValue() == challenge + 1) {
+//					return true;
+//				}
+//				else {
+//					System.out.println("Session Key challenge response failed.");
+//				}
+//			}
 		}
 		catch(Exception e) {
 			System.out.println("Error: " + e);
@@ -407,4 +437,16 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 		return null;
 	}
+	
+	// found at http://www.javafaq.nu/java-article236.html
+	public byte[] getBytes(Object obj) throws java.io.IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(); 
+		ObjectOutputStream oos = new ObjectOutputStream(bos); 
+		oos.writeObject(obj);
+		oos.flush(); 
+		oos.close(); 
+		bos.close();
+		return bos.toByteArray();
+	}
+
 }
