@@ -427,7 +427,6 @@ public class FileThread extends Thread {
 			signed.update(aToken.getContents().getBytes());
 			if (signed.verify(aToken.getSignature())) {
 				// RSA Signature verified
-				return true;
 			}
 			else {
 				 // RSA Signature bad
@@ -438,6 +437,9 @@ public class FileThread extends Thread {
 			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace(System.err);
 		}
-		return false;
+		
+		// verify File Server ID in token is correct for this server
+		if (
+		return true;
 	}
 }
