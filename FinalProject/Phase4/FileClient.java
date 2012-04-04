@@ -20,12 +20,20 @@ public class FileClient extends Client implements FileClientInterface {
 		try {
 			// create symmetric shared key for this session
 			Cipher sharedCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-			KeyGenerator keyGenAES = KeyGenerator.getInstance("AES", "BC");
+			KeyGenerator keyGen = KeyGenerator.getInstance("AES", "BC");
 			SecureRandom rand = new SecureRandom();
 			byte b[] = new byte[20];
 			rand.nextBytes(b);
-			keyGenAES.init(128, rand);
-			sessionKeyEnc = keyGenAES.generateKey();
+			keyGen.init(128, rand);
+			sessionKeyEnc = keyGen.generateKey();
+			
+			// create authentication key for HMAC
+			keyGen = KeyGenerator.getInstance("HmacSHA1", "BC");
+			b = new byte[20];
+			rand.nextBytes(b);
+			keyGen.init(128, rand);
+			sessionKeyAuth = keyGen.generateKey();
+
 			// get challenge from same generator as key
 			int challenge = (Integer)rand.nextInt();
 			
@@ -50,14 +58,32 @@ public class FileClient extends Client implements FileClientInterface {
 			// get the response from the server
 			response = (Envelope)input.readObject();
 			
-			// decrypt and verify challenge value + 1 was returned
-			if (response.getMessage().equals("OK")) {
-				byte challResp[] = (byte[])response.getObjContents().get(0);
-				// decrypt challenge
-				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-				sc.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-				byte[] plainText = sc.doFinal(challResp);
-				if (new BigInteger(plainText).intValue() == challenge + 1) {
+			// decrypt and verify challenge + 1, sequence, HMAC
+			if (response.getMessage().equals("ENV")) {
+				// so, iv array, hmac
+				SealedObject env = (SealedObject)response.getObjContents().get(0);
+				IVarray = (byte[])response.getObjContents().get(1);
+				byte[] hmac = (byte[])response.getObjContents().get(2);
+				String algo = env.getAlgorithm();
+				Cipher envCipher = Cipher.getInstance(algo);
+				envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
+				Envelope seqMsg = (Envelope)env.getObject(envCipher);
+				Envelope reply = (Envelope)seqMsg.getObjContents().get(1);
+				
+				// check HMAC
+				Mac mac = Mac.getInstance("HmacSHA1", "BC");
+				mac.init(sessionKeyAuth);
+				mac.update(getBytes(env));
+				if (!Arrays.equals(mac.doFinal(), hmac)) {
+					System.out.println("Session Key creation HMAC inequality");
+					return false;
+				}
+				
+				System.out.println((Integer)reply.getObjContents().get(0));
+				System.out.println(challenge + 1);
+				// check challenge, set sequence
+				if ((Integer)reply.getObjContents().get(0) == challenge + 1) {
+					sequence = (Integer)seqMsg.getObjContents().get(0) + 1;
 					return true;
 				}
 				else {
@@ -375,5 +401,16 @@ public class FileClient extends Client implements FileClientInterface {
 			return false;
 		}
 		return true;
+	}
+	
+	// found at http://www.javafaq.nu/java-article236.html
+	public byte[] getBytes(Object obj) throws java.io.IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(); 
+		ObjectOutputStream oos = new ObjectOutputStream(bos); 
+		oos.writeObject(obj);
+		oos.flush(); 
+		oos.close(); 
+		bos.close();
+		return bos.toByteArray();
 	}
 }
