@@ -102,8 +102,8 @@ public class FileClientUI {
 				System.exit(-1);
 			}
 			
-			// get session key
-			if (fc.getSessionKey()) {
+			// get session keys
+			if (fc.getSessionKeys()) {
 				System.out.println("Session key obtained. Connection to server encrypted.");
 			}
 			else {
