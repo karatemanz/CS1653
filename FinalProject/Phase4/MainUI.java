@@ -36,6 +36,9 @@ public class MainUI {
 		String serverAddress;
 		int portNumber;
 		
+		// connect to group client for login and tokens
+		gc.connect(groupServerAddress, groupServerPort);
+
 		while (!exitKey) {
 			System.out.print("Enter 1 to login,\nenter 2 to exit...\n> ");
 			inputString = scan.nextLine();
@@ -45,11 +48,6 @@ public class MainUI {
 			}
 			catch(Exception e) {
 				menuChoice = -1;
-			}
-			
-			// connect to group client for tokens
-			if (!gc.isConnected()) {
-				gc.connect(groupServerAddress, groupServerPort);
 			}
 			
 			if (menuChoice == 1) {
@@ -113,7 +111,6 @@ public class MainUI {
 										 userName + "> ");
 						portNumber = Integer.parseInt(scan.nextLine());
 						userToken = gc.getFileServerToken(userToken, serverAddress, Integer.toString(portNumber));
-						gc.disconnect();
 						System.out.println("Connecting to File Server at " +
 										   serverAddress + " port " +
 										   portNumber + "...");
@@ -122,14 +119,12 @@ public class MainUI {
 						hasToken = false;
 						break;
 					case 2:
-						gc.disconnect();
 						System.out.println("Connecting to Group Server...");
 						GroupClientUI gcu = new GroupClientUI();
 						gcu.launchUI(userToken, groupServerAddress, groupServerPort);
 						hasToken = false;
 						break;
 					case 3:
-						gc.disconnect();
 						System.out.println("Logging out...");
 						hasToken = false;
 						userToken = null;
@@ -140,5 +135,8 @@ public class MainUI {
 				}
 			}
 		}
+		
+		// we're done with the server, close connection
+		gc.disconnect();
 	}
 }
