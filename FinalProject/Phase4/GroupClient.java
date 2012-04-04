@@ -81,13 +81,10 @@ public class GroupClient extends Client implements GroupClientInterface {
 
 				// check challenge, set sequence
 				if ((Integer)reply.getObjContents().get(0) == challenge + 1) {
-					sequence = (Integer)reply.getObjContents().get(1);
+					sequence = (Integer)reply.getObjContents().get(1) + 1;
 					return true;
 				}
 				else {
-					System.out.println((Integer)reply.getObjContents().get(0));
-					System.out.println(challenge + 1);
-					System.out.println(hmac);
 					System.out.println("Session Key challenge response failed.");
 				}
 			}
@@ -393,15 +390,18 @@ public class GroupClient extends Client implements GroupClientInterface {
 			}
 	 }
 
-	public Envelope secureMsg (Envelope message) {
+	public Envelope secureMsg(Envelope message) {
 		try {
+			Envelope seqMsg = new Envelope("SEQMSG");
+			seqMsg.addObject(sequence);
+			seqMsg.addObject(message);
 			// Encrypt original Envelope
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 			SecureRandom IV = new SecureRandom();
 			byte IVarray[] = new byte[16];
 			IV.nextBytes(IVarray);
 			cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-			SealedObject outCipher = new SealedObject(message, cipher);
+			SealedObject outCipher = new SealedObject(seqMsg, cipher);
 			// Create new Envelope with encrypted data and IV
 			Envelope cipherMsg = new Envelope("ENV");
 			Envelope encResponse = null;
@@ -414,10 +414,30 @@ public class GroupClient extends Client implements GroupClientInterface {
 				// Decrypt Envelope contents
 				SealedObject inCipher = (SealedObject)encResponse.getObjContents().get(0);
 				IVarray = (byte[])encResponse.getObjContents().get(1);
+				byte[] hmac = (byte[])encResponse.getObjContents().get(2);
 				String algo = inCipher.getAlgorithm();
 				Cipher envCipher = Cipher.getInstance(algo);
 				envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-				return (Envelope)inCipher.getObject(envCipher);
+				
+				// check HMAC
+				Mac mac = Mac.getInstance("HmacSHA1", "BC");
+				mac.init(sessionKeyAuth);
+				mac.update(getBytes(inCipher));
+				if (!Arrays.equals(mac.doFinal(), hmac)) {
+					System.out.println("Secure Message HMAC FAIL");
+					return new Envelope("HMACFAIL");
+				}
+				
+				Envelope reply = (Envelope)inCipher.getObject(envCipher);
+				// check sequence
+				if ((Integer)reply.getObjContents().get(0) == sequence + 1) {
+					sequence += 2;
+					return (Envelope)reply.getObjContents().get(1);
+				}
+				else {
+					System.out.println("Secure Message sequence FAIL.");
+					return new Envelope("SEQFAIL");
+				}
 			}
 		}
 		catch(Exception e) {
