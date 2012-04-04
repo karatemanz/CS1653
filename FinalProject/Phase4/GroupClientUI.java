@@ -22,7 +22,7 @@ public class GroupClientUI {
 			final int MAXGROUPLENGTH = 32;
 			
 			// get session key
-			if (gc.getSessionKey()) {
+			if (gc.getSessionKeys()) {
 				System.out.println("Session key obtained. Connection to server encrypted.");
 			}
 			else {

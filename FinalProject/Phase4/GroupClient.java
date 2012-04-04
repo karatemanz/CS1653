@@ -11,9 +11,10 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.math.BigInteger;
 
 public class GroupClient extends Client implements GroupClientInterface {
-	private Key sessionKey;
+	private Key sessionKeyEnc;
+	private Key sessionKeyAuth;
 	
-	public boolean getSessionKey() {
+	public boolean getSessionKeys() {
 		Security.addProvider(new BouncyCastleProvider());
 		try {
 			// create symmetric shared key for this session
@@ -23,11 +24,11 @@ public class GroupClient extends Client implements GroupClientInterface {
 			byte b[] = new byte[20];
 			rand.nextBytes(b);
 			keyGenAES.init(128, rand);
-			sessionKey = keyGenAES.generateKey();
+			sessionKeyEnc = keyGenAES.generateKey();
 			// get challenge from same generator as key
 			int challenge = (Integer)rand.nextInt();
 			
-			KeyPack keyPack = new KeyPack(challenge, sessionKey);
+			KeyPack keyPack = new KeyPack(challenge, sessionKeyEnc);
 			
 			// create an object for use as IV
 			byte IVarray[] = new byte[16];
@@ -53,7 +54,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 				byte challResp[] = (byte[])response.getObjContents().get(0);
 				// decrypt challenge
 				Cipher sc = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-				sc.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+				sc.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 				byte[] plainText = sc.doFinal(challResp);
 				if (new BigInteger(plainText).intValue() == challenge + 1) {
 					return true;
@@ -371,7 +372,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			SecureRandom IV = new SecureRandom();
 			byte IVarray[] = new byte[16];
 			IV.nextBytes(IVarray);
-			cipher.init(Cipher.ENCRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+			cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 			SealedObject outCipher = new SealedObject(message, cipher);
 			// Create new Envelope with encrypted data and IV
 			Envelope cipherMsg = new Envelope("ENV");
@@ -387,7 +388,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 				IVarray = (byte[])encResponse.getObjContents().get(1);
 				String algo = inCipher.getAlgorithm();
 				Cipher envCipher = Cipher.getInstance(algo);
-				envCipher.init(Cipher.DECRYPT_MODE, sessionKey, new IvParameterSpec(IVarray));
+				envCipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 				return (Envelope)inCipher.getObject(envCipher);
 			}
 		}
