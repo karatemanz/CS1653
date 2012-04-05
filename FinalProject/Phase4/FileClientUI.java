@@ -159,7 +159,7 @@ public class FileClientUI {
 						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
 							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
-							if (fc.download(sourceFileName, destFileName, token)) {
+							if (fc.download(sourceFileName, destFileName, token, keys)) {
 								System.out.println(destFileName + " successfully downloaded.");
 							}
 						}

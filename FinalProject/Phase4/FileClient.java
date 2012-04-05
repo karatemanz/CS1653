@@ -213,7 +213,7 @@ public class FileClient extends Client implements FileClientInterface {
 		return true;
 	}
 
-	public boolean download(String sourceFile, String destFile, Token token) {
+	public boolean download(String sourceFile, String destFile, Token token, ArrayList<Key> keys) {
 		if (sourceFile.charAt(0) == '/') {
 			sourceFile = sourceFile.substring(1);
 		}
@@ -230,9 +230,17 @@ public class FileClient extends Client implements FileClientInterface {
 				env.addObject(token);
 
 				env = secureMsg(env);
-								
-				while (env.getMessage().compareTo("CHUNK")==0) { 
-					fos.write((byte[])env.getObjContents().get(0), 0, (Integer)env.getObjContents().get(1));
+
+				Cipher bufCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+				int keyVersion = keys.size() - 1; // most recent key version
+
+				while (env.getMessage().compareTo("CHUNK")==0) {
+					// decrypt chunk
+					bufCipher.init(Cipher.DECRYPT_MODE, keys.get(keyVersion));
+					byte[] plainText = bufCipher.doFinal((byte[])env.getObjContents().get(0));
+					
+					fos.write(plainText, 0, (Integer)env.getObjContents().get(1));
+//					fos.write((byte[])env.getObjContents().get(0), 0, (Integer)env.getObjContents().get(1));
 					System.out.printf(".");
 					env = new Envelope("DOWNLOADF"); // Success
 					
