@@ -1,6 +1,7 @@
 import java.util.Scanner; // Scanner class required for user input
-import java.util.List; // to create test UserToken
-import java.util.Arrays; // to create test UserToken
+import java.util.List;
+import java.util.ArrayList;
+import java.security.*;
 import java.io.Console;
 
 public class MainUI {
@@ -115,6 +116,8 @@ public class MainUI {
 										 userName + "> ");
 						portNumber = Integer.parseInt(scan.nextLine());
 						userToken = gc.getGroupToken(userToken, groupName, serverAddress, portNumber);
+						ArrayList<Key> keys = new ArrayList<Key>();
+						keys = gc.getGroupKeys(userToken);
 						System.out.println("Connecting to File Server at " +
 										   serverAddress + " port " +
 										   portNumber + "...");

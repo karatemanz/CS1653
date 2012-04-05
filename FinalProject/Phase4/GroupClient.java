@@ -197,6 +197,41 @@ public class GroupClient extends Client implements GroupClientInterface {
 			return null;
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<Key> getGroupKeys(UserToken aToken) {
+		try {
+			ArrayList<Key> keys = null;
+			Envelope message = null, response = null;
+
+			// Tell the server to return a group token for use in a File Server
+			message = new Envelope("GETKEYS");
+			message.addObject(aToken);
+			
+			// Get the response from the server
+			response = secureMsg(message);
+			
+			System.out.println(response.getMessage());
+			// Successful response
+			if (checkResponse(response.getMessage())) {
+				// If there is a token in the Envelope, return it 
+				ArrayList<Object> temp = null;
+				temp = response.getObjContents();
+				
+				if (temp.size() == 1) {
+					keys = (ArrayList<Key>)temp.get(0);
+					return keys;
+				}
+			}
+			
+			return null;
+		}
+		catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
 
 	 public boolean createUser(String username, char[] password, UserToken token) {
 		 try {
@@ -302,7 +337,7 @@ public class GroupClient extends Client implements GroupClientInterface {
 			}
 	 }
 	 
-	 @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public List<String> listMembers(String group, UserToken token)
 	 {
 		 try
