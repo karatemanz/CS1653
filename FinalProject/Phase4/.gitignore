@@ -4,3 +4,4 @@
 *.bin
 *.class
 *-eps-converted-to.pdf
+shared_files/*
