@@ -333,6 +333,7 @@ public class FileClient extends Client implements FileClientInterface {
 			message = new Envelope("UPLOADF");
 			message.addObject(destFile);
 			message.addObject(token.getGroups().get(0)); // group
+			// add version number here
 			message.addObject(token);
 
 			FileInputStream fis = new FileInputStream(sourceFile);
@@ -346,7 +347,10 @@ public class FileClient extends Client implements FileClientInterface {
 				System.out.printf("Upload failed: %s\n", env.getMessage());
 				return false;
 			}
-			 
+			
+			Cipher bufCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			int keyVersion = keys.size() - 1; // most recent key version
+
 			do {
 				byte[] buf = new byte[4096];
 				if (env.getMessage().compareTo("READY") != 0) {
@@ -364,9 +368,10 @@ public class FileClient extends Client implements FileClientInterface {
 				}
 
 				// encrypt buf
+				bufCipher.init(Cipher.ENCRYPT_MODE, keys.get(keyVersion));
+				byte[] cipherText = bufCipher.doFinal(buf);
 				
-				
-				message.addObject(buf);
+				message.addObject(cipherText);
 				message.addObject(new Integer(n));
 
 				env = secureMsg(message);
