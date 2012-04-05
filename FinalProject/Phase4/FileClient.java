@@ -231,13 +231,13 @@ public class FileClient extends Client implements FileClientInterface {
 
 				env = secureMsg(env);
 
-				Cipher bufCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+				Cipher bufCipher = Cipher.getInstance("AES/CTR/NoPadding", "BC");
 				int keyVersion = keys.size() - 1; // most recent key version
-				byte[] IVarray = getBytes(token.getGroups().get(0));
+				byte[] IVarray = Arrays.copyOf(getBytes(token.getGroups().get(0)), 16);
 
 				while (env.getMessage().compareTo("CHUNK")==0) {
 					// decrypt chunk
-					bufCipher.init(Cipher.DECRYPT_MODE, keys.get(keyVersion));
+					bufCipher.init(Cipher.DECRYPT_MODE, keys.get(keyVersion), new IvParameterSpec(IVarray));
 					byte[] plainText = bufCipher.doFinal((byte[])env.getObjContents().get(0));
 					
 					fos.write(plainText, 0, (Integer)env.getObjContents().get(1));
@@ -264,7 +264,7 @@ public class FileClient extends Client implements FileClientInterface {
 						SecureRandom IV = new SecureRandom();
 						IVarray = new byte[16];
 						IV.nextBytes(IVarray);
-						cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
+						cipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 						SealedObject outCipher = new SealedObject(seqMsg, cipher);
 						
 						// Do the HMAC
@@ -356,9 +356,9 @@ public class FileClient extends Client implements FileClientInterface {
 				return false;
 			}
 			
-			Cipher bufCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			Cipher bufCipher = Cipher.getInstance("AES/CTR/NoPadding", "BC");
 			// get 128-bit IV from group name
-			byte[] IVarray = Arrays.copyOf(getBytes(token.getGroups().get(0)), 16);			
+			byte[] IVarray = Arrays.copyOf(getBytes(token.getGroups().get(0)), 16);
 			int keyVersion = keys.size() - 1; // most recent key version
 
 			do {
