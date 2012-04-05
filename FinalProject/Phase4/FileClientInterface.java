@@ -1,5 +1,7 @@
 
 import java.util.List;
+import java.util.ArrayList;
+import java.security.*;
 
 /**
  * Interface describing the operations that must be supported by the
@@ -55,7 +57,7 @@ public interface FileClientInterface
      * @return true on success, false on failure
      *
      */
-    public boolean upload(final String sourceFile, final String destFile, final Token token);
+    public boolean upload(final String sourceFile, final String destFile, final Token token, final ArrayList<Key> keys);
 
 
     /**

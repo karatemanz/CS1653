@@ -144,7 +144,7 @@ public class FileClientUI {
 						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
 							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
-							if (fc.upload(sourceFileName, destFileName, token)) {
+							if (fc.upload(sourceFileName, destFileName, token, keys)) {
 								System.out.println(destFileName + " successfully uploaded to group " + groupName + ".");
 							}
 							else {

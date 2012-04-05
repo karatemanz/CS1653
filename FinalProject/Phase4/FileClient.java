@@ -323,7 +323,7 @@ public class FileClient extends Client implements FileClientInterface {
 		}
 	}
 
-	public boolean upload(String sourceFile, String destFile, Token token) {
+	public boolean upload(String sourceFile, String destFile, Token token, ArrayList<Key> keys) {
 		if (destFile.charAt(0) != '/') {
 			 destFile = "/" + destFile;
 		}
@@ -339,7 +339,6 @@ public class FileClient extends Client implements FileClientInterface {
 
 			env = secureMsg(message);
 
-			// If server indicates success, return the member list
 			if (env.getMessage().equals("READY")) { 
 				System.out.printf("Meta data upload successful\n");
 			}
@@ -364,6 +363,9 @@ public class FileClient extends Client implements FileClientInterface {
 					return false;
 				}
 
+				// encrypt buf
+				
+				
 				message.addObject(buf);
 				message.addObject(new Integer(n));
 
