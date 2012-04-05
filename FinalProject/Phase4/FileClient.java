@@ -264,7 +264,7 @@ public class FileClient extends Client implements FileClientInterface {
 						SecureRandom IV = new SecureRandom();
 						IVarray = new byte[16];
 						IV.nextBytes(IVarray);
-						cipher.init(Cipher.DECRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
+						cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 						SealedObject outCipher = new SealedObject(seqMsg, cipher);
 						
 						// Do the HMAC
