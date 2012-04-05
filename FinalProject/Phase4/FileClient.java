@@ -233,6 +233,7 @@ public class FileClient extends Client implements FileClientInterface {
 
 				Cipher bufCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 				int keyVersion = keys.size() - 1; // most recent key version
+				byte[] IVarray = getBytes(token.getGroups().get(0));
 
 				while (env.getMessage().compareTo("CHUNK")==0) {
 					// decrypt chunk
@@ -240,7 +241,6 @@ public class FileClient extends Client implements FileClientInterface {
 					byte[] plainText = bufCipher.doFinal((byte[])env.getObjContents().get(0));
 					
 					fos.write(plainText, 0, (Integer)env.getObjContents().get(1));
-//					fos.write((byte[])env.getObjContents().get(0), 0, (Integer)env.getObjContents().get(1));
 					System.out.printf(".");
 					env = new Envelope("DOWNLOADF"); // Success
 					
@@ -262,7 +262,7 @@ public class FileClient extends Client implements FileClientInterface {
 						// Encrypt original Envelope
 						Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 						SecureRandom IV = new SecureRandom();
-						byte IVarray[] = new byte[16];
+						IVarray = new byte[16];
 						IV.nextBytes(IVarray);
 						cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
 						SealedObject outCipher = new SealedObject(seqMsg, cipher);
@@ -357,6 +357,8 @@ public class FileClient extends Client implements FileClientInterface {
 			}
 			
 			Cipher bufCipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+			// get 128-bit IV from group name
+			byte[] IVarray = Arrays.copyOf(getBytes(token.getGroups().get(0)), 16);			
 			int keyVersion = keys.size() - 1; // most recent key version
 
 			do {
@@ -376,7 +378,7 @@ public class FileClient extends Client implements FileClientInterface {
 				}
 
 				// encrypt buf
-				bufCipher.init(Cipher.ENCRYPT_MODE, keys.get(keyVersion));
+				bufCipher.init(Cipher.ENCRYPT_MODE, keys.get(keyVersion), new IvParameterSpec(IVarray));
 				byte[] cipherText = bufCipher.doFinal(buf);
 				
 				message.addObject(cipherText);
