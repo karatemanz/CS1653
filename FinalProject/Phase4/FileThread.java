@@ -183,10 +183,14 @@ public class FileThread extends Thread {
 							if (e.getObjContents().get(2) == null) {
 								response = new Envelope("FAIL-BADTOKEN");
 							}
+							if (e.getObjContents().get(3) == null) {
+								response = new Envelope("FAIL-BADKEYVERSION");
+							}
 							else {
 								String remotePath = (String)e.getObjContents().get(0);
 								String group = (String)e.getObjContents().get(1);
 								Token yourToken = (Token)e.getObjContents().get(2); // Extract token
+								int keyVersion = (Integer)e.getObjContents().get(3); // key version number
 								if (authToken(yourToken)) {
 									if (FileServer.fileList.checkFile(remotePath)) {
 										System.out.printf("Error: file already exists at %s\n", remotePath);
@@ -215,7 +219,7 @@ public class FileThread extends Thread {
 
 										if (e.getMessage().compareTo("EOF") == 0) {
 											System.out.printf("Transfer successful file %s\n", remotePath);
-											FileServer.fileList.addFile(yourToken.getSubject(), group, remotePath);
+											FileServer.fileList.addFile(yourToken.getSubject(), group, remotePath, keyVersion);
 											response = new Envelope("OK"); // Success
 										}
 										else {

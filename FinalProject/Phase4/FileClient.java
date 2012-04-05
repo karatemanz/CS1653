@@ -341,8 +341,8 @@ public class FileClient extends Client implements FileClientInterface {
 			message = new Envelope("UPLOADF");
 			message.addObject(destFile);
 			message.addObject(token.getGroups().get(0)); // group
-			// add version number here
 			message.addObject(token);
+			message.addObject(keys.size() - 1); // most recent key version
 
 			FileInputStream fis = new FileInputStream(sourceFile);
 
