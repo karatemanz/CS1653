@@ -233,8 +233,8 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 	}
 
-	 public boolean createUser(String username, char[] password, UserToken token) {
-		 try {
+	public boolean createUser(String username, char[] password, UserToken token) {
+		try {
 			Envelope message = null, response = null;
 			//Tell the server to create a user
 			message = new Envelope("CUSER");
@@ -282,119 +282,106 @@ public class GroupClient extends Client implements GroupClientInterface {
 			e.printStackTrace(System.err);
 			return false;
 		}
-	 }
+	}
 	 
-	 public boolean createGroup(String groupname, UserToken token)
-	 {
-		 try
-			{
-				Envelope message = null, response = null;
-				//Tell the server to create a group
-				message = new Envelope("CGROUP");
-				message.addObject(groupname); //Add the group name string
-				message.addObject(token); //Add the requester's token
-				
-				response = secureMsg(message);
-				
-				//If server indicates success, return true
-				if (checkResponse(response.getMessage())) {
-					return true;
-				}
-				
-				return false;
+	public boolean createGroup(String groupname, UserToken token)
+	{
+		try {
+			Envelope message = null, response = null;
+			//Tell the server to create a group
+			message = new Envelope("CGROUP");
+			message.addObject(groupname); //Add the group name string
+			message.addObject(token); //Add the requester's token
+			
+			response = secureMsg(message);
+			
+			//If server indicates success, return true
+			if (checkResponse(response.getMessage())) {
+				return true;
 			}
-			catch(Exception e)
-			{
-				System.err.println("Error: " + e.getMessage());
-				e.printStackTrace(System.err);
-				return false;
-			}
-	 }
+			
+			return false;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return false;
+		}
+	}
 	 
-	 public boolean deleteGroup(String groupname, UserToken token)
-	 {
-		 try
-			{
-				Envelope message = null, response = null;
-				//Tell the server to delete a group
-				message = new Envelope("DGROUP");
-				message.addObject(groupname); //Add group name string
-				message.addObject(token); //Add requester's token
-				
-				response = secureMsg(message);
-				//If server indicates success, return true
-				if (checkResponse(response.getMessage())) {
-					return true;
-				}
-				
-				return false;
+	public boolean deleteGroup(String groupname, UserToken token) {
+		try {
+			Envelope message = null, response = null;
+			//Tell the server to delete a group
+			message = new Envelope("DGROUP");
+			message.addObject(groupname); //Add group name string
+			message.addObject(token); //Add requester's token
+			
+			response = secureMsg(message);
+			//If server indicates success, return true
+			if (checkResponse(response.getMessage())) {
+				return true;
 			}
-			catch(Exception e)
-			{
-				System.err.println("Error: " + e.getMessage());
-				e.printStackTrace(System.err);
-				return false;
-			}
-	 }
+			
+			return false;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return false;
+		}
+	}
 	 
 	@SuppressWarnings("unchecked")
-	public List<String> listMembers(String group, UserToken token)
-	 {
-		 try
-		 {
-			 Envelope message = null, response = null;
-			 //Tell the server to return the member list
-			 message = new Envelope("LMEMBERS");
-			 message.addObject(group); //Add group name string
-			 message.addObject(token); //Add requester's token
+	public List<String> listMembers(String group, UserToken token) {
+		try {
+			Envelope message = null, response = null;
+			//Tell the server to return the member list
+			message = new Envelope("LMEMBERS");
+			message.addObject(group); //Add group name string
+			message.addObject(token); //Add requester's token
 
-			 response = secureMsg(message);
+			response = secureMsg(message);
 			 
-			 //If server indicates success, return the member list
-			 if (checkResponse(response.getMessage())) {
+			// If server indicates success, return the member list
+			if (checkResponse(response.getMessage())) {
 				return (List<String>)response.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
-			 }
-				
-			 return null;
-			 
-		 }
-		 catch(Exception e)
-			{
-				System.err.println("Error: " + e.getMessage());
-				e.printStackTrace(System.err);
-				return null;
 			}
-	 }
+				
+			return null;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
 	 
-	 public boolean addUserToGroup(String username, String groupname, UserToken token)
-	 {
-		 try
-			{
-				Envelope message = null, response = null;
-				//Tell the server to add a user to the group
-				message = new Envelope("AUSERTOGROUP");
-				message.addObject(username); //Add user name string
-				message.addObject(groupname); //Add group name string
-				message.addObject(token); //Add requester's token
-				
-				response = secureMsg(message);
-				//If server indicates success, return true
-				if (checkResponse(response.getMessage())) {
-					return true;
-				}
-				
-				return false;
+	public boolean addUserToGroup(String username, String groupname, UserToken token) {
+		try {
+			Envelope message = null, response = null;
+			//Tell the server to add a user to the group
+			message = new Envelope("AUSERTOGROUP");
+			message.addObject(username); //Add user name string
+			message.addObject(groupname); //Add group name string
+			message.addObject(token); //Add requester's token
+			
+			response = secureMsg(message);
+			//If server indicates success, return true
+			if (checkResponse(response.getMessage())) {
+				return true;
 			}
-			catch(Exception e)
-			{
-				System.err.println("Error: " + e.getMessage());
-				e.printStackTrace(System.err);
-				return false;
-			}
-	 }
+			
+			return false;
+		}
+		catch(Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace(System.err);
+			return false;
+		}
+	}
 	 
-	public boolean deleteUserFromGroup(String username, String groupname, UserToken token)
-	{
+	public boolean deleteUserFromGroup(String username, String groupname, UserToken token) {
 		try {
 			Envelope message = null, response = null;
 			//Tell the server to remove a user from the group
