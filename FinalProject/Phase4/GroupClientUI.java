@@ -9,7 +9,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 public class GroupClientUI {
 	GroupClient gc = new GroupClient();
 	
-	public boolean launchUI(UserToken token, String serverName, int portNumber) {
+	public boolean launchUI(Token token, String serverName, int portNumber) {
 		if (gc.connect(serverName, portNumber)) {
 			Scanner console = new Scanner(System.in); // Scanner object for input
 			String userName = token.getSubject();

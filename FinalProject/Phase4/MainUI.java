@@ -33,7 +33,7 @@ public class MainUI {
 		boolean exitKey = false;
 		boolean hasToken = false;
 		String userName = new String();
-		UserToken userToken = null;
+		Token userToken = null;
 		String groupName;
 		String serverAddress;
 		int portNumber;
@@ -106,7 +106,7 @@ public class MainUI {
 				switch (menuChoice) {
 					case 1:
 						// prompt user for group name, server address, port
-						System.out.print("Please enter the group to use File Server...\n" +
+						System.out.print("Please enter the group to use on the File Server...\n" +
 										 userName + "> ");
 						groupName = scan.nextLine();
 						System.out.print("Please enter the IP address of the File Server...\n" +

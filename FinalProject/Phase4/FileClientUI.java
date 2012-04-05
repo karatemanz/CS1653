@@ -129,7 +129,7 @@ public class FileClientUI {
 				}
 				
 				switch (menuChoice) {
-					case 1:
+					case 1: // LIST FILES
 						aList = fc.listFiles(token);
 						if (aList != null && aList.size() != 0) {
 							for (String s: aList) {
@@ -140,7 +140,7 @@ public class FileClientUI {
 							System.out.println("No files present.");
 						}
 						break;
-					case 2:
+					case 2: // UPLOAD
 						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
 							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
@@ -155,7 +155,7 @@ public class FileClientUI {
 							System.out.println("You must pick a group for your workspace (option 2).");
 						}
 						break;
-					case 3:
+					case 3: // DOWNLOAD
 						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
 							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
@@ -167,7 +167,7 @@ public class FileClientUI {
 							System.out.println("You must pick a group for your workspace (option 2).");
 						}
 						break;
-					case 4:
+					case 4: // DELETE
 						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter filename to delete...\n> ", MAXPATHLENGTH);
 							if (fc.delete(sourceFileName, groupName, token)) {
@@ -178,7 +178,7 @@ public class FileClientUI {
 							System.out.println("You must pick a group for your workspace (option 2).");
 						}
 						break;
-					case 0:
+					case 0: // EXIT
 						System.out.println("Disconnecting from File Server...");
 						fc.disconnect();
 						exitKey = true;
