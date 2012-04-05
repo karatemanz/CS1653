@@ -22,6 +22,7 @@ public class GroupServer extends Server {
 
 	public static final int SERVER_PORT = 8765;
 	public UserList userList;
+	public KeyTable keyTable;
 	private KeyPair keys = null;
     
 	public GroupServer() {
@@ -37,8 +38,10 @@ public class GroupServer extends Server {
 		
 		String userFile = "UserList.bin";
 		String keyFile = "GSKeyList.bin";
+		String tableFile = "GSKeyTable.bin";
 		Scanner console = new Scanner(System.in);
 		ObjectInputStream userStream;
+		ObjectInputStream tableStream;
 		ObjectInputStream groupStream;
 		Security.addProvider(new BouncyCastleProvider());
 		final int RSAKEYSIZE = 4096;
@@ -102,6 +105,9 @@ public class GroupServer extends Server {
 			FileInputStream fis = new FileInputStream(userFile);
 			userStream = new ObjectInputStream(fis);
 			userList = (UserList)userStream.readObject();
+			FileInputStream fisk = new FileInputStream(tableFile);
+			tableStream = new ObjectInputStream(fisk);
+			keyTable = (KeyTable)tableStream.readObject();
 		}
 		catch(FileNotFoundException e)
 		{
@@ -117,6 +123,18 @@ public class GroupServer extends Server {
 			userList.setUserHash(username, pwHash);
 			userList.addGroup(username, "ADMIN");
 			userList.addOwnership(username, "ADMIN");
+			// Create a new KeyTable, add ADMIN group and random key
+			keyTable = new KeyTable();
+			try {
+				KeyGenerator keyGen = KeyGenerator.getInstance("AES", "BC");
+				keyGen.init(128);
+				keyTable.addGroup("ADMIN", keyGen.generateKey());
+			}
+			catch (Exception ke) {
+				System.out.println("Error creating Group File Key");
+				System.exit(-1);
+			}
+			
 		}
 		catch(IOException e)
 		{
@@ -248,63 +266,58 @@ public class GroupServer extends Server {
 }
 
 //This thread saves the user list
-class ShutDownListener extends Thread
-{
+class ShutDownListener extends Thread{
 	public GroupServer my_gs;
 	
 	public ShutDownListener (GroupServer _gs) {
 		my_gs = _gs;
 	}
 	
-	public void run()
-	{
+	public void run() {
 		System.out.println("Shutting down server");
 		ObjectOutputStream outStream;
-		try
-		{
+		ObjectOutputStream outStreamk;
+		try {
 			outStream = new ObjectOutputStream(new FileOutputStream("UserList.bin"));
 			outStream.writeObject(my_gs.userList);
+			outStreamk = new ObjectOutputStream(new FileOutputStream("GSKeyTable.bin"));
+			outStreamk.writeObject(my_gs.keyTable);
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace(System.err);
 		}
 	}
 }
 
-class AutoSave extends Thread
-{
+class AutoSave extends Thread {
 	public GroupServer my_gs;
 	
 	public AutoSave (GroupServer _gs) {
 		my_gs = _gs;
 	}
 	
-	public void run()
-	{
-		do
-		{
-			try
-			{
+	public void run() {
+		do {
+			try {
 				Thread.sleep(300000); //Save group and user lists every 5 minutes
 				System.out.println("Autosave group and user lists...");
 				ObjectOutputStream outStream;
-				try
-				{
+				ObjectOutputStream outStreamk;
+				try {
 					outStream = new ObjectOutputStream(new FileOutputStream("UserList.bin"));
 					outStream.writeObject(my_gs.userList);
+					outStreamk = new ObjectOutputStream(new FileOutputStream("GSKeyTable.bin"));
+					outStreamk.writeObject(my_gs.keyTable);
 				}
-				catch(Exception e)
-				{
+				catch(Exception e) {
 					System.err.println("Error: " + e.getMessage());
 					e.printStackTrace(System.err);
 				}
 			}
-			catch(Exception e)
-			{
+			catch(Exception e) {
 				System.out.println("Autosave Interrupted");
 			}
-		}while(true);
+		} while(true);
 	}
 }
