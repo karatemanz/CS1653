@@ -79,8 +79,6 @@ public class FileClient extends Client implements FileClientInterface {
 					return false;
 				}
 				
-				System.out.println((Integer)reply.getObjContents().get(0));
-				System.out.println(challenge + 1);
 				// check challenge, set sequence
 				if ((Integer)reply.getObjContents().get(0) == challenge + 1) {
 					sequence = (Integer)seqMsg.getObjContents().get(0) + 1;
@@ -249,18 +247,29 @@ public class FileClient extends Client implements FileClientInterface {
 
 					// send envelope, don't need response so don't use secureMsg
 					try {
+						Envelope seqMsg = new Envelope("SEQMSG");
+						seqMsg.addObject(sequence);
+						seqMsg.addObject(env);
+						
 						// Encrypt original Envelope
 						Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 						SecureRandom IV = new SecureRandom();
 						byte IVarray[] = new byte[16];
 						IV.nextBytes(IVarray);
 						cipher.init(Cipher.ENCRYPT_MODE, sessionKeyEnc, new IvParameterSpec(IVarray));
-						SealedObject outCipher = new SealedObject(env, cipher);
-						// Create new Envelope with encrypted data and IV
+						SealedObject outCipher = new SealedObject(seqMsg, cipher);
+						
+						// Do the HMAC
+						Mac mac = Mac.getInstance("HmacSHA1", "BC");
+						mac.init(sessionKeyAuth);
+						mac.update(getBytes(outCipher));
+						
+						// Create new Envelope with encrypted data, IV, and HMAC
 						Envelope cipherMsg = new Envelope("ENV");
 						Envelope encResponse = null;
 						cipherMsg.addObject(outCipher);
 						cipherMsg.addObject(IVarray);
+						cipherMsg.addObject(mac.doFinal());
 						output.writeObject(cipherMsg);
 					}
 					catch(Exception e) {
