@@ -7,7 +7,7 @@ import java.security.*;
 public class FileClientUI {
 	FileClient fc = new FileClient();
 	
-	public boolean launchUI(UserToken token, String serverAddress, int portNumber) {
+	public boolean launchUI(Token token, ArrayList<Key> keys, String serverAddress, int portNumber) {
 		if (fc.connect(serverAddress, portNumber)) {
 			Scanner console = new Scanner(System.in); // Scanner object for input
 			String userName = token.getSubject();
@@ -17,8 +17,7 @@ public class FileClientUI {
 			final int MAXGROUPLENGTH = 32;
 			final int MAXPATHLENGTH = 256;
 			List<String> aList;
-			String groupName;
-			String currentGroup = new String();
+			String groupName = token.getGroups().get(0);
 			String userPrompt;
 			String sourceFileName;
 			String destFileName;
@@ -111,19 +110,13 @@ public class FileClientUI {
 				exitKey = true;
 			}
 			
+			userPrompt = userName + "/" + token.getGroups().get(0);
+
 			while (!exitKey) {
-				if (currentGroup.length() > 0) {
-					userPrompt = userName + "/" + currentGroup;
-				}
-				else {
-					userPrompt = userName;
-				}
-				System.out.print("Enter 1 to list the groups you belong to,\n" +
-								 "enter 2 to change the current group to traverse,\n" +
-								 "enter 3 to list files,\n" +
-								 "enter 4 to upload a file to the File Server,\n" +
-								 "enter 5 to download a file from the File Server,\n" +
-								 "enter 6 to delete a file from the File Server,\n" +
+				System.out.print("enter 1 to list files,\n" +
+								 "enter 2 to upload a file to the File Server,\n" +
+								 "enter 3 to download a file from the File Server,\n" +
+								 "enter 4 to delete a file from the File Server,\n" +
 								 "enter 0 to disconnect from File Server...\n" +
 								 userPrompt + "> ");
 				String inputString = console.nextLine();
@@ -137,30 +130,6 @@ public class FileClientUI {
 				
 				switch (menuChoice) {
 					case 1:
-						aList = fc.listGroups(token);
-						if (aList != null) {
-							for (String s: aList) {
-								System.out.println(s);
-							}
-						}
-						else {
-							System.out.println("Error - user has no groups. Please add groups in Group Server.");
-						}
-						break;
-					case 2:
-						groupName = getNonEmptyString("Enter the group name to change to...\n> ", MAXGROUPLENGTH);
-						aList = fc.changeGroup(groupName, token);
-						if (aList != null) {
-							for (String s: aList) {
-								System.out.println("Changed to group " + s + ".");
-								currentGroup = s;
-							}
-						}
-						else {
-							System.out.println("Error - please add groups to Group Server.");
-						}
-						break;
-					case 3:
 						aList = fc.listFiles(token);
 						if (aList != null && aList.size() != 0) {
 							for (String s: aList) {
@@ -171,12 +140,12 @@ public class FileClientUI {
 							System.out.println("No files present.");
 						}
 						break;
-					case 4:
-						if (currentGroup.length() > 0) {
+					case 2:
+						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
 							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
-							if (fc.upload(sourceFileName, destFileName, currentGroup, token)) {
-								System.out.println(destFileName + " successfully uploaded to group " + currentGroup + ".");
+							if (fc.upload(sourceFileName, destFileName, groupName, token)) {
+								System.out.println(destFileName + " successfully uploaded to group " + groupName + ".");
 							}
 							else {
 								System.out.println("Error uploading " + destFileName + " to File Server.");
@@ -186,11 +155,11 @@ public class FileClientUI {
 							System.out.println("You must pick a group for your workspace (option 2).");
 						}
 						break;
-					case 5:
-						if (currentGroup.length() > 0) {
+					case 3:
+						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
 							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
-							if (fc.download(sourceFileName, destFileName, currentGroup, token)) {
+							if (fc.download(sourceFileName, destFileName, groupName, token)) {
 								System.out.println(destFileName + " successfully downloaded.");
 							}
 						}
@@ -198,10 +167,10 @@ public class FileClientUI {
 							System.out.println("You must pick a group for your workspace (option 2).");
 						}
 						break;
-					case 6:
-						if (currentGroup.length() > 0) {
+					case 4:
+						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter filename to delete...\n> ", MAXPATHLENGTH);
-							if (fc.delete(sourceFileName, currentGroup, token)) {
+							if (fc.delete(sourceFileName, groupName, token)) {
 								System.out.println(sourceFileName + " successfully deleted.");
 							}
 						}
