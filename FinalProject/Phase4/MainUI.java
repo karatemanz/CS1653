@@ -122,7 +122,8 @@ public class MainUI {
 										   serverAddress + " port " +
 										   portNumber + "...");
 						FileClientUI fcu = new FileClientUI();
-						fcu.launchUI(userToken, serverAddress, portNumber);
+						fcu.launchUI(userToken, keys, serverAddress, portNumber);
+						keys = null; // clear keys from memory
 						hasToken = false;
 						break;
 					case 2:

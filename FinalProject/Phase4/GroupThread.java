@@ -113,6 +113,22 @@ public class GroupThread extends Thread
 							output.writeObject(encryptEnv(response));
 						}
 					}
+					else if (message.getMessage().equals("GETKEYS")) // Client wants a group's file keys
+					{
+						Token token = (Token)message.getObjContents().get(0);
+						if (token == null) {
+							response = new Envelope("FAIL");
+							response.addObject(null);
+							output.writeObject(encryptEnv(response));
+						}
+						else {
+							ArrayList<Key> keys = new ArrayList<Key>();
+							keys = my_gs.keyTable.getKeys(token.getGroups().get(0));
+							response = new Envelope("OK");
+							response.addObject(keys);
+							output.writeObject(encryptEnv(response));
+						}
+					}
 					else if (message.getMessage().equals("CUSER")) //Client wants to create a user
 					{
 						if (message.getObjContents().size() < 3) {
