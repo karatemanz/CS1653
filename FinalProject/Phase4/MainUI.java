@@ -33,6 +33,7 @@ public class MainUI {
 		boolean hasToken = false;
 		String userName = new String();
 		UserToken userToken = null;
+		String groupName;
 		String serverAddress;
 		int portNumber;
 		
@@ -103,14 +104,17 @@ public class MainUI {
 
 				switch (menuChoice) {
 					case 1:
-						// prompt user for server address, port
+						// prompt user for group name, server address, port
+						System.out.print("Please enter the group to use File Server...\n" +
+										 userName + "> ");
+						groupName = scan.nextLine();
 						System.out.print("Please enter the IP address of the File Server...\n" +
 										 userName + "> ");
 						serverAddress = scan.nextLine();
 						System.out.print("Please enter the port number of the File Server...\n" +
 										 userName + "> ");
 						portNumber = Integer.parseInt(scan.nextLine());
-						userToken = gc.getFileServerToken(userToken, serverAddress, portNumber);
+						userToken = gc.getGroupToken(userToken, groupName, serverAddress, portNumber);
 						System.out.println("Connecting to File Server at " +
 										   serverAddress + " port " +
 										   portNumber + "...");

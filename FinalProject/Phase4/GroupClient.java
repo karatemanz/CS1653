@@ -161,14 +161,15 @@ public class GroupClient extends Client implements GroupClientInterface {
 		}
 	}
 
-	public UserToken getFileServerToken(UserToken aToken, String address, int port) {
+	public UserToken getGroupToken(UserToken aToken, String groupName, String address, int port) {
 		try {
 			UserToken token = null;
 			Envelope message = null, response = null;
 			
-			// Tell the server to return a token for use in a File Server
-			message = new Envelope("GETFST");
+			// Tell the server to return a group token for use in a File Server
+			message = new Envelope("GETGT");
 			message.addObject(aToken);
+			message.addObject(groupName);
 			message.addObject(address);
 			message.addObject(port);
 			

@@ -94,11 +94,12 @@ public class GroupThread extends Thread
 							output.writeObject(encryptEnv(response));
 						}
 					}
-					else if (message.getMessage().equals("GETFST")) // Client wants a token for the File Server
+					else if (message.getMessage().equals("GETGT")) // Client wants a group token for the File Server
 					{
 						Token token = (Token)message.getObjContents().get(0);
-						String address = (String)message.getObjContents().get(1);
-						int port = (Integer)message.getObjContents().get(2);
+						String groupName = (String)message.getObjContents().get(1);
+						String address = (String)message.getObjContents().get(2);
+						int port = (Integer)message.getObjContents().get(3);
 						
 						if (token == null) {
 							response = new Envelope("FAIL");
@@ -106,7 +107,7 @@ public class GroupThread extends Thread
 							output.writeObject(encryptEnv(response));
 						}
 						else {
-							Token yourToken = createFileServerToken(token, address, port);
+							Token yourToken = createGroupToken(token, groupName, address, port);
 							response = new Envelope("OK");
 							response.addObject(yourToken);
 							output.writeObject(encryptEnv(response));
@@ -328,12 +329,13 @@ public class GroupThread extends Thread
 		}
 	}
 	
-	// Method to create a signed token with the File Server ID set
-	private Token createFileServerToken(Token aToken, String address, int port) {
+	// Method to create a signed token with a single group and the File Server ID set
+	private Token createGroupToken(Token aToken, String groupName, String address, int port) {
 		Token fsToken = new Token(aToken.getIssuer(),
 								  aToken.getSubject(),
 								  aToken.getGroups(),
 								  address, port);
+		fsToken.setGroup(groupName);
 		return my_gs.getSignedToken(fsToken);								  
 	}
 	
