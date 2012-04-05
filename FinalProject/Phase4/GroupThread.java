@@ -442,6 +442,16 @@ public class GroupThread extends Thread
 			// add group to groups
 			my_gs.userList.addGroup(requester, groupname);
 			
+			// Add group and new key to KeyTable
+			try {
+				KeyGenerator keyGen = KeyGenerator.getInstance("AES", "BC");
+				keyGen.init(128);
+				my_gs.keyTable.addGroup(groupname, keyGen.generateKey());
+			}
+			catch (Exception ke) {
+				System.out.println("Error creating Group File Key for Create New Group");
+			}
+
 			return true;
 		}
 		else {
@@ -485,6 +495,9 @@ public class GroupThread extends Thread
 				// remove this group from owner's lists
 				my_gs.userList.removeGroup(requester, groupname);
 				my_gs.userList.removeOwnership(requester, groupname);
+				
+				// remove the group and its keys from the KeyTable
+				my_gs.keyTable.removeGroup(groupname);
 				
 				return true;
 			}
@@ -572,6 +585,16 @@ public class GroupThread extends Thread
 					// Is the user a member of the group?
 					if (my_gs.userList.getUserGroups(username).contains(groupname)) {
 						my_gs.userList.removeGroup(username, groupname);
+						
+						// Add new key to group's entry in KeyTable
+						try {
+							KeyGenerator keyGen = KeyGenerator.getInstance("AES", "BC");
+							keyGen.init(128);
+							my_gs.keyTable.addKey(groupname, keyGen.generateKey());
+						}
+						catch (Exception ke) {
+							System.out.println("Error creating Group File Key after Delete User from Group");
+						}
 						
 						return true;
 					}

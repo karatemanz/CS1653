@@ -88,6 +88,19 @@ public class Token implements UserToken, java.io.Serializable
 		signature = sig;
 	}
 	
+	/**
+	 * Set a single group for use in the File Client
+	 */
+	public boolean setGroup(String groupName) {
+		if (groups.contains(groupName)) {
+			groups.clear();
+			groups.add(groupName);
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public String getContents() {
 		StringBuilder contents = new StringBuilder(issuer);
 		contents.append(subject);
