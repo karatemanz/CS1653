@@ -9,7 +9,7 @@ import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.math.BigInteger;
-/* TODO: where secureMsg isn't used, send HMAC anyway since decrypt() needs it */
+
 public class FileClient extends Client implements FileClientInterface {
 	private Key sessionKeyEnc;
 	private Key sessionKeyAuth;
@@ -183,7 +183,7 @@ public class FileClient extends Client implements FileClientInterface {
 		return null;
 	}
 	
-	public boolean delete(String filename, String group, UserToken token) {
+	public boolean delete(String filename, Token token) {
 		String remotePath;
 		if (filename.charAt(0)=='/') {
 			remotePath = filename.substring(1);
@@ -193,7 +193,7 @@ public class FileClient extends Client implements FileClientInterface {
 		}
 		Envelope env = new Envelope("DELETEF"); // Success
 	    env.addObject(remotePath);
-	    env.addObject(group);
+	    env.addObject(token.getGroups().get(0)); // group
 	    env.addObject(token);
 	    try {
 			env = secureMsg(env);
@@ -213,7 +213,7 @@ public class FileClient extends Client implements FileClientInterface {
 		return true;
 	}
 
-	public boolean download(String sourceFile, String destFile, String group, UserToken token) {
+	public boolean download(String sourceFile, String destFile, Token token) {
 		if (sourceFile.charAt(0) == '/') {
 			sourceFile = sourceFile.substring(1);
 		}
@@ -226,7 +226,7 @@ public class FileClient extends Client implements FileClientInterface {
 				
 				Envelope env = new Envelope("DOWNLOADF"); // Success
 				env.addObject(sourceFile);
-				env.addObject(group);
+				env.addObject(token.getGroups().get(0)); // group
 				env.addObject(token);
 
 				env = secureMsg(env);
@@ -302,7 +302,7 @@ public class FileClient extends Client implements FileClientInterface {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<String> listFiles(UserToken token) {
+	public List<String> listFiles(Token token) {
 		try {
 			Envelope message = null, env = null;
 			message = new Envelope("LFILES");
@@ -323,54 +323,7 @@ public class FileClient extends Client implements FileClientInterface {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<String> listGroups(UserToken token) {
-		try {
-			Envelope message = null, env = null;
-			// Tell the server to return the group list
-			message = new Envelope("LGROUPS");
-			message.addObject(token); // Add requester's token
-			
-			env = secureMsg(message);
-			
-			// If server indicates success, return the member list
-			if (checkResponse(env.getMessage())) {
-				return (List<String>)env.getObjContents().get(0); // This cast creates compiler warnings. Sorry.
-			}
-			
-			return null;
-		}
-		catch(Exception e) {
-			System.err.println("Error: " + e.getMessage());
-			e.printStackTrace(System.err);
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<String> changeGroup(String group, UserToken token) {
-		try {
-			Envelope message = null, env = null;
-			message = new Envelope("CGROUP");
-			message.addObject(group); // Add requester's group
-			message.addObject(token); // Add requester's token
-			
-			env = secureMsg(message);
-
-			// If server indicates success, return the group that it was changed to
-			if (checkResponse(env.getMessage())) {
-				return (List<String>)env.getObjContents().get(0); //This cast creates compiler warnings. Sorry.
-			}
-			return null;			 
-		}
-		catch(Exception e) {
-			System.err.println("Error: " + e.getMessage());
-			e.printStackTrace(System.err);
-			return null;
-		}
-	}
-
-	public boolean upload(String sourceFile, String destFile, String group, UserToken token) {
+	public boolean upload(String sourceFile, String destFile, Token token) {
 		if (destFile.charAt(0) != '/') {
 			 destFile = "/" + destFile;
 		}
@@ -379,8 +332,8 @@ public class FileClient extends Client implements FileClientInterface {
 			Envelope message = null, env = null;
 			message = new Envelope("UPLOADF");
 			message.addObject(destFile);
-			message.addObject(group);
-			message.addObject(token); // Add requester's token
+			message.addObject(token.getGroups().get(0)); // group
+			message.addObject(token);
 
 			FileInputStream fis = new FileInputStream(sourceFile);
 

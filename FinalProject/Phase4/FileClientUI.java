@@ -144,7 +144,7 @@ public class FileClientUI {
 						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
 							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
-							if (fc.upload(sourceFileName, destFileName, groupName, token)) {
+							if (fc.upload(sourceFileName, destFileName, token)) {
 								System.out.println(destFileName + " successfully uploaded to group " + groupName + ".");
 							}
 							else {
@@ -159,7 +159,7 @@ public class FileClientUI {
 						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter source file path...\n> ", MAXPATHLENGTH);
 							destFileName = getNonEmptyString("Enter destination file path...\n> ", MAXPATHLENGTH);
-							if (fc.download(sourceFileName, destFileName, groupName, token)) {
+							if (fc.download(sourceFileName, destFileName, token)) {
 								System.out.println(destFileName + " successfully downloaded.");
 							}
 						}
@@ -170,7 +170,7 @@ public class FileClientUI {
 					case 4: // DELETE
 						if (groupName.length() > 0) {
 							sourceFileName = getNonEmptyString("Enter filename to delete...\n> ", MAXPATHLENGTH);
-							if (fc.delete(sourceFileName, groupName, token)) {
+							if (fc.delete(sourceFileName, token)) {
 								System.out.println(sourceFileName + " successfully deleted.");
 							}
 						}

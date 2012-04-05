@@ -27,29 +27,6 @@ public interface FileClientInterface
      *
      */
     public void disconnect();
-	
-	
-    /**
-     * Retrieves a list of groups that are encoded in the supplied user token.
-     *
-     * @param token - The UserToken object assigned to the user invoking this operation
-     *
-     * @return A list of groups that the user belongs to
-     *
-     */
-    public List<String> listGroups(final UserToken token);
-	
-	
-    /**
-     * Retrieves a list of groups that are encoded in the supplied user token.
-     *
-	 * @param group -The group name that the user will work within
-     * @param token - The UserToken object assigned to the user invoking this operation
-     *
-     * @return A list of groups that the user belongs to
-     *
-     */
-    public List<String> changeGroup(final String group, final UserToken token);
 
 
     /**
@@ -61,7 +38,7 @@ public interface FileClientInterface
      * @return A list of filenames
      *
      */
-    public List<String> listFiles(final UserToken token);
+    public List<String> listFiles(final Token token);
 
 
     /**
@@ -78,7 +55,7 @@ public interface FileClientInterface
      * @return true on success, false on failure
      *
      */
-    public boolean upload(final String sourceFile, final String destFile, final String group, final UserToken token);
+    public boolean upload(final String sourceFile, final String destFile, final Token token);
 
 
     /**
@@ -93,7 +70,7 @@ public interface FileClientInterface
      * @return true on success, false on failure
      *
      */
-    public boolean download(final String sourceFile, final String destFile, final String group, final UserToken token);
+    public boolean download(final String sourceFile, final String destFile, final Token token);
 
 
     /**
@@ -107,7 +84,7 @@ public interface FileClientInterface
      * @return true on success, false on failure
      *
      */
-    public boolean delete(final String filename, final String group, final UserToken token);
+    public boolean delete(final String filename, final Token token);
 
 
 }  //-- end interface FileClientInterface
