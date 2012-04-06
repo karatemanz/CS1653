@@ -289,6 +289,9 @@ public class FileClient extends Client implements FileClientInterface {
 						cipherMsg.addObject(IVarray);
 						cipherMsg.addObject(mac.doFinal());
 						output.writeObject(cipherMsg);
+						
+						// increase sequence
+						sequence += 2;
 					}
 					catch(Exception e) {
 						System.out.println("Error: " + e);
