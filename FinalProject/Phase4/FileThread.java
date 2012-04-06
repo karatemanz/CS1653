@@ -185,7 +185,7 @@ public class FileThread extends Thread {
 						String group = (String)e.getObjContents().get(1);
 						Token t = (Token)e.getObjContents().get(2);
 						if (authToken(t)) {
-							ShareFile sf = FileServer.fileList.getFile("/"+remotePath);
+							ShareFile sf = FileServer.fileList.getFile("/"+remotePath); // gets the ShareFile
 							if (sf == null) {
 								System.out.printf("Error: File %s doesn't exist\n", remotePath);
 								e = new Envelope("ERROR_FILEMISSING");
@@ -203,9 +203,19 @@ public class FileThread extends Thread {
 										System.out.printf("Error file %s missing from disk\n", "_"+remotePath.replace('/', '_'));
 										e = new Envelope("ERROR_NOTONDISK");
 										output.writeObject(encryptEnv(e));
-
 									}
 									else {
+										// send file key version
+										e = new Envelope("KEYVERSION");
+										e.addObject(sf.getKeyVersion());
+										output.writeObject(encryptEnv(e));
+										// read OK
+										e = decryptEnv((Envelope)input.readObject());
+										if (!e.getMessage().equals("OK")) {
+											System.out.printf("Key Version send/rec'v error: %s\n", e.getMessage());
+											break;
+										}
+										
 										FileInputStream fis = new FileInputStream(f);
 
 										do {
