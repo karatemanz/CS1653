@@ -77,7 +77,6 @@ public class FileThread extends Thread {
 					Envelope e = decryptEnv(env);
 					System.out.println("ENV: " + e.getMessage());
 				
-					
 					if (e.getMessage().equals("LFILES")) { // Handler to list files that this user is allowed to see
 						if (e.getObjContents().size() < 1) {
 							response = new Envelope("FAIL-BADCONTENTS");
@@ -212,7 +211,7 @@ public class FileThread extends Thread {
 										output.writeObject(encryptEnv(e));
 										// read OK
 										e = decryptEnv((Envelope)input.readObject());
-										if (!e.getMessage().equals("OK")) {
+										if (!e.getMessage().equals("DOWNLOADF")) {
 											System.out.printf("Key Version send/rec'v error: %s\n", e.getMessage());
 											break;
 										}

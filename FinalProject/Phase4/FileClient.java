@@ -235,7 +235,7 @@ public class FileClient extends Client implements FileClientInterface {
 				if (env.getMessage().equals("KEYVERSION")) {
 					keyVersion = (Integer)env.getObjContents().get(0);
 					System.out.println("****** rec'd key version " + keyVersion);
-					env = secureMsg(new Envelope("OK"));
+					env = secureMsg(new Envelope("DOWNLOADF"));
 				}
 				else {
 					System.out.printf("Error retrieving file key version for %s (%s)\n", sourceFile, env.getMessage());
