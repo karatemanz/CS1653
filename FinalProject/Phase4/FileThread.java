@@ -77,65 +77,8 @@ public class FileThread extends Thread {
 					Envelope e = decryptEnv(env);
 					System.out.println("ENV: " + e.getMessage());
 				
-					if (e.getMessage().equals("LGROUPS")) {
-						if (e.getObjContents().size() < 1) {
-							response = new Envelope("FAIL-BADCONTENTS");
-						}
-						else {
-							if (e.getObjContents().get(0) == null) {
-								response = new Envelope("FAIL-BADTOKEN");
-							}
-							else {
-								Token yourToken = (Token)e.getObjContents().get(0); //Extract token
-								if (authToken(yourToken)) {
-									List<String> groupList = yourToken.getGroups(); // get groups
-									response = new Envelope("OK"); //Success
-									System.out.println("OK");
-									response.addObject(groupList);
-								}
-								else {
-									response = new Envelope("FAIL-BADTOKENAUTH");
-								}
-							}
-						}
-						output.writeObject(encryptEnv(response));
-					}
-					else if (e.getMessage().equals("CGROUP")) {
-						if (e.getObjContents().size() < 2) {
-							response = new Envelope("FAIL-BADCONTENTS");
-						}
-						else {
-							if (e.getObjContents().get(0) == null) {
-								response = new Envelope("FAIL-BADGROUP");
-							}
-							if (e.getObjContents().get(1) == null) {
-								response = new Envelope("FAIL-BADTOKEN");
-							}
-							else {
-								String changeGroup = (String)e.getObjContents().get(0); //Extract group
-								Token yourToken = (Token)e.getObjContents().get(1); //Extract token
-								if (authToken(yourToken)) {
-									// check that it is a valid group
-									if (yourToken.getGroups().contains(changeGroup)) {
-										response = new Envelope("OK"); //Success
-										List<String> changeGroupList = new ArrayList<String>();
-										changeGroupList.add(changeGroup);
-										
-										response.addObject(changeGroupList);
-									}
-									else {
-										response = new Envelope("FAIL-BADGROUP");
-									}
-								}
-								else {
-									response = new Envelope("FAIL-BADTOKENAUTH");
-								}
-							}
-						}
-						output.writeObject(encryptEnv(response));
-					}
-					// Handler to list files that this user is allowed to see
-					else if (e.getMessage().equals("LFILES")) {
+					
+					if (e.getMessage().equals("LFILES")) { // Handler to list files that this user is allowed to see
 						if (e.getObjContents().size() < 1) {
 							response = new Envelope("FAIL-BADCONTENTS");
 						}
