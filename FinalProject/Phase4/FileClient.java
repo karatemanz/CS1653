@@ -223,6 +223,7 @@ public class FileClient extends Client implements FileClientInterface {
 			if (!file.exists()) {
 				file.createNewFile();
 				FileOutputStream fos = new FileOutputStream(file);
+				int keyVersion = 0;
 				
 				Envelope env = new Envelope("DOWNLOADF"); // Success
 				env.addObject(sourceFile);
@@ -230,9 +231,19 @@ public class FileClient extends Client implements FileClientInterface {
 				env.addObject(token);
 
 				env = secureMsg(env);
+				
+				if (env.getMessage().equals("KEYVERSION")) {
+					keyVersion = (Integer)env.getObjContents().get(0);
+					System.out.println("****** rec'd key version " + keyVersion);
+					env = secureMsg(new Envelope("OK"));
+				}
+				else {
+					System.out.printf("Error retrieving file key version for %s (%s)\n", sourceFile, env.getMessage());
+					file.delete();
+					return false;
+				}
 
 				Cipher bufCipher = Cipher.getInstance("AES/CTR/NoPadding", "BC");
-				int keyVersion = keys.size() - 1; // most recent key version
 				byte[] IVarray = Arrays.copyOf(getBytes(token.getGroups().get(0)), 16);
 
 				while (env.getMessage().compareTo("CHUNK")==0) {
@@ -287,9 +298,9 @@ public class FileClient extends Client implements FileClientInterface {
 
 				}
 				else {
-						System.out.printf("Error reading file %s (%s)\n", sourceFile, env.getMessage());
-						file.delete();
-						return false;								
+					System.out.printf("Error reading file %s (%s)\n", sourceFile, env.getMessage());
+					file.delete();
+					return false;
 				}
 			}    
 			 
