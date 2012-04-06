@@ -223,7 +223,7 @@ public class FileClient extends Client implements FileClientInterface {
 			if (!file.exists()) {
 				file.createNewFile();
 				FileOutputStream fos = new FileOutputStream(file);
-				int keyVersion = 0;
+				int keyVersion;
 				
 				Envelope env = new Envelope("DOWNLOADF"); // Success
 				env.addObject(sourceFile);
@@ -234,7 +234,6 @@ public class FileClient extends Client implements FileClientInterface {
 				
 				if (env.getMessage().equals("KEYVERSION")) {
 					keyVersion = (Integer)env.getObjContents().get(0);
-					System.out.println("****** rec'd key version " + keyVersion);
 					env = secureMsg(new Envelope("DOWNLOADF"));
 				}
 				else {

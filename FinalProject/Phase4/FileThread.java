@@ -207,9 +207,8 @@ public class FileThread extends Thread {
 										// send file key version
 										e = new Envelope("KEYVERSION");
 										e.addObject(sf.getKeyVersion());
-										System.out.println("****** Key version of file: " + sf.getKeyVersion());
 										output.writeObject(encryptEnv(e));
-										// read OK
+										// read ack
 										e = decryptEnv((Envelope)input.readObject());
 										if (!e.getMessage().equals("DOWNLOADF")) {
 											System.out.printf("Key Version send/rec'v error: %s\n", e.getMessage());
@@ -240,9 +239,7 @@ public class FileThread extends Thread {
 										} while (fis.available() > 0);
 
 										// If server indicates success
-										if (e.getMessage().compareTo("DOWNLOADF") == 0)
-										{
-
+										if (e.getMessage().compareTo("DOWNLOADF") == 0) {
 											e = new Envelope("EOF");
 											output.writeObject(encryptEnv(e));
 
