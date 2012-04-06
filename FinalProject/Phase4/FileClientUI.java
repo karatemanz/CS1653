@@ -113,7 +113,7 @@ public class FileClientUI {
 			userPrompt = userName + "/" + token.getGroups().get(0);
 
 			while (!exitKey) {
-				System.out.print("enter 1 to list files,\n" +
+				System.out.print("Enter 1 to list files,\n" +
 								 "enter 2 to upload a file to the File Server,\n" +
 								 "enter 3 to download a file from the File Server,\n" +
 								 "enter 4 to delete a file from the File Server,\n" +
