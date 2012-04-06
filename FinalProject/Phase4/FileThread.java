@@ -208,6 +208,7 @@ public class FileThread extends Thread {
 										// send file key version
 										e = new Envelope("KEYVERSION");
 										e.addObject(sf.getKeyVersion());
+										System.out.println("****** Key version of file: " + sf.getKeyVersion());
 										output.writeObject(encryptEnv(e));
 										// read OK
 										e = decryptEnv((Envelope)input.readObject());
