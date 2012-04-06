@@ -137,7 +137,6 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// Get the response from the server
 			response = secureMsg(message);
 			
-			System.out.println(response.getMessage());
 			// Successful response
 			if (checkResponse(response.getMessage())) {
 				// If there is a token in the Envelope, return it 
@@ -174,7 +173,6 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// Get the response from the server
 			response = secureMsg(message);
 			
-			System.out.println(response.getMessage());
 			// Successful response
 			if (checkResponse(response.getMessage())) {
 				// If there is a token in the Envelope, return it 
@@ -209,7 +207,6 @@ public class GroupClient extends Client implements GroupClientInterface {
 			// Get the response from the server
 			response = secureMsg(message);
 			
-			System.out.println(response.getMessage());
 			// Successful response
 			if (checkResponse(response.getMessage())) {
 				// If there is a token in the Envelope, return it 
