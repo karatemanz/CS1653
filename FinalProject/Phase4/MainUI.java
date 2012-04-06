@@ -109,6 +109,10 @@ public class MainUI {
 						System.out.print("Please enter the group to use on the File Server...\n" +
 										 userName + "> ");
 						groupName = scan.nextLine();
+						if (!userToken.getGroups().contains(groupName)) {
+							System.out.println("Error: you are not a member of " + groupName);
+							break;
+						}
 						System.out.print("Please enter the IP address of the File Server...\n" +
 										 userName + "> ");
 						serverAddress = scan.nextLine();
